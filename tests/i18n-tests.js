@@ -32,5 +32,10 @@ check("I4. both languages use the same {placeholders}", diff.length === 0, diff.
 const arabicInEn = en.filter((k) => k !== "switch" && /[؀-ۿ]/.test(T.en[k].replace("قرآنا", "")));
 check("I5. the English interface has no Arabic script outside the brand name and the switch to Arabic",arabicInEn.length === 0, arabicInEn.join(", "));
 
+// The notes are written with AI: they are never called the teacher's, and the result page says how they were written.
+const allText = JSON.stringify(T) + files;
+check("I6. the AI-written notes are never called «ملاحظات المعلمة» / \"the teacher's notes\"", !/ملاحظات المعلمة|teacher's notes/.test(allText));
+check("I7. the result page carries the line on how the notes were written", fs.readFileSync(path.join(pub, "result.html"), "utf8").includes('data-i18n="r_ai_note"') && /الذكاء الاصطناعي/.test(T.ar.r_ai_note) && /AI/.test(T.en.r_ai_note));
+
 console.log(failed ? `\n${failed} i18n case(s) failed` : "\nall i18n cases behaved as expected");
 process.exit(failed ? 1 : 0);

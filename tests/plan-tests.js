@@ -59,8 +59,14 @@ const fakeClient = (...replies) => {
   const four = ["الفاتحة", "الإخلاص", "الفلق", "الناس"];
   p = curriculum.path(c, "R6", ["hifz"], "arabic", { memorized: four, reads: true, tajweed: { madd: "sometimes", ghunnah: "no", qalqalah: "yes" } });
   check("P31. a child who memorizes the four surahs does not get their stage", !ids(p.stages).includes("L3-S1") && p.stages[0].id === "L3-S2", ids(p.stages));
-  check("P32. the next stage reviews what is memorized and keeps only the rest, with fewer lessons in proportion",
-    p.stages[0].review.join(",") === "الناس,الفلق,الإخلاص" && p.stages[0].sessions === Math.ceil((20 * 19) / 22), `${p.stages[0].review} / ${p.stages[0].sessions}`);
+  check("P32. the next stage (Al-Masad to Ad-Duha) has none of those surahs again: no review, all its lessons",
+    !p.stages[0].review && p.stages[0].sessions === 20, `${p.stages[0].review} / ${p.stages[0].sessions}`);
+  const all = c.stages.filter((s) => s.surahs).flatMap((s) => s.surahs);
+  check("P54. no surah is in two memorization stages", all.length === new Set(all).size);
+  const part = curriculum.path(c, "R6", ["hifz"], "arabic", { memorized: ["الفاتحة", "المسد", "النصر"], reads: true }).stages;
+  check("P55. partly memorized stages keep the rest, with fewer lessons in proportion, and review what is memorized",
+    part[0].id === "L3-S1" && part[0].review.join(",") === "الفاتحة" && part[0].sessions === Math.ceil((6 * 3) / 4)
+    && part[1].review.join(",") === "المسد,النصر" && part[1].sessions === Math.ceil((20 * 17) / 19), part.slice(0, 2).map((s) => `${s.id} ${s.review} ${s.sessions}`).join(" | "));
   check("P33. a reader gets Tajweed alongside each memorization stage, starting with the \"no\" answer, then \"sometimes\"",
     p.stages.map((s) => s.with_focus).join(",") === "ghunnah,madd", p.stages.map((s) => s.with_focus).join(","));
   p = curriculum.path(c, "R6", ["hifz", "tajweed"], "arabic", { reads: true, tajweed: { madd: "no", ghunnah: "no", qalqalah: "no" } });
@@ -113,9 +119,9 @@ const fakeClient = (...replies) => {
   check("P24. the English path uses the English stage text", path.stages[0].name === st.name_en);
   check("P25. goal already reached", plan.pathFor({ ...r6, profile: { ...r6.profile, goals: ["read"] } }, "ar", approved).status === "reached");
   check("P26. no path from a curriculum with structural problems", plan.pathFor(record, "ar", { ...c, diagnosis_map: {} }).status === "unavailable");
-  const reader = { ...r6, profile: { ...r6.profile, goals: ["hifz"], memorized: four, tajweed: { madd: "no", ghunnah: "sometimes", qalqalah: "yes" } } };
+  const reader = { ...r6, profile: { ...r6.profile, goals: ["hifz"], memorized: [...four, "المسد", "النصر"], tajweed: { madd: "no", ghunnah: "sometimes", qalqalah: "yes" } } };
   path = plan.pathFor(reader, "ar", approved);
-  check("P45. the reader's page shows the review and the Tajweed point by name", path.stages[0].review.length === 3 && path.stages[0].focus === "المد", JSON.stringify(path.stages[0]).slice(0, 200));
+  check("P45. the reader's page shows the review and the Tajweed point by name", path.stages[0].review.length === 2 && path.stages[0].focus === "المد", JSON.stringify(path.stages[0]).slice(0, 200));
 
   // ---- the adult track ----
   const validate = require("../lib/validate").validateSubmission;

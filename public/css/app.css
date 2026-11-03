@@ -140,3 +140,5 @@ html[lang="en"] h1, html[lang="en"] h2 { font-family: "Inter", "Segoe UI", Arial
 .stage-details summary { cursor: pointer; font-weight: 700; color: var(--olive); padding: 6px 0; }
 .stage-details[open] { display: grid; gap: 12px; }
 .draft-note { display: inline-block; margin-top: 4px; background: #F6E3B4; color: #6B4A00; border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 700; }
+.site .ai-note { margin: 0 0 6px; }
+.site p { margin: 0; }

@@ -70,7 +70,7 @@
   </div>
 </main>
 
-<footer class="site" data-i18n="footer"></footer>
+<footer class="site"><p class="ai-note" data-i18n="r_ai_note"></p><p data-i18n="footer"></p></footer>
 
 <script src="/js/i18n.js"></script>
 <script src="/js/levels.js"></script>
@@ -104,6 +104,7 @@
   $("r-level").textContent = levelName;
   $("r-focus").textContent = I.t("r_focus", { focus: I.label(lvl, "focus") });
   $("r-note").textContent = t("r_note");
+  document.querySelector(".ai-note").textContent = t("r_ai_note");
   $("d-title").textContent = t("r_done");
   $("s-title").textContent = t("r_suggest");
 
