@@ -67,6 +67,7 @@
     chips("estimate", "estimate", L.ESTIMATES.map((x) => ({ value: x.id, label: I.label(x) })));
     chips("mem-from", "mem_from", O.MEM_SOURCES.map((x) => ({ value: x.id, label: I.label(x) })));
     chips("per-week", "per_week", O.LESSONS_PER_WEEK.map((x) => ({ value: x.id, label: I.label(x) })));
+    document.querySelector(`input[name="per_week"][value="${O.DEFAULT_LESSONS_PER_WEEK}"]`).checked = true;
     $("tajweed").innerHTML = tajweedHtml("tj", (q) => I.label(q));
     $("likes").innerHTML = O.LIKES_QS.map((q) => `
       <div><p class="small">${esc(I.label(q))}</p>
@@ -135,6 +136,7 @@
     chips("ad-self", "ad_self", O.ADULT_SELF.map((x) => ({ value: x.id, label: I.label(x) })));
     chips("ad-ayah-self", "ad_ayah", O.AYAH_SELF.map((x) => ({ value: x.id, label: I.label(x) })));
     chips("ad-per-week", "ad_per_week", O.LESSONS_PER_WEEK.map((x) => ({ value: x.id, label: I.label(x) })));
+    document.querySelector(`input[name="ad_per_week"][value="${O.DEFAULT_LESSONS_PER_WEEK}"]`).checked = true;
     $("ad-ayah").textContent = content.ayah.items[0].text;
     $("ad-tajweed").innerHTML = tajweedHtml("atj", (q) => I.label(O.TAJWEED_QS_ADULT[q.id]));
     // The Tajweed questions only for someone who reads.

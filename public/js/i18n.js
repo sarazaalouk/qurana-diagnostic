@@ -61,7 +61,7 @@
       r_not_needed: "لم يحتجها", r_of: "{a} من {b}",
       r_memorizes: "يحفظ:", r_and_more: "، وأكثر", r_no_mem: "لم يُذكر حفظ سابق.",
       r_suggest: "نقترح أن يبدأ بـ",
-      k_program: "البرنامج", k_track: "المسار", k_plan: "الباقة", k_teacher: "المعلم",
+      k_program: "البرنامج", k_track: "المسار", k_plan: "الباقة المقترحة", k_teacher: "المعلم",
       then: "ثم", track_ar: "المسار العربي (التدريس بالفصحى)", track_en: "المسار الإنجليزي (المعلم يشرح بالإنجليزية)",
       per_week: "عدد الحصص في الأسبوع: {n}", any_teacher: "معلمة أو معلم",
       p_title: "الخطة التعليمية المقترحة",
@@ -99,6 +99,7 @@
       p_reached_adult: "حسب إجاباتك، تجاوزت مراحل ما اخترته من أهداف في المنهج. المعلمة تقترح الخطوة التالية معك في الحصة التجريبية.",
       wa_hello_adult: "السلام عليكم، أجريت تشخيص قرآنا.",
       local_link: "رابط محلي للتطوير، لا يعمل خارج هذا الجهاز",
+      per_week_tip: "ننصح بثلاث حصص أسبوعيًا لثبات التقدم.", k_chosen: "اخترتم", p_weeks_less: "بثلاث حصص في الأسبوع تقلّ المدة إلى نحو {weeks} {unit}.",
     },
     en: {
       brand_sub: "Level check",
@@ -158,7 +159,7 @@
       r_not_needed: "not needed", r_of: "{a} of {b}",
       r_memorizes: "Knows by heart:", r_and_more: ", and more", r_no_mem: "No memorized surahs mentioned.",
       r_suggest: "We suggest starting with",
-      k_program: "Program", k_track: "Track", k_plan: "Plan", k_teacher: "Teacher",
+      k_program: "Program", k_track: "Track", k_plan: "Suggested plan", k_teacher: "Teacher",
       then: "then", track_ar: "Arabic track (taught in standard Arabic)", track_en: "English track (the teacher explains in English)",
       per_week: "{n} lessons a week", any_teacher: "A female or male teacher",
       p_title: "Suggested learning plan",
@@ -196,6 +197,7 @@
       p_reached_adult: "From your answers, you are already past the curriculum stages of the goals you chose. The teacher suggests the next step with you in the free trial lesson.",
       wa_hello_adult: "Assalamu alaikum, I did the Qurana level check.",
       local_link: "A local development link — it does not work outside this computer",
+      per_week_tip: "We recommend three lessons a week for steady progress.", k_chosen: "You chose", p_weeks_less: "With three lessons a week it takes about {weeks} {unit}.",
     },
   };
 

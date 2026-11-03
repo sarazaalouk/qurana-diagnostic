@@ -31,18 +31,23 @@ const run = (estimate, results) => L.runStages(L.startStage(estimate), async (k)
 
   check("L7. suggestion: English track for an English-speaking home, reading foundations while learning to read, Seed for 2 lessons a week",
     O.suggestion({ home_language: "en", goals: ["hifz"], age_band: "4–5", lessons_per_week: 2 }, "R3"),
-    { track: "english", program: "reading", plan: "seed", then: "hifz", with_tajweed: false });
+    { track: "english", program: "reading", plan: "growth", chosen: "seed", then: "hifz", with_tajweed: false });
   check("L8. suggestion: a reader follows the goal, Arabic track, Growth plan for 3 lessons a week",
     O.suggestion({ home_language: "ar", goals: ["tajweed"], age_band: "8–9", lessons_per_week: 3 }, "R6"),
-    { track: "arabic", program: "tajweed", plan: "growth", then: null, with_tajweed: false });
+    { track: "arabic", program: "tajweed", plan: "growth", chosen: "growth", then: null, with_tajweed: false });
   check("L9. several goals: a reader who memorizes gets memorization with Tajweed alongside, not Tajweed after",
     O.suggestion({ home_language: "ar", goals: ["read", "hifz", "tajweed"], lessons_per_week: 3 }, "R6"),
-    { track: "arabic", program: "hifz", plan: "growth", then: null, with_tajweed: true });
+    { track: "arabic", program: "hifz", plan: "growth", chosen: "growth", then: null, with_tajweed: true });
   check("L11. a child still learning to read: reading foundations, then memorization (no Tajweed alongside yet)",
     O.suggestion({ home_language: "ar", goals: ["hifz", "tajweed"], lessons_per_week: 3 }, "R3"),
-    { track: "arabic", program: "reading", plan: "growth", then: "hifz", with_tajweed: false });
+    { track: "arabic", program: "reading", plan: "growth", chosen: "growth", then: "hifz", with_tajweed: false });
   check("L12. a reader whose parent answered yes to all three Tajweed questions needs no Tajweed alongside",
     O.suggestion({ home_language: "ar", goals: ["hifz"], lessons_per_week: 3, tajweed: { madd: "yes", ghunnah: "yes", qalqalah: "yes" } }, "R6").with_tajweed, false);
+  check("L15. Growth (3 a week) is the suggestion by default; Seed is never suggested for age, only shown when 2 a week was chosen",
+    [O.suggestion({ home_language: "ar", goals: ["hifz"], age_band: "4–5", lessons_per_week: 3 }, "R3").plan, O.suggestion({ home_language: "ar", goals: ["hifz"], age_band: "4–5", lessons_per_week: 3 }, "R3").chosen,
+     O.suggestion({ home_language: "ar", goals: ["hifz"], age_band: "8–9", lessons_per_week: 2 }, "R3").plan, O.suggestion({ home_language: "ar", goals: ["hifz"], age_band: "8–9", lessons_per_week: 2 }, "R3").chosen],
+    ["growth", "growth", "growth", "seed"]);
+  check("L16. three lessons a week is chosen in advance", O.DEFAULT_LESSONS_PER_WEEK === 3 && O.LESSONS_PER_WEEK[0].id === 3, true);
   check("L13. the focus order: no first, then sometimes, then not sure; yes needs none",
     O.focusOrder({ madd: "sometimes", ghunnah: "no", qalqalah: "yes" }), ["ghunnah", "madd"]);
   check("L14. adult level from the self-assessment and the ayah",

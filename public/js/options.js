@@ -69,11 +69,12 @@
   ].map(([ar, en]) => ({ ar, en }));
   const SURAH_NAMES = SURAHS.map((s) => s.ar);
 
-  // How many lessons a week the family can do; it decides the plan (Seed = 2, Growth = 3).
+  // How many lessons a week the family can do. Three is chosen in advance and recommended; two can be chosen.
   const LESSONS_PER_WEEK = [
-    { id: 2, label: "حصتان في الأسبوع", label_en: "2 lessons a week" },
     { id: 3, label: "3 حصص في الأسبوع", label_en: "3 lessons a week" },
+    { id: 2, label: "حصتان في الأسبوع", label_en: "2 lessons a week" },
   ];
+  const DEFAULT_LESSONS_PER_WEEK = 3;
 
   // Where the child's memorization came from (asked only when the parent lists surahs).
   const MEM_SOURCES = [
@@ -197,7 +198,8 @@
   // Program: from the goals (in the order of the list), except that a learner still learning to read starts with
   // reading foundations; "then" is the next chosen program after it. A reader who memorizes gets Tajweed alongside
   // ("with_tajweed") instead of after it.
-  // Plan: from the lessons a week chosen (Seed = 2, Growth = 3).
+  // Plan: Qurana recommends Growth (3 a week) for steady progress. Seed is never suggested by the rules; it shows only as
+  // what the family chose when they chose 2 a week explicitly ("chosen").
   function suggestion(profile, level) {
     const adult = profile.who === "adult";
     const track = adult ? (profile.explain_lang === "en" ? "english" : "arabic")
@@ -206,15 +208,16 @@
     const chosen = (adult ? ADULT_GOALS : GOALS).filter((g) => ids.includes(g.id)).map((g) => g.program);
     const learningToRead = ["R1", "R2", "R3", "R4"].includes(level);
     let program = learningToRead ? "reading" : chosen.find((p) => p !== "reading") || chosen[0] || "hifz";
-    const plan = Number(profile.lessons_per_week) === 2 ? "seed" : "growth";
+    const plan = "growth";
+    const chosenPlan = Number(profile.lessons_per_week) === 2 ? "seed" : "growth";
     const withTajweed = readsMushaf(level) && chosen.includes("hifz") && focusOrder(profile.tajweed).length > 0;
     if (withTajweed) program = "hifz";
     const then = withTajweed ? null : chosen.find((p) => p !== program && p !== "reading" && !(learningToRead && p === "tilawa" && program === "reading")) || null;
-    return { track, program, plan, then, with_tajweed: withTajweed };
+    return { track, program, plan, chosen: chosenPlan, then, with_tajweed: withTajweed };
   }
 
   const api = {
-    AGE_BANDS, COUNTRIES, countryFromZone, HOME_LANGUAGES, PROGRAMS, GOALS, TEACHER, SURAHS, SURAH_NAMES, LESSONS_PER_WEEK, MEM_SOURCES,
+    AGE_BANDS, COUNTRIES, countryFromZone, HOME_LANGUAGES, PROGRAMS, GOALS, TEACHER, SURAHS, SURAH_NAMES, LESSONS_PER_WEEK, DEFAULT_LESSONS_PER_WEEK, MEM_SOURCES,
     TAJWEED_QS, TAJWEED_QS_ADULT, TAJWEED_ANSWERS, FOCUS, focusOrder, readsMushaf, LIKES_QS, LIKES_ANSWERS, MOTIVATION, WHO,
     ADULT_AGE_BANDS, ADULT_SELF, AYAH_SELF, ADULT_GOALS, EXPLAIN_LANGS, adultLevel, ADULT_TO_LEVEL, PLANS, pathGoals, suggestion,
   };

@@ -148,6 +148,8 @@
     [I.t("k_program"), progText],
     [I.t("k_track"), s.track === "english" ? I.t("track_en") : I.t("track_ar")],
     [I.t("k_plan"), `${I.label(plan, "name")} · ${I.t("per_week", { n: plan.per_week })}`],
+    // Seed shows only as what the family chose, when they chose two lessons a week.
+    ...(s.chosen === "seed" ? [[I.t("k_chosen"), `${I.label(O.PLANS.seed, "name")} · ${I.t("per_week", { n: O.PLANS.seed.per_week })}`]] : []),
     [I.t("k_teacher"), teacher.id === "any" ? I.t("any_teacher") : I.label(teacher)],
   ].map(([k, v]) => `<div><span class="muted">${esc(k)}</span><span>${esc(v)}</span></div>`).join("");
 
@@ -210,9 +212,10 @@
     month3: w.done_by_month3 ? I.t("w_done_by") : I.t("w_at", { name: withFocus(byId.get(w.month3)) }),
     longer: I.t("w_goal", { name: byId.get(w.longer).name }),
   };
-  const other = tot.per_week === 3 ? 2 : 3;
-  const weeksLine = I.t("p_weeks", { weeks: tot.weeks, unit: unit(tot.weeks), rate: I.t(`rate${tot.per_week}`) })
-    + " " + I.t("p_weeks_other", { rate: I.t(`rate${other}`), weeks: tot.weeks_at[other], unit: unit(tot.weeks_at[other]) });
+  // The total once, at the chosen rate; with two a week, one sentence on how three a week shortens it.
+  const weeksLine = I.t("p_weeks", { weeks: tot.weeks, unit: unit(tot.weeks), rate: I.t(`rate${tot.per_week}`) }) + " "
+    + (tot.per_week === 2 ? I.t("p_weeks_less", { weeks: tot.weeks_at[3], unit: unit(tot.weeks_at[3]) })
+      : I.t("p_weeks_other", { rate: I.t("rate2"), weeks: tot.weeks_at[2], unit: unit(tot.weeks_at[2]) }));
   $("plan-body").innerHTML = `
     <div class="plan">
       ${["month1", "month3", "longer"].map((k) => `
