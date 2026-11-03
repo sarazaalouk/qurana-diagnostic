@@ -36,6 +36,7 @@
     <p id="status-detail" class="small"></p>
     <ul id="status-problems" class="small"></ul>
     <p class="small muted" id="status-file"></p>
+    <p class="small" id="status-storage"></p>
     <div class="ctas">
       <a class="btn block" href="/">افتح التشخيص</a>
       <button class="btn block secondary" id="logout" type="button">خروج</button>
@@ -78,6 +79,9 @@
     $("status-problems").innerHTML = "";
     missing.forEach((m) => { const li = document.createElement("li"); li.textContent = m; $("status-problems").appendChild(li); });
     $("status-file").textContent = s.source_file ? `الملف المستورد: ${s.source_file}${s.imported_at ? ` · ${s.imported_at.slice(0, 10)}` : ""}` : "المنهج الحالي: عيّنة الاختبار (لم يُستورد ملف المعلمات بعد).";
+    $("status-storage").textContent = s.storage === "supabase"
+      ? "حفظ النتائج: قاعدة بيانات Supabase."
+      : "حفظ النتائج: ملفات على السيرفر نفسه — تضيع مع كل نشر. اضبطي SUPABASE_URL وSUPABASE_SERVICE_KEY في Render.";
     show("status");
   }
 

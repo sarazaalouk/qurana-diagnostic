@@ -7,7 +7,7 @@ const content = require("./lib/content");
 const store = require("./lib/store");
 const { validateSubmission } = require("./lib/validate");
 const levels = require("./public/js/levels");
-const { buildPlan } = require("./lib/plan");
+const { pathFor, writeNotes } = require("./lib/plan");
 const access = require("./lib/access");
 
 const PORT = process.env.PORT || 3100;
@@ -24,22 +24,23 @@ app.use(access.gate);
 access.routes(app);
 app.use(express.static(path.join(__dirname, "public"), { extensions: ["html"] }));
 
-// Simple limit on saved results per IP (in memory).
-const hits = new Map();
-function limiter(map, max, message) {
-  return (req, res, next) => {
+// Simple limits per IP and hour (in memory): allowed(req) counts one use and says whether it is within the limit.
+function limit(max) {
+  const map = new Map();
+  return (req) => {
     const now = Date.now();
     const list = (map.get(req.ip) || []).filter((t) => now - t < 60 * 60 * 1000);
-    if (list.length >= max) return res.status(429).json({ error: message });
+    if (list.length >= max) return false;
     list.push(now);
     map.set(req.ip, list);
-    next();
+    return true;
   };
 }
-const saveLimit = limiter(hits, 20, "too many results from this address, try again later");
-// Plans are built once per result and language, then kept; this only limits new builds.
-const planLimit = limiter(new Map(), 30, "too many plans from this address, try again later");
-const building = new Map(); // "<id>:<lang>" → promise, so two page loads do not build the same plan twice
+const saveAllowed = limit(20);
+const saveLimit = (req, res, next) => (saveAllowed(req) ? next() : res.status(429).json({ error: "too many results from this address, try again later" }));
+// Notes are written once per result and language, then kept; this only limits new writing (and "Try again").
+const notesAllowed = limit(30);
+const building = new Map(); // "<id>:<lang>" → promise, so two page loads do not write the same notes twice
 
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 
@@ -55,17 +56,20 @@ app.get("/api/config", (req, res) => {
   res.json({ site_url: SITE_URL, public_base_url: PUBLIC_BASE_URL, whatsapp: WHATSAPP });
 });
 
+// Express 5 passes a rejected promise to the error handler; this keeps the routes short.
+const wrap = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
+
 // Save a finished diagnostic; the level and suggestion are worked out here.
-app.post("/api/results", saveLimit, (req, res) => {
+app.post("/api/results", saveLimit, wrap(async (req, res) => {
   const { error, value } = validateSubmission(req.body);
   if (error) return res.status(400).json({ error });
-  const record = store.save(value);
+  const record = await store.save(value);
   res.status(201).json({ id: record.id, url: `${PUBLIC_BASE_URL}/r/${record.id}` });
-});
+}));
 
 // A saved result, for the result page and (later) for the site's booking form.
-app.get("/api/results/:id", (req, res) => {
-  const r = store.get(req.params.id);
+app.get("/api/results/:id", wrap(async (req, res) => {
+  const r = await store.get(req.params.id);
   if (!r) return res.status(404).json({ error: "result not found" });
   const level = levels.LEVELS[r.level];
   res.json({
@@ -81,42 +85,54 @@ app.get("/api/results/:id", (req, res) => {
       prices: `${SITE_URL}/#plans`,
     },
   });
-});
+}));
 
-// The learning plan for a saved result (the path by rules from the curriculum, notes by Claude; see lib/plan.js).
-app.get("/api/results/:id/plan", async (req, res, next) => {
-  const r = store.get(req.params.id);
+// The path for a saved result, by rules from the curriculum: instant, no model (lib/plan.js pathFor).
+app.get("/api/results/:id/path", wrap(async (req, res) => {
+  const r = await store.get(req.params.id);
   if (!r) return res.status(404).json({ error: "result not found" });
   const lang = req.query.lang === "en" ? "en" : "ar";
-  // A kept plan is used only while the curriculum is the same version it was built from.
+  const cur = access.current();
+  if (!cur.c) return res.json({ status: "unavailable" });
+  res.json(pathFor(r, lang, cur.c));
+}));
+
+// The notes for that path, by Claude (lib/plan.js writeNotes). Kept with the result per language and curriculum version;
+// a failure is not kept, so "Try again" asks again.
+app.get("/api/results/:id/notes", wrap(async (req, res) => {
+  const r = await store.get(req.params.id);
+  if (!r) return res.status(404).json({ error: "result not found" });
+  const lang = req.query.lang === "en" ? "en" : "ar";
   const version = access.current().fingerprint;
   const kept = r.plans && r.plans[lang];
-  if (kept && kept.curriculum === version) return res.json(kept.shown);
-  planLimit(req, res, async () => {
-    const key = `${r.id}:${lang}`;
-    try {
-      if (!building.has(key)) {
-        building.set(key, buildPlan(r, lang, { client: app.locals.planClient }).finally(() => building.delete(key)));
-      }
-      const out = await building.get(key);
-      if (out.problems && out.problems.length) console.warn(`plan ${key}: used the curriculum plan (${out.problems.join("; ")})`);
-      const shown = { status: out.status, plan: out.plan };
-      // Keep only plans that will not change: a curriculum fallback after a model error is tried again next time.
-      if (out.status === "ready" && out.plan.source === "claude") {
-        const latest = store.get(r.id);
-        store.update(r.id, { plans: { ...(latest.plans || {}), [lang]: { curriculum: version, shown } } });
-      }
-      res.json(shown);
-    } catch (err) {
-      next(err);
-    }
-  });
-});
+  if (kept && kept.curriculum === version && kept.notes) return res.json(kept.notes);
+  if (!notesAllowed(req)) return res.status(429).json({ status: "failed", error: "too many requests from this address, try again later" });
+  const key = `${r.id}:${lang}`;
+  if (!building.has(key)) {
+    building.set(key, writeNotes(r, lang, { client: app.locals.planClient }).finally(() => building.delete(key)));
+  }
+  const out = await building.get(key);
+  if (out.problems.length) console.warn(`notes ${key}: ${out.status} (${out.problems.join("; ")})`);
+  const shown = out.status === "ready" ? { status: "ready", intro: out.intro, tip: out.tip, notes: out.notes } : { status: out.status };
+  if (out.status === "ready") {
+    const latest = await store.get(r.id);
+    await store.update(r.id, { plans: { ...(latest.plans || {}), [lang]: { curriculum: version, notes: shown } } });
+  }
+  res.json(shown);
+}));
 
 // Result page at /r/<id>
 app.get("/r/:id", (req, res) => res.sendFile(path.join(__dirname, "public", "result.html")));
 
+// Errors: logged with the route, answered without details.
+app.use((err, req, res, next) => {
+  console.error(`${req.method} ${req.path}: ${err.stack || err.message}`);
+  if (res.headersSent) return next(err);
+  res.status(500).json({ error: "something went wrong on the server" });
+});
+
 if (require.main === module) {
-  app.listen(PORT, () => console.log(`Qurana diagnostic on http://localhost:${PORT}`));
+  store.init();
+  app.listen(PORT, () => console.log(`Qurana diagnostic on http://localhost:${PORT} (results: ${store.backendName()})`));
 }
 module.exports = app;

@@ -80,10 +80,16 @@ const setCurriculum = (c) => { fs.writeFileSync(curriculumFile, JSON.stringify(c
     check("A9. the result page is served at /r/<id>", r.status === 200 && (await r.text()).includes("نتيجة تشخيص قرآنا"));
     check("A10. the level comes with its English name too", typeof got.level.name_en === "string" && got.level.name_en.length > 0);
 
-    // The plan, with a stand-in for the model that counts its calls.
+    // The path comes at once, by rules, with no model call.
     let calls = 0;
+    let modelFails = false;
+    const pathRes = await get(`/api/results/${res.body.id}/path?lang=en`).then((x) => x.json());
+    check("A20. the path is served at once from the curriculum, with its totals, and no model call", pathRes.status === "ready" && pathRes.stages.length > 0 && pathRes.totals.per_week === 3 && calls === 0);
+
+    // The notes, with a stand-in for the model that counts its calls.
     app.locals.planClient = { beta: { messages: { create: async (req) => {
       calls++;
+      if (modelFails) throw new Error("model down");
       const ids = req.output_config.format.schema.properties.notes.items.properties.stage_id.enum;
       const reply = {
         intro: "A suggested plan that the teacher reviews with you in the free trial lesson.",
@@ -92,19 +98,28 @@ const setCurriculum = (c) => { fs.writeFileSync(curriculumFile, JSON.stringify(c
       };
       return { stop_reason: "end_turn", content: [{ type: "text", text: JSON.stringify(reply) }] };
     } } } };
-    const planUrl = `/api/results/${res.body.id}/plan?lang=en`;
+    const planUrl = `/api/results/${res.body.id}/notes?lang=en`;
     const [p1, p2] = await Promise.all([1, 2].map(() => get(planUrl).then((x) => x.json())));
-    check("A11. the plan is built once even when the page asks twice at the same time", calls === 1 && p1.plan.source === "claude" && p2.plan.source === "claude", `calls=${calls}`);
+    check("A11. the notes are written once even when the page asks twice at the same time", calls === 1 && p1.status === "ready" && p2.status === "ready", `calls=${calls}`);
     const p3 = await get(planUrl).then((x) => x.json());
-    check("A12. the plan is kept with the result and not built again", calls === 1 && JSON.stringify(p3) === JSON.stringify(p1));
-    check("A13. the plan says nothing about the curriculum's status", !("draft" in p1) && !/draft|approved/i.test(JSON.stringify(p1)));
-    check("A15. the plan carries lessons and weeks from the curriculum and the chosen lessons a week", p1.plan.totals.per_week === 3 && p1.plan.totals.weeks === Math.ceil(p1.plan.totals.sessions / 3));
+    check("A12. the notes are kept with the result and not written again", calls === 1 && JSON.stringify(p3) === JSON.stringify(p1));
+    check("A13. path and notes say nothing about the curriculum's status", !/draft|approved/i.test(JSON.stringify(p1) + JSON.stringify(pathRes)));
+    check("A15. the totals: lessons from the curriculum, weeks from the chosen lessons a week", pathRes.totals.weeks === Math.ceil(pathRes.totals.sessions / 3));
+    // A failure is not kept: "Try again" asks the model again.
+    modelFails = true;
+    const fresh = await post({ profile, stages: { sound: { score: 5, total: 6, passed: true } } });
+    const before = calls;
+    let n = await get(`/api/results/${fresh.body.id}/notes?lang=ar`).then((x) => x.json());
+    check("A21. when the model fails twice the notes answer failed", n.status === "failed" && calls === before + 2, `calls=${calls - before}`);
+    modelFails = false;
+    n = await get(`/api/results/${fresh.body.id}/notes?lang=ar`).then((x) => x.json());
+    check("A22. trying again asks the model again (a failure is not kept)", n.status === "ready" && calls === before + 3);
     bad = await post({ profile: { ...profile, lessons_per_week: 7 }, stages: { sound: { score: 5, total: 6, passed: true } } });
     check("A16. lessons a week outside the options is refused", bad.status === 400);
     bad = await post({ profile: { ...profile, memorized_from: undefined }, stages: { sound: { score: 5, total: 6, passed: true } } });
     check("A17. listed surahs without how they were memorized is refused", bad.status === 400);
-    r = await get("/api/results/doesnotexi/plan");
-    check("A14. a plan for an unknown result answers 404", r.status === 404);
+    r = await get("/api/results/doesnotexi/notes");
+    check("A14. notes for an unknown result answer 404", r.status === 404);
 
     // ---- approval opens the link ----
     setCurriculum({ ...sample, status: "approved", approved_by: "" , approved_at: "2026-11-03" });
@@ -116,7 +131,7 @@ const setCurriculum = (c) => { fs.writeFileSync(curriculumFile, JSON.stringify(c
     r = await get(`/api/results/${res.body.id}`, false);
     check("G10. results open publicly after approval", r.status === 200);
     await get(planUrl, false).then((x) => x.json());
-    check("G11. a plan kept from the earlier curriculum version is built again", calls === 2, `calls=${calls}`);
+    check("G11. notes kept from the earlier curriculum version are written again", calls === before + 4, `calls=${calls - before}`);
     st = await get("/api/admin/status").then((x) => x.json());
     check("G12. the admin sees the link is public", st.public === true && st.approved_by === "Sara Zaalouk");
 

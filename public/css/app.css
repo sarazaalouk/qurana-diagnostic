@@ -125,5 +125,12 @@ html[lang="en"] h1, html[lang="en"] h2 { font-family: "Inter", "Segoe UI", Arial
 .plan-stage .why { font-size: 15px; background: var(--card); border-radius: 8px; padding: 8px 10px; }
 .spinner { width: 22px; height: 22px; border: 3px solid var(--line); border-top-color: var(--olive); border-radius: 50%; animation: spin 0.9s linear infinite; display: inline-block; vertical-align: middle; }
 @keyframes spin { to { transform: rotate(360deg); } }
+.spinner.small { width: 14px; height: 14px; border-width: 2px; }
+.build-steps { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 6px; font-size: 15px; }
+.build-steps li { display: flex; align-items: center; gap: 10px; color: var(--muted); }
+.build-steps .mark { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line); flex: none; }
+.build-steps li.done { color: inherit; }
+.build-steps li.done .mark { background: var(--olive); border-color: var(--olive); }
+.notes-wait { font-size: 13px; color: var(--muted); margin: 0; display: flex; align-items: center; gap: 8px; }
 @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
 @media (max-width: 420px) { .plan-stage dl { grid-template-columns: 1fr; } }

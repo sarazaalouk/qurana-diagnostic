@@ -40,7 +40,7 @@ In 3–5 minutes the parent and child find the child's starting level, and get a
 - Arabic (RTL) and English (LTR): `?lang=ar|en`, then the last choice (`localStorage` `qurana.lang`), then Arabic. Text in `public/js/i18n.js`; `npm test` checks both languages have the same keys.
 - The Arabic letters and words the child reads stay Arabic in both languages.
 
-## Learning plan (`GET /api/results/:id/plan?lang=`)
+## Learning plan (`GET /api/results/:id/path` at once, `GET /api/results/:id/notes` after the model)
 - Built from `data/curriculum.json` only (imported from the teachers' Excel template). The plan itself never mentions the curriculum's status: access is decided by the gate below.
 - **The path is worked out by rules, not by the model** (`curriculum.path`): start = the stage `diagnosis_map` gives for the child's level (the first stage not yet mastered); end = the furthest of the stages `goal_map` gives for the parent's goals (`""` = the last foundation stage); in between, the foundation stages (the program of the R1 start stage) and the stages of every chosen goal's program, in curriculum order, for the child's track. A child already past every goal gets "reached" and no model call.
 - Totals: lessons = the sum of the stages' lessons from the curriculum; weeks = lessons ÷ the lessons a week the parent chose, rounded up. Shown as an estimate the teacher reviews, not a promise.
@@ -49,7 +49,13 @@ In 3–5 minutes the parent and child find the child's starting level, and get a
 - Validator (`lib/plan.js`): notes exactly one per path stage in order; no number that is not in the path, the totals, the age band or the scores (Arabic-Indic digits included); lengths; no promises of results or durations; nothing that looks like Quran text; no Arabic script in the English plan. A rejected reply is written once more with the problems listed; if it fails again, or the model refuses, or the API fails, the path is shown from the curriculum without notes.
 - A Claude plan is kept with the result per language and not built again; a fallback is tried again on the next visit.
 
-- A kept plan carries the curriculum version (a hash) it was built from; after a new import or the approval it is built again.
+- Kept notes carry the curriculum version (a hash) they were written for; after a new import or the approval they are written again. A failure is never kept.
+- **Waiting on the result page:** four steps — «قراءة إجاباتكم» and «تحديد نقطة البداية» on a fixed short timer, «بناء المسار من المنهج» when the path has really arrived (about a second), «كتابة ملاحظات المعلمة» only when the notes have really arrived. The path (stages, lessons, weeks) is shown as soon as it arrives; the intro, each stage's note and the home tip show «نكتب ملاحظات المعلمة…» in their places until the notes come. If the model fails twice (validation, refusal or API error), the page stays complete without notes, with «ستضيف المعلمة ملاحظاتها في الحصة التجريبية» and «حاول مرة أخرى», which asks for the notes only (not the diagnostic).
+
+## Storage (`lib/store.js`)
+- On Render: Supabase Postgres, table `diagnoses` (`docs/supabase.sql`): id, created_at, market (kuwait / gulf / international, from the country), answers (profile, stages, suggestion), level, plan (the notes), status (new / booked / cancelled), booked_at. Needs `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` (the service key stays on the server; RLS is on with no policies).
+- Without those two variables: JSON files under `DATA_STORE_DIR/results` or `data/results` — for local development only. At start the folder is created; if it cannot be written the app falls back to its own folder and logs it, instead of failing every save. `/admin` shows which storage is in use.
+- Deploy steps: `docs/deploy.md`.
 
 ## Access: internal preview until approval (`lib/access.js`)
 - Until the curriculum is approved — status «معتمد» **and** a reviewer's name **and** a date in the «الاعتماد» tab — the whole app (pages and API) answers 503 with a neutral "not available yet" page that says nothing about the curriculum. Only `/admin`, `/api/admin/*`, `/css/*` and `/health` stay open.

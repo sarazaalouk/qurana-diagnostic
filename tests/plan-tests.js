@@ -75,32 +75,36 @@ const fakeClient = (...replies) => {
   check("P16. Arabic script in the English plan is refused", problems({ ...good, tip: "Practise الحروف daily." }, "en").length > 0);
   check("P17. a long note is refused", problems({ ...good, notes: [{ ...good.notes[0], note: "ا".repeat(300) }, ...good.notes.slice(1)] }).length > 0);
 
-  // ---- building the plan ----
-  let out = await plan.buildPlan(r6, "ar", { client: fakeClient(good), curriculumData: approved });
+  // ---- the path (instant, rules only) ----
   const st = c.stages.find((s) => s.id === "L4-S1");
-  check("P18. accepted reply: stages and numbers from the curriculum, notes from Claude",
-    out.plan.source === "claude" && out.plan.stages[0].goals === st.goals && out.plan.stages[0].note === good.notes[0].note && out.plan.totals.weeks === tot.weeks && !("draft" in out));
-  const sent = JSON.stringify(requests[0]);
-  check("P19. the request uses the documented model, sends the path and totals, and no nickname",
-    requests[0].model === plan.MODEL && sent.includes("weeks_estimate") && sent.includes("L4-S1") && !sent.includes("Zaid"));
+  let path = plan.pathFor(r6, "ar", approved);
+  check("P18. the path comes from the curriculum with its totals, without the model", path.status === "ready" && path.stages[0].goals === st.goals && path.totals.weeks === tot.weeks && !("draft" in path));
+  path = plan.pathFor(r6, "en", approved);
+  check("P24. the English path uses the English stage text", path.stages[0].name === st.name_en);
+  check("P25. goal already reached", plan.pathFor({ ...r6, profile: { ...r6.profile, goals: ["read"] } }, "ar", approved).status === "reached");
+  check("P26. no path from a curriculum with structural problems", plan.pathFor(record, "ar", { ...c, diagnosis_map: {} }).status === "unavailable");
 
+  // ---- the notes (model) ----
+  let out = await plan.writeNotes(r6, "ar", { client: fakeClient(good), curriculumData: approved });
+  check("P19. accepted notes: one per stage, by stage id", out.status === "ready" && out.notes["L4-S1"] === good.notes[0].note && out.intro === good.intro);
+  const sent = JSON.stringify(requests[0]);
+  check("P20. the request uses the documented model, sends the path and totals, and no nickname",
+    requests[0].model === plan.MODEL && sent.includes("weeks_estimate") && sent.includes("L4-S1") && !sent.includes("Zaid"));
   const bad = { ...good, intro: "خطة من 12 حصة." };
-  out = await plan.buildPlan(r6, "ar", { client: fakeClient(bad, good), curriculumData: approved });
-  check("P20. a rejected reply is written once more with the problems listed, and the second one is used",
-    requests.length === 2 && requests[1].messages[0].content.includes("rejected") && out.plan.source === "claude");
-  out = await plan.buildPlan(r6, "ar", { client: fakeClient(bad, bad), curriculumData: approved });
-  check("P21. two rejected replies: the path is shown from the curriculum without notes", requests.length === 2 && out.plan.source === "curriculum" && out.plan.stages.every((s) => s.note === "") && out.plan.totals.weeks === tot.weeks);
-  out = await plan.buildPlan(r6, "ar", { client: fakeClient({ stop: "refusal", reply: {} }), curriculumData: approved });
-  check("P22. a model refusal: the path from the curriculum, no second try", requests.length === 1 && out.plan.source === "curriculum");
+  out = await plan.writeNotes(r6, "ar", { client: fakeClient(bad, good), curriculumData: approved });
+  check("P21. a rejected reply is written once more with the problems listed, and the second one is used",
+    requests.length === 2 && requests[1].messages[0].content.includes("rejected") && out.status === "ready");
+  out = await plan.writeNotes(r6, "ar", { client: fakeClient(bad, bad), curriculumData: approved });
+  check("P22. two rejected replies: the notes fail (the page keeps the path without them)", requests.length === 2 && out.status === "failed" && out.problems.length > 0);
+  out = await plan.writeNotes(r6, "ar", { client: fakeClient({ stop: "refusal", reply: {} }), curriculumData: approved });
+  check("P23. a model refusal: the notes fail, no second try", requests.length === 1 && out.status === "failed");
+  let tries = 0;
+  const flaky = { beta: { messages: { create: async () => { tries++; if (tries === 1) throw new Error("offline"); return { stop_reason: "end_turn", content: [{ type: "text", text: JSON.stringify(good) }] }; } } } };
+  out = await plan.writeNotes(r6, "ar", { client: flaky, curriculumData: approved });
+  check("P29. an API error is tried once more", tries === 2 && out.status === "ready");
   const offline = { beta: { messages: { create: async () => { throw new Error("offline"); } } } };
-  out = await plan.buildPlan(r6, "ar", { client: offline, curriculumData: approved });
-  check("P23. an API error: the path from the curriculum", out.plan.source === "curriculum");
-  out = await plan.buildPlan(r6, "en", { client: fakeClient(good), curriculumData: approved });
-  check("P24. the English plan uses the English stage text", out.plan.stages[0].name === st.name_en);
-  out = await plan.buildPlan({ ...r6, profile: { ...r6.profile, goals: ["read"] } }, "ar", { client: fakeClient(good), curriculumData: approved });
-  check("P25. goal already reached: no model call", out.status === "reached" && requests.length === 0);
-  out = await plan.buildPlan(record, "ar", { client: fakeClient(good), curriculumData: { ...c, diagnosis_map: {} } });
-  check("P26. no plan from a curriculum with structural problems", out.status === "unavailable");
+  out = await plan.writeNotes(r6, "ar", { client: offline, curriculumData: approved });
+  check("P30. two API errors: the notes fail", out.status === "failed");
 
   console.log(failed ? `\n${failed} plan case(s) failed` : "\nall plan cases behaved as expected");
   process.exit(failed ? 1 : 0);
