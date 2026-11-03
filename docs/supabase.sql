@@ -29,3 +29,11 @@ create table if not exists public.waitlist (
 );
 
 alter table public.waitlist enable row level security;
+
+-- Permissions for the server (service_role) only. Newer Supabase projects do not grant tables made in the
+-- SQL Editor to the API roles, and the server then gets "permission denied for table diagnoses".
+-- Nothing is granted to anon or authenticated: the public key still reads and writes nothing.
+grant usage on schema public to service_role;
+grant select, insert, update on public.diagnoses to service_role;
+grant select, insert on public.waitlist to service_role;
+grant usage, select on all sequences in schema public to service_role;
