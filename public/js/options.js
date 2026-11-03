@@ -83,16 +83,20 @@
   ];
 
   // Tajweed basics, asked of the parent only when the child reads from the Mushaf. Information for the teacher; no game.
+  // Wording and example words by Sara (teacher-written, not from the two source files); English uses transliteration.
   const TAJWEED_QS = [
-    { id: "madd", label: "يمدّ حروف المدّ بمقدارها", label_en: "Lengthens the long vowels for their full length" },
-    { id: "ghunnah", label: "يُخرج الغنّة في النون والميم المشدّدتين", label_en: "Makes the nasal sound (ghunnah) on doubled noon and meem" },
-    { id: "qalqalah", label: "يُقلقل حروف «قطب جد» الساكنة", label_en: "Bounces the letters of qalqalah when they have sukun" },
+    { id: "madd", label: "المد: هل يُطيل طفلكم الصوت عند حروف المد، مثل: قَالَ، قِيلَ، يَقُولُ، ولا يقرؤها قصيرة؟",
+      label_en: "Madd: does your child hold the sound longer on the long-vowel letters, as in qāla, qīla, yaqūlu, and not read them short?" },
+    { id: "ghunnah", label: "الغنة: هل يُخرج طفلكم صوتًا من الأنف عند النون والميم المشددتين، مثل: إِنَّ، ثُمَّ؟",
+      label_en: "Ghunnah: does your child make a sound through the nose on a doubled noon or meem, as in inna, thumma?" },
+    { id: "qalqalah", label: "القلقلة: هل يظهر اهتزاز خفيف في الصوت عند الوقف على حروف القلقلة، مثل: أَحَد، الْفَلَق؟",
+      label_en: "Qalqalah: is there a slight bounce in the sound when your child stops on a qalqalah letter, as in aḥad, al-falaq?" },
   ];
   const TAJWEED_ANSWERS = [
     { id: "yes", label: "نعم", label_en: "Yes" },
     { id: "sometimes", label: "أحيانًا", label_en: "Sometimes" },
     { id: "no", label: "لا", label_en: "No" },
-    { id: "unsure", label: "لا أعرف", label_en: "Not sure" },
+    { id: "unsure", label: "لست متأكدًا", label_en: "Not sure" },
   ];
 
   const PLANS = {

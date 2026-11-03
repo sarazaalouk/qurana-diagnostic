@@ -317,10 +317,52 @@ function build() {
   return wb;
 }
 
-module.exports = { build, SHEETS, FIRST_ROW, LEVEL_ROWS, STAGE_ROWS, RULE_ROWS, PROGRAMS, TRACKS, RULE_TYPES, STATUSES };
+// Fills the template from a curriculum (data/curriculum.json) as starting values for the teachers to correct.
+// The example rows stay; the approval stays as it is in the curriculum (a draft stays «مسودة»).
+function prefill(wb, c) {
+  const nameOf = (table, id) => Object.keys(table).find((k) => table[k] === id) || id;
+  const lv = wb.getWorksheet(SHEETS.levels);
+  c.levels.forEach((l, i) => {
+    const row = lv.getRow(FIRST_ROW + 1 + i);
+    [l.code, l.name, l.description, l.diagnosis_signs, l.age].forEach((v, j) => (row.getCell(j + 1).value = v || null));
+    row.getCell(7).value = l.name_en || null;
+  });
+  const st = wb.getWorksheet(SHEETS.stages);
+  c.stages.forEach((s, i) => {
+    const row = st.getRow(FIRST_ROW + 1 + i);
+    [s.level, s.n, s.name, nameOf(PROGRAMS, s.program), nameOf(TRACKS, s.track || "both"), s.goals, s.content, s.sessions, s.exit_sign,
+      s.teacher_note, s.name_en, s.goals_en, s.content_en, s.exit_sign_en].forEach((v, j) => (row.getCell(j + 1).value = v === undefined ? null : v));
+    row.getCell(16).value = s.entry || null;
+    row.getCell(17).value = s.entry_en || null;
+  });
+  const mp = wb.getWorksheet(SHEETS.map);
+  for (let r = FIRST_ROW; r < FIRST_ROW + 6; r++) mp.getRow(r).getCell(4).value = c.diagnosis_map[mp.getRow(r).getCell(1).value] || null;
+  const gm = wb.getWorksheet(SHEETS.goals);
+  for (let r = FIRST_ROW; r < FIRST_ROW + options.GOALS.length; r++) gm.getRow(r).getCell(3).value = (c.goal_map || {})[gm.getRow(r).getCell(1).value] || null;
+  const ru = wb.getWorksheet(SHEETS.rules);
+  for (let r = FIRST_ROW; r < FIRST_ROW + RULE_ROWS; r++) [1, 2, 3].forEach((col) => (ru.getRow(r).getCell(col).value = null));
+  (c.rules || []).forEach((x, i) => {
+    const row = ru.getRow(FIRST_ROW + i);
+    row.getCell(1).value = nameOf(RULE_TYPES, x.type);
+    row.getCell(2).value = x.rule;
+    row.getCell(3).value = x.example || null;
+  });
+  const ap = wb.getWorksheet(SHEETS.approval);
+  ap.getCell("B4").value = c.owner || null;
+  ap.getCell("B5").value = c.approved_by || null;
+  ap.getCell("B6").value = c.approved_at || null;
+  ap.getCell("B7").value = nameOf(STATUSES, c.status);
+  return wb;
+}
+
+module.exports = { build, prefill, SHEETS, FIRST_ROW, LEVEL_ROWS, STAGE_ROWS, RULE_ROWS, PROGRAMS, TRACKS, RULE_TYPES, STATUSES };
 
 if (require.main === module) {
-  const out = process.argv[2];
-  if (!out) { console.error("usage: npm run curriculum-template -- <out.xlsx>"); process.exit(1); }
-  build().xlsx.writeFile(out).then(() => console.log("written", out));
+  const args = process.argv.slice(2);
+  const out = args.find((a) => !a.startsWith("--") && args[args.indexOf(a) - 1] !== "--prefill");
+  const from = args.includes("--prefill") ? args[args.indexOf("--prefill") + 1] : null;
+  if (!out) { console.error("usage: npm run curriculum-template -- <out.xlsx> [--prefill data/curriculum.json]"); process.exit(1); }
+  const wb = build();
+  if (from) prefill(wb, JSON.parse(require("fs").readFileSync(from, "utf8")));
+  wb.xlsx.writeFile(out).then(() => console.log("written", out, from ? `(prefilled from ${from})` : ""));
 }

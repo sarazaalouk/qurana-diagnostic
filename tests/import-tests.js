@@ -13,32 +13,10 @@ const check = (name, ok, detail = "") => {
 };
 
 const sample = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "data", "curriculum.json"), "utf8"));
-const programName = (id) => Object.keys(T.PROGRAMS).find((k) => T.PROGRAMS[k] === id);
-const trackName = (id) => Object.keys(T.TRACKS).find((k) => T.TRACKS[k] === id);
-const ruleName = (id) => Object.keys(T.RULE_TYPES).find((k) => T.RULE_TYPES[k] === id);
-
-// The template as the teachers would fill it: the example rows left in place, the sample curriculum below them.
+// The template filled from the sample curriculum (as `--prefill` does), the example rows left in place.
+// Stages are written out of order on purpose: the importer orders them by level, then stage number.
 function filled({ approve = true } = {}) {
-  const wb = T.build();
-  const lv = wb.getWorksheet(T.SHEETS.levels);
-  sample.levels.forEach((l, i) => {
-    const row = lv.getRow(T.FIRST_ROW + 1 + i);
-    row.getCell(1).value = l.code; row.getCell(2).value = l.name; row.getCell(7).value = l.name_en;
-  });
-  const st = wb.getWorksheet(T.SHEETS.stages);
-  // Written out of order on purpose: the importer orders by level then stage number.
-  [...sample.stages].reverse().forEach((s, i) => {
-    const row = st.getRow(T.FIRST_ROW + 1 + i);
-    [s.level, s.n, s.name, programName(s.program), trackName(s.track), s.goals, s.content, s.sessions, s.exit_sign, "", s.name_en, s.goals_en, s.content_en, s.exit_sign_en]
-      .forEach((v, j) => (row.getCell(j + 1).value = v));
-  });
-  const mp = wb.getWorksheet(T.SHEETS.map);
-  for (let r = T.FIRST_ROW; r < T.FIRST_ROW + 6; r++) mp.getRow(r).getCell(4).value = sample.diagnosis_map[mp.getRow(r).getCell(1).value];
-  const gm = wb.getWorksheet(T.SHEETS.goals);
-  for (let r = T.FIRST_ROW; r < T.FIRST_ROW + 5; r++) gm.getRow(r).getCell(3).value = sample.goal_map[gm.getRow(r).getCell(1).value] || null;
-  const ru = wb.getWorksheet(T.SHEETS.rules);
-  for (let r = T.FIRST_ROW; r < T.FIRST_ROW + T.RULE_ROWS; r++) [1, 2, 3].forEach((c) => (ru.getRow(r).getCell(c).value = null));
-  sample.rules.forEach((x, i) => { ru.getRow(T.FIRST_ROW + i).getCell(1).value = ruleName(x.type); ru.getRow(T.FIRST_ROW + i).getCell(2).value = x.rule; });
+  const wb = T.prefill(T.build(), { ...sample, stages: [...sample.stages].reverse() });
   const ap = wb.getWorksheet(T.SHEETS.approval);
   if (approve) { ap.getCell("B5").value = "Sara Zaalouk"; ap.getCell("B6").value = new Date("2026-11-03"); ap.getCell("B7").value = "معتمد"; }
   return wb;

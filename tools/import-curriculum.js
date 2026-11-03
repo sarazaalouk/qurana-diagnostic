@@ -200,7 +200,7 @@ if (require.main === module) {
       problems.forEach((p) => console.log(`- ${p}`));
       process.exit(1);
     }
-    const summary = `${c.levels.length} مستوى، ${c.stages.length} مرحلة، ${c.rules.length} قاعدة، الحالة: ${c.status === "approved" ? "معتمد" : "مسودة"}`;
+    const summary = `المستويات: ${c.levels.length}، المراحل: ${c.stages.length}، القواعد: ${c.rules.length}، الحالة: ${c.status === "approved" ? "معتمد" : "مسودة"}`;
     if (checkOnly) { console.log(`الملف سليم (${summary}). ما اتكتبش حاجة لأنه --check.`); return; }
     fs.writeFileSync(curriculum.CURRICULUM_PATH, JSON.stringify(c, null, 2) + "\n", "utf8");
     console.log(`اتكتب ${curriculum.CURRICULUM_PATH} (${summary}).`);

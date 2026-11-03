@@ -35,17 +35,17 @@ const fakeClient = (...replies) => {
   // ---- the path, by rules ----
   let p = curriculum.path(c, "R3", "hifz", "arabic");
   check("P3. hifz from R3: from the fatha stage through the foundations and Mushaf reading to the end of Juz' Amma, no Tajweed stages",
-    ids(p.stages) === "L1-S3,L1-S4,L1-S5,L1-S6,L1-S7,L2-S1,L3-S1,L3-S2,L3-S3", ids(p.stages));
+    ids(p.stages) === "L1-S3,L1-S4,L1-S5,L1-S6,L1-S7,L1-S8,L1-S9,L2-S1,L3-S1,L3-S2,L3-S3", ids(p.stages));
   p = curriculum.path(c, "R6", "tajweed", "arabic");
   check("P4. Tajweed from R6: only the Tajweed stages (the memorization stages are another program)", ids(p.stages) === "L4-S1,L4-S2,L4-S3", ids(p.stages));
   p = curriculum.path(c, "R1", "read", "arabic");
-  check("P5. reading from R1 ends with the last foundation stage", ids(p.stages) === "L1-S1,L1-S2,L1-S3,L1-S4,L1-S5,L1-S6,L1-S7,L2-S1", ids(p.stages));
+  check("P5. reading from R1 ends with the last foundation stage", ids(p.stages) === "L1-S1,L1-S2,L1-S3,L1-S4,L1-S5,L1-S6,L1-S7,L1-S8,L1-S9,L2-S1", ids(p.stages));
   p = curriculum.path(c, "R6", "read", "arabic");
   check("P6. a child already past the goal: no path, marked reached", p.reached === true && p.stages.length === 0);
   const mixed = { ...c, stages: c.stages.map((s) => (s.id === "L1-S5" ? { ...s, track: "english" } : s)) };
   check("P7. a stage for the other track is left out", !ids(curriculum.path(mixed, "R3", "hifz", "arabic").stages).includes("L1-S5"));
   const t = curriculum.totals(curriculum.path(c, "R3", "hifz", "arabic").stages, 3);
-  check("P8. lessons are added from the curriculum and weeks = lessons ÷ lessons a week, rounded up", t.sessions === 89 && t.weeks === 30 && t.per_week === 3, JSON.stringify(t));
+  check("P8. lessons are added from the curriculum and weeks = lessons ÷ lessons a week, rounded up", t.sessions === 100 && t.weeks === 34 && t.per_week === 3, JSON.stringify(t));
 
   // ---- the validator ----
   const route = curriculum.path(c, "R6", "tajweed", "arabic").stages;
