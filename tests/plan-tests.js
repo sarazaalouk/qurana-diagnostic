@@ -12,7 +12,7 @@ const c = curriculum.load();
 const approved = { ...c, status: "approved" };
 const record = {
   level: "R3",
-  profile: { nickname: "Zaid", age_band: "6–7", home_language: "ar", goal: "hifz", memorized: ["الفاتحة"], memorized_more: false, memorized_from: "listening", lessons_per_week: 3, teacher: "female" },
+  profile: { nickname: "Zaid", age_band: "6–7", home_language: "ar", goals: ["hifz"], memorized: ["الفاتحة"], memorized_more: false, memorized_from: "listening", lessons_per_week: 3, teacher: "female" },
   stages: { sound: { passed: true, inferred: true }, shape: { passed: true, inferred: true }, fatha: { score: 1, total: 3, passed: false } },
   suggestion: { track: "arabic", program: "reading", plan: "growth", then: "hifz" },
 };
@@ -30,7 +30,9 @@ const fakeClient = (...replies) => {
 
 (async () => {
   check("P1. the sample curriculum has no structural problems", curriculum.problems(c).length === 0, curriculum.problems(c).join("; "));
-  check("P2. a draft curriculum is not used unless explicitly allowed", !curriculum.usable(c, false) && curriculum.usable(c, true));
+  check("P2. the link is public only when approved with a reviewer's name and a date",
+    !curriculum.isPublic(c) && !curriculum.isPublic({ ...c, status: "approved", approved_at: "2026-11-03" })
+    && curriculum.isPublic({ ...c, status: "approved", approved_by: "Sara Zaalouk", approved_at: "2026-11-03" }));
 
   // ---- the path, by rules ----
   let p = curriculum.path(c, "R3", "hifz", "arabic");
@@ -42,6 +44,11 @@ const fakeClient = (...replies) => {
   check("P5. reading from R1 ends with the last foundation stage", ids(p.stages) === "L1-S1,L1-S2,L1-S3,L1-S4,L1-S5,L1-S6,L1-S7,L1-S8,L1-S9,L2-S1", ids(p.stages));
   p = curriculum.path(c, "R6", "read", "arabic");
   check("P6. a child already past the goal: no path, marked reached", p.reached === true && p.stages.length === 0);
+  p = curriculum.path(c, "R3", ["hifz", "tajweed"], "arabic");
+  check("P27. two goals: the foundations, then both programs, up to the furthest goal",
+    ids(p.stages) === "L1-S3,L1-S4,L1-S5,L1-S6,L1-S7,L1-S8,L1-S9,L2-S1,L3-S1,L3-S2,L3-S3,L4-S1,L4-S2,L4-S3", ids(p.stages));
+  p = curriculum.path(c, "R6", ["read", "tajweed"], "arabic");
+  check("P28. a goal already passed does not stop the others", ids(p.stages) === "L4-S1,L4-S2,L4-S3" && !p.reached, ids(p.stages));
   const mixed = { ...c, stages: c.stages.map((s) => (s.id === "L1-S5" ? { ...s, track: "english" } : s)) };
   check("P7. a stage for the other track is left out", !ids(curriculum.path(mixed, "R3", "hifz", "arabic").stages).includes("L1-S5"));
   const t = curriculum.totals(curriculum.path(c, "R3", "hifz", "arabic").stages, 3);
@@ -50,7 +57,7 @@ const fakeClient = (...replies) => {
   // ---- the validator ----
   const route = curriculum.path(c, "R6", "tajweed", "arabic").stages;
   const tot = curriculum.totals(route, 3);
-  const r6 = { ...record, level: "R6", profile: { ...record.profile, goal: "tajweed" } };
+  const r6 = { ...record, level: "R6", profile: { ...record.profile, goals: ["tajweed"] } };
   const allowed = plan.allowedNumbers(route, tot, r6);
   const good = {
     intro: `خطة مقترحة من ${route.length} مراحل تراجعها المعلمة معكم في الحصة التجريبية.`,
@@ -72,7 +79,7 @@ const fakeClient = (...replies) => {
   let out = await plan.buildPlan(r6, "ar", { client: fakeClient(good), curriculumData: approved });
   const st = c.stages.find((s) => s.id === "L4-S1");
   check("P18. accepted reply: stages and numbers from the curriculum, notes from Claude",
-    out.plan.source === "claude" && out.plan.stages[0].goals === st.goals && out.plan.stages[0].note === good.notes[0].note && out.plan.totals.weeks === tot.weeks && out.draft === false);
+    out.plan.source === "claude" && out.plan.stages[0].goals === st.goals && out.plan.stages[0].note === good.notes[0].note && out.plan.totals.weeks === tot.weeks && !("draft" in out));
   const sent = JSON.stringify(requests[0]);
   check("P19. the request uses the documented model, sends the path and totals, and no nickname",
     requests[0].model === plan.MODEL && sent.includes("weeks_estimate") && sent.includes("L4-S1") && !sent.includes("Zaid"));
@@ -90,12 +97,10 @@ const fakeClient = (...replies) => {
   check("P23. an API error: the path from the curriculum", out.plan.source === "curriculum");
   out = await plan.buildPlan(r6, "en", { client: fakeClient(good), curriculumData: approved });
   check("P24. the English plan uses the English stage text", out.plan.stages[0].name === st.name_en);
-  out = await plan.buildPlan({ ...r6, profile: { ...r6.profile, goal: "read" } }, "ar", { client: fakeClient(good), curriculumData: approved });
+  out = await plan.buildPlan({ ...r6, profile: { ...r6.profile, goals: ["read"] } }, "ar", { client: fakeClient(good), curriculumData: approved });
   check("P25. goal already reached: no model call", out.status === "reached" && requests.length === 0);
-  if (process.env.ALLOW_DRAFT_CURRICULUM !== "1") {
-    out = await plan.buildPlan(record, "ar", { client: fakeClient(good), curriculumData: c });
-    check("P26. no plan from a draft curriculum when it is not allowed", out.status === "unavailable");
-  }
+  out = await plan.buildPlan(record, "ar", { client: fakeClient(good), curriculumData: { ...c, diagnosis_map: {} } });
+  check("P26. no plan from a curriculum with structural problems", out.status === "unavailable");
 
   console.log(failed ? `\n${failed} plan case(s) failed` : "\nall plan cases behaved as expected");
   process.exit(failed ? 1 : 0);

@@ -45,7 +45,7 @@
     $("country").innerHTML = `<option value="">${esc(t("choose_country"))}</option>` + O.COUNTRIES.map((c) => `<option value="${c.code}">${esc(I.label(c, "name"))}</option>`).join("");
     try { $("country").value = O.countryFromZone(Intl.DateTimeFormat().resolvedOptions().timeZone) || ""; } catch { /* no time zone */ }
     chips("lang", "lang", O.HOME_LANGUAGES.map((x) => ({ value: x.id, label: I.label(x) })));
-    chips("goal", "goal", O.GOALS.map((x) => ({ value: x.id, label: I.label(x) })));
+    chips("goal", "goal", O.GOALS.map((x) => ({ value: x.id, label: I.label(x) })), "checkbox");
     chips("surahs", "surah", O.SURAHS.map((s) => ({ value: s.ar, label: I.lang === "en" ? s.en : s.ar })), "checkbox");
     chips("teacher", "teacher", O.TEACHER.map((x) => ({ value: x.id, label: I.label(x) })));
     chips("estimate", "estimate", L.ESTIMATES.map((x) => ({ value: x.id, label: I.label(x) })));
@@ -69,7 +69,7 @@
       age_band: picked("age"),
       country: $("country").value,
       home_language: picked("lang"),
-      goal: picked("goal"),
+      goals: [...document.querySelectorAll('input[name="goal"]:checked')].map((x) => x.value),
       teacher: picked("teacher"),
       estimate: picked("estimate"),
       memorized: [...document.querySelectorAll('input[name="surah"]:checked')].map((x) => x.value),
@@ -83,7 +83,7 @@
     if (!p.age_band) missing.push(t("m_age"));
     if (!p.country) missing.push(t("m_country"));
     if (!p.home_language) missing.push(t("m_lang"));
-    if (!p.goal) missing.push(t("m_goal"));
+    if (!p.goals.length) missing.push(t("m_goal"));
     if (!p.teacher) missing.push(t("m_teacher"));
     if (!p.estimate) missing.push(t("m_estimate"));
     if (!p.lessons_per_week) missing.push(t("m_per_week"));

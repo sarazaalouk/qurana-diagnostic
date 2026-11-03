@@ -11,7 +11,7 @@ In 3–5 minutes the parent and child find the child's starting level, and get a
 
 ## Flow
 1. **Welcome + consent** (parent): what it is, how long, that a grown-up sits with the child.
-2. **About the child** (parent, 1 screen): nickname (optional), age band, country (detected), language at home, goal, surahs memorized (names) and how (listening / from the Mushaf / both — asked only when surahs are listed), lessons a week (2 or 3; it decides the plan), teacher preference, parent's estimate of the child's reading, and — only when the parent says the child reads from the Mushaf — three Tajweed basics (madd, ghunnah, qalqalah: yes / sometimes / no / not sure), for the teacher, not a game.
+2. **About the child** (parent, 1 screen): nickname (optional), age band, country (detected), language at home, goals (one or more), surahs memorized (names) and how (listening / from the Mushaf / both — asked only when surahs are listed), lessons a week (2 or 3; it decides the plan), teacher preference, parent's estimate of the child's reading, and — only when the parent says the child reads from the Mushaf — three Tajweed basics (madd, ghunnah, qalqalah: yes / sometimes / no / not sure), for the teacher, not a game.
 3. **Games** (child with parent): adaptive, starting from the parent's estimate and going down only if needed.
    1. Letter sounds — 6 letters of the Bismillah, pass 4.
    2. Letter shapes in a word — 4, pass 3.
@@ -41,13 +41,21 @@ In 3–5 minutes the parent and child find the child's starting level, and get a
 - The Arabic letters and words the child reads stay Arabic in both languages.
 
 ## Learning plan (`GET /api/results/:id/plan?lang=`)
-- Built from `data/curriculum.json` only (imported from the teachers' Excel template). Used only when `status` is `approved`; a draft is used only with `ALLOW_DRAFT_CURRICULUM=1` (local demo) and the page marks it "Test example".
-- **The path is worked out by rules, not by the model** (`curriculum.path`): start = the stage `diagnosis_map` gives for the child's level (the first stage not yet mastered); end = the stage `goal_map` gives for the parent's goal (`""` = the last foundation stage); in between, the foundation stages (the program of the R1 start stage) and the stages of the goal's program, in curriculum order, for the child's track. A child already past the goal gets "reached" and no model call.
+- Built from `data/curriculum.json` only (imported from the teachers' Excel template). The plan itself never mentions the curriculum's status: access is decided by the gate below.
+- **The path is worked out by rules, not by the model** (`curriculum.path`): start = the stage `diagnosis_map` gives for the child's level (the first stage not yet mastered); end = the furthest of the stages `goal_map` gives for the parent's goals (`""` = the last foundation stage); in between, the foundation stages (the program of the R1 start stage) and the stages of every chosen goal's program, in curriculum order, for the child's track. A child already past every goal gets "reached" and no model call.
 - Totals: lessons = the sum of the stages' lessons from the curriculum; weeks = lessons ÷ the lessons a week the parent chose, rounded up. Shown as an estimate the teacher reviews, not a promise.
 - Claude (`claude-opus-5-5`) only writes the words: an intro, one note per path stage, a home tip. Stage names, goals, content, exit signs and every number are inserted by the server from the curriculum.
-- Sent to Claude: age band, home language, goal, level, stage scores, surahs the parent listed and how they were memorized, the parent's Tajweed answers, lessons a week, track, teacher preference, the path and its totals. Never the nickname.
+- Sent to Claude: age band, home language, goals, level, stage scores, surahs the parent listed and how they were memorized, the parent's Tajweed answers, lessons a week, track, teacher preference, the path and its totals. Never the nickname.
 - Validator (`lib/plan.js`): notes exactly one per path stage in order; no number that is not in the path, the totals, the age band or the scores (Arabic-Indic digits included); lengths; no promises of results or durations; nothing that looks like Quran text; no Arabic script in the English plan. A rejected reply is written once more with the problems listed; if it fails again, or the model refuses, or the API fails, the path is shown from the curriculum without notes.
 - A Claude plan is kept with the result per language and not built again; a fallback is tried again on the next visit.
+
+- A kept plan carries the curriculum version (a hash) it was built from; after a new import or the approval it is built again.
+
+## Access: internal preview until approval (`lib/access.js`)
+- Until the curriculum is approved — status «معتمد» **and** a reviewer's name **and** a date in the «الاعتماد» tab — the whole app (pages and API) answers 503 with a neutral "not available yet" page that says nothing about the curriculum. Only `/admin`, `/api/admin/*`, `/css/*` and `/health` stay open.
+- `/admin`: enter `ADMIN_PIN` (env, set in Render, never in the code) → a 12-hour HttpOnly session cookie; then the app opens for that browser as an internal preview. 5 wrong PINs from one address in 15 minutes → wait. Without `ADMIN_PIN` the preview cannot open at all.
+- `/admin` shows the curriculum's current status and whether the link is public, and what is missing if it is not.
+- After approval (and an import), the link is public; the result page is the same before and after — only whether it opens changes.
 
 ## Curriculum template and import
 - Template for the teachers: `npm run curriculum-template -- <out.xlsx> [--prefill data/curriculum.json]` (`tools/curriculum-template.js`); `--prefill` puts the current curriculum in as starting values (the sample: Sara's Noor Al-Bayan order and the first teacher's lesson estimates, marked in the teacher-notes column). Tabs: read first, levels, stages (with optional English columns, an optional entry condition and an automatic stage code `L1-S1`), diagnosis map (R1–R6 → start stage), goal map (each goal → last stage), plan rules, approval (owner, reviewer, date, status), lists.

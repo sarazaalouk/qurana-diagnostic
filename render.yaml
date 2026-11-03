@@ -28,3 +28,6 @@ services:
       # For step 2 (learning plan with Claude). Set in Render, never in the repository.
       - key: ANTHROPIC_API_KEY
         sync: false
+      # The PIN for /admin (internal preview before the curriculum is approved). Set it in the Render dashboard; never in the code.
+      - key: ADMIN_PIN
+        sync: false

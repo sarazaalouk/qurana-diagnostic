@@ -30,11 +30,16 @@ const run = (estimate, results) => L.runStages(L.startStage(estimate), async (k)
   check("L6. reading words from Al-Fatiha but not the whole ayah stays at R5", L.levelFrom(r.stages), "R5");
 
   check("L7. suggestion: English track for an English-speaking home, reading foundations while learning to read, Seed for 2 lessons a week",
-    O.suggestion({ home_language: "en", goal: "hifz", age_band: "4–5", lessons_per_week: 2 }, "R3"),
+    O.suggestion({ home_language: "en", goals: ["hifz"], age_band: "4–5", lessons_per_week: 2 }, "R3"),
     { track: "english", program: "reading", plan: "seed", then: "hifz" });
   check("L8. suggestion: a reader follows the goal, Arabic track, Growth plan for 3 lessons a week",
-    O.suggestion({ home_language: "ar", goal: "tajweed", age_band: "8–9", lessons_per_week: 3 }, "R6"),
+    O.suggestion({ home_language: "ar", goals: ["tajweed"], age_band: "8–9", lessons_per_week: 3 }, "R6"),
     { track: "arabic", program: "tajweed", plan: "growth", then: null });
+  check("L9. several goals: a reader starts with the first goal in the list after reading, then the next one",
+    O.suggestion({ home_language: "ar", goals: ["read", "hifz", "tajweed"], lessons_per_week: 3 }, "R6"),
+    { track: "arabic", program: "hifz", plan: "growth", then: "tajweed" });
+  check("L10. an older result with a single goal still works",
+    O.suggestion({ home_language: "ar", goal: "tajweed", lessons_per_week: 3 }, "R6").program, "tajweed");
 
   console.log(failed ? `\n${failed} level case(s) failed` : "\nall level cases behaved as expected");
   process.exit(failed ? 1 : 0);

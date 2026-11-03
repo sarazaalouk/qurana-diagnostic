@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>إدارة تشخيص قرآنا</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Cairo:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<header class="top">
+  <span class="brand">قرآنا</span>
+  <span class="top-end"><small>إدارة التشخيص</small></span>
+</header>
+
+<main>
+  <section class="card" id="login" hidden>
+    <h1>الدخول</h1>
+    <p class="small muted">قبل اعتماد المنهج، التشخيص كله معاينة داخلية لا تفتح إلا بعد إدخال الرقم هنا.</p>
+    <form id="login-form" class="form-stack">
+      <div class="field">
+        <label for="pin">رقم الإدارة</label>
+        <input type="password" id="pin" autocomplete="current-password" required>
+      </div>
+      <p class="error" id="login-error" hidden></p>
+      <button class="btn block" type="submit">دخول</button>
+    </form>
+  </section>
+
+  <section class="card" id="status" hidden>
+    <h1>حالة المنهج</h1>
+    <p id="status-line" style="font-weight:700"></p>
+    <p id="status-detail" class="small"></p>
+    <ul id="status-problems" class="small"></ul>
+    <p class="small muted" id="status-file"></p>
+    <div class="ctas">
+      <a class="btn block" href="/">افتح التشخيص</a>
+      <button class="btn block secondary" id="logout" type="button">خروج</button>
+    </div>
+  </section>
+
+  <section class="card" id="no-pin" hidden>
+    <h1>الإدارة غير مفعّلة</h1>
+    <p>رقم الإدارة (ADMIN_PIN) غير مضبوط على السيرفر، فالمعاينة الداخلية لا تفتح. الرابط يصبح عامًا فقط بعد اعتماد المنهج.</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const show = (id) => ["login", "status", "no-pin"].forEach((s) => ($(s).hidden = s !== id));
+
+  async function load() {
+    const res = await fetch("/api/admin/status");
+    if (res.status === 503) return show("no-pin");
+    if (res.status === 401) return show("login");
+    const s = await res.json();
+    $("status-line").textContent = s.public
+      ? "معتمد — الرابط عام: الأهل يقدرون يفتحون التشخيص."
+      : "غير معتمد — الرابط مغلق للأهل: التشخيص كله معاينة داخلية بعد إدخال الرقم.";
+    $("status-line").style.color = s.public ? "var(--olive, #4A520A)" : "#8A3A1E";
+    const detail = [];
+    detail.push(`الحالة في تبويب «الاعتماد»: ${s.status === "approved" ? "معتمد" : s.status === "draft" ? "مسودة" : "غير معروفة"}`);
+    if (s.approved_by) detail.push(`راجعته: ${s.approved_by}`);
+    if (s.approved_at) detail.push(`بتاريخ: ${s.approved_at}`);
+    detail.push(`عدد المراحل: ${s.stages}`);
+    $("status-detail").textContent = detail.join(" · ");
+    const missing = [];
+    if (!s.public) {
+      if (s.status !== "approved") missing.push("الحالة لازم تكون «معتمد».");
+      if (!s.approved_by) missing.push("اسم اللي راجعت واعتمدت ناقص.");
+      if (!s.approved_at) missing.push("تاريخ الاعتماد ناقص.");
+      s.problems.forEach((p) => missing.push(`مشكلة في الملف: ${p}`));
+    }
+    $("status-problems").innerHTML = "";
+    missing.forEach((m) => { const li = document.createElement("li"); li.textContent = m; $("status-problems").appendChild(li); });
+    $("status-file").textContent = s.source_file ? `الملف المستورد: ${s.source_file}${s.imported_at ? ` · ${s.imported_at.slice(0, 10)}` : ""}` : "المنهج الحالي: عيّنة الاختبار (لم يُستورد ملف المعلمات بعد).";
+    show("status");
+  }
+
+  $("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    $("login-error").hidden = true;
+    const res = await fetch("/api/admin/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pin: $("pin").value }) });
+    $("pin").value = "";
+    if (res.ok) return load();
+    $("login-error").textContent = res.status === 429 ? "محاولات خاطئة كثيرة. حاولي بعد ربع ساعة." : res.status === 503 ? "رقم الإدارة غير مضبوط على السيرفر." : "الرقم غير صحيح.";
+    $("login-error").hidden = false;
+  });
+  $("logout").addEventListener("click", async () => { await fetch("/api/admin/logout", { method: "POST" }); show("login"); });
+  load();
+})();
+</script>
+</body>
+</html>

@@ -8,6 +8,7 @@ const store = require("./lib/store");
 const { validateSubmission } = require("./lib/validate");
 const levels = require("./public/js/levels");
 const { buildPlan } = require("./lib/plan");
+const access = require("./lib/access");
 
 const PORT = process.env.PORT || 3100;
 // Where the result links point, and the main site for booking and prices.
@@ -18,6 +19,9 @@ const WHATSAPP = process.env.WHATSAPP_NUMBER || "201142847626";
 const app = express();
 app.set("trust proxy", 1);
 app.use(express.json({ limit: "20kb" }));
+// Before approval of the curriculum, everything except /admin is closed unless the visitor entered ADMIN_PIN (lib/access.js).
+app.use(access.gate);
+access.routes(app);
 app.use(express.static(path.join(__dirname, "public"), { extensions: ["html"] }));
 
 // Simple limit on saved results per IP (in memory).
@@ -79,13 +83,15 @@ app.get("/api/results/:id", (req, res) => {
   });
 });
 
-// The learning plan for a saved result (Claude chooses stages from the approved curriculum; see lib/plan.js).
+// The learning plan for a saved result (the path by rules from the curriculum, notes by Claude; see lib/plan.js).
 app.get("/api/results/:id/plan", async (req, res, next) => {
   const r = store.get(req.params.id);
   if (!r) return res.status(404).json({ error: "result not found" });
   const lang = req.query.lang === "en" ? "en" : "ar";
+  // A kept plan is used only while the curriculum is the same version it was built from.
+  const version = access.current().fingerprint;
   const kept = r.plans && r.plans[lang];
-  if (kept) return res.json(kept);
+  if (kept && kept.curriculum === version) return res.json(kept.shown);
   planLimit(req, res, async () => {
     const key = `${r.id}:${lang}`;
     try {
@@ -94,11 +100,11 @@ app.get("/api/results/:id/plan", async (req, res, next) => {
       }
       const out = await building.get(key);
       if (out.problems && out.problems.length) console.warn(`plan ${key}: used the curriculum plan (${out.problems.join("; ")})`);
-      const shown = { status: out.status, draft: out.draft, plan: out.plan };
+      const shown = { status: out.status, plan: out.plan };
       // Keep only plans that will not change: a curriculum fallback after a model error is tried again next time.
       if (out.status === "ready" && out.plan.source === "claude") {
         const latest = store.get(r.id);
-        store.update(r.id, { plans: { ...(latest.plans || {}), [lang]: shown } });
+        store.update(r.id, { plans: { ...(latest.plans || {}), [lang]: { curriculum: version, shown } } });
       }
       res.json(shown);
     } catch (err) {

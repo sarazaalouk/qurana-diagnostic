@@ -106,15 +106,17 @@
 
   // Suggestion on the result page — fixed rules, shown as a suggestion the teacher reviews in the trial.
   // Track: English track when the child mostly speaks another language at home.
-  // Program: from the goal, except that a child still learning to read starts with reading foundations.
+  // Program: from the parent's goals (in the order of the list), except that a child still learning to read starts with
+  // reading foundations; "then" is the next chosen program after it.
   // Plan: from the lessons a week the parent chose (Seed = 2, Growth = 3).
   function suggestion(profile, level) {
     const track = profile.home_language === "en" || profile.home_language === "other" ? "english" : "arabic";
-    const goal = GOALS.find((g) => g.id === profile.goal);
+    const ids = Array.isArray(profile.goals) && profile.goals.length ? profile.goals : [profile.goal];
+    const chosen = GOALS.filter((g) => ids.includes(g.id)).map((g) => g.program);
     const learningToRead = ["R1", "R2", "R3", "R4"].includes(level);
-    const program = learningToRead ? "reading" : goal ? goal.program : "hifz";
+    const program = learningToRead ? "reading" : chosen.find((p) => p !== "reading") || chosen[0] || "hifz";
     const plan = Number(profile.lessons_per_week) === 2 ? "seed" : "growth";
-    const then = learningToRead && goal && goal.program !== "reading" ? goal.program : null;
+    const then = chosen.find((p) => p !== program && p !== "reading") || null;
     return { track, program, plan, then };
   }
 

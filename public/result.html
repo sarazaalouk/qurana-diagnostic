@@ -146,12 +146,12 @@
   $("result").hidden = false;
   document.title = t("r_doc_title", { level: levelName });
 
-  // ---- learning plan (built on the server from the approved curriculum) ----
+  // ---- learning plan (built on the server from the curriculum) ----
   try {
     const res = await fetch(`/api/results/${encodeURIComponent(id)}/plan?lang=${I.lang}`);
     const p = await res.json();
     if (res.ok && p.status === "reached") {
-      $("plan").innerHTML = `${p.draft ? `<span class="draft-flag">${esc(t("p_draft"))}</span>` : ""}<p>${esc(t("p_reached"))}</p>`;
+      $("plan").innerHTML = `<p>${esc(t("p_reached"))}</p>`;
       return;
     }
     if (!res.ok || p.status !== "ready") throw new Error();
@@ -169,12 +169,11 @@
       </article>`).join("");
     $("plan").innerHTML = `
       <div class="plan">
-        ${p.draft ? `<span class="draft-flag">${esc(t("p_draft"))}</span>` : ""}
         <p>${esc(p.plan.intro)}</p>
         ${stagesHtml}
         <p class="small"><b>${esc(t("p_totals", { sessions: tot.sessions, weeks: tot.weeks, per_week: tot.per_week }))}</b></p>
         <p><b>${esc(t("p_tip"))}:</b> ${esc(p.plan.tip)}</p>
-        <p class="note">${esc(p.plan.source === "claude" ? t("p_footer") : t("p_footer_cur"))}</p>
+        <p class="note">${esc(t("p_footer"))}</p>
       </div>`;
   } catch {
     $("plan").innerHTML = `<p class="note">${esc(t("p_unavailable"))}</p>`;
