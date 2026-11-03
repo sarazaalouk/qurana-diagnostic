@@ -37,5 +37,12 @@ const allText = JSON.stringify(T) + files;
 check("I6. the AI-written notes are never called «ملاحظات المعلمة» / \"the teacher's notes\"", !/ملاحظات المعلمة|teacher's notes/.test(allText));
 check("I7. the result page carries the line on how the notes were written", fs.readFileSync(path.join(pub, "result.html"), "utf8").includes('data-i18n="r_ai_note"') && /الذكاء الاصطناعي/.test(T.ar.r_ai_note) && /AI/.test(T.en.r_ai_note));
 
+// Every id appears once per page (a repeated id made the teacher choices disappear with the teachers' section).
+for (const page of ["index.html", "result.html", "admin.html"]) {
+  const ids = [...fs.readFileSync(path.join(pub, page), "utf8").matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]);
+  const dup = ids.filter((x, i) => ids.indexOf(x) !== i);
+  check(`I8. ${page}: no id is used twice`, dup.length === 0, dup.join(", "));
+}
+
 console.log(failed ? `\n${failed} i18n case(s) failed` : "\nall i18n cases behaved as expected");
 process.exit(failed ? 1 : 0);

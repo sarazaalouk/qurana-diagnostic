@@ -11,7 +11,7 @@
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((x) => x[1]);
-  const show = (id) => ["welcome", "about", "adult", "teacher", "game", "saving"].forEach((s) => ($(s).hidden = s !== id));
+  const show = (id) => ["welcome", "about", "adult", "teacher-soon", "game", "saving"].forEach((s) => ($(s).hidden = s !== id));
 
   I.apply();
   let content = null;
@@ -40,7 +40,7 @@
     if (!$("consent").checked) { $("consent-error").textContent = t("consent_err"); $("consent-error").hidden = false; return; }
     $("consent-error").hidden = true;
     const who = picked("who") || "child";
-    if (who === "teacher") { show("teacher"); window.scrollTo({ top: 0 }); return; }
+    if (who === "teacher") { show("teacher-soon"); window.scrollTo({ top: 0 }); return; }
     $("start").disabled = true;
     try {
       const res = await fetch("/api/content");
