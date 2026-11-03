@@ -99,28 +99,125 @@
     { id: "unsure", label: "لست متأكدًا", label_en: "Not sure" },
   ];
 
+  // The same three questions, put to an adult about their own reading.
+  const TAJWEED_QS_ADULT = {
+    madd: { label: "المد: هل تُطيل الصوت عند حروف المد، مثل: قَالَ، قِيلَ، يَقُولُ، ولا تقرؤها قصيرة؟", label_en: "Madd: do you hold the sound longer on the long-vowel letters, as in qāla, qīla, yaqūlu?" },
+    ghunnah: { label: "الغنة: هل تُخرج صوتًا من الأنف عند النون والميم المشددتين، مثل: إِنَّ، ثُمَّ؟", label_en: "Ghunnah: do you make a sound through the nose on a doubled noon or meem, as in inna, thumma?" },
+    qalqalah: { label: "القلقلة: هل يظهر اهتزاز خفيف في صوتك عند الوقف على حروف القلقلة، مثل: أَحَد، الْفَلَق؟", label_en: "Qalqalah: is there a slight bounce in your voice when you stop on a qalqalah letter, as in aḥad, al-falaq?" },
+  };
+
+  // Tajweed points that can go alongside memorization ("تركيز مصاحب"), one per Tajweed question.
+  const FOCUS = [
+    { id: "madd", name: "المد", name_en: "Madd (lengthening)" },
+    { id: "ghunnah", name: "الغنة", name_en: "Ghunnah (the nasal sound)" },
+    { id: "qalqalah", name: "القلقلة", name_en: "Qalqalah (the slight bounce)" },
+  ];
+  // The order of the focus points from the Tajweed answers: "no" first, then "sometimes", then "not sure"; "yes" needs none.
+  // Without answers (not asked), all three in their usual order.
+  function focusOrder(tajweed) {
+    if (!tajweed) return FOCUS.map((f) => f.id);
+    return ["no", "sometimes", "unsure"].flatMap((a) => FOCUS.filter((f) => tajweed[f.id] === a).map((f) => f.id));
+  }
+  // A learner who reads from the Mushaf: Tajweed goes alongside memorization instead of coming after it.
+  const readsMushaf = (level) => level === "R5" || level === "R6";
+
+  // What the child responds to — the parent's four short answers (no labels, no "types").
+  const LIKES_QS = [
+    { id: "listening", label: "يحب الأناشيد والاستماع؟", label_en: "Enjoys nasheeds and listening?" },
+    { id: "drawing", label: "يحب الكتابة والرسم؟", label_en: "Enjoys writing and drawing?" },
+    { id: "moving", label: "يحب الحركة؟", label_en: "Enjoys moving about?" },
+  ];
+  const LIKES_ANSWERS = [
+    { id: "yes", label: "نعم", label_en: "Yes" },
+    { id: "sometimes", label: "أحيانًا", label_en: "Sometimes" },
+    { id: "no", label: "لا", label_en: "No" },
+  ];
+  const MOTIVATION = [
+    { id: "challenge", label: "التحدي", label_en: "A challenge" },
+    { id: "praise", label: "المدح", label_en: "Praise" },
+    { id: "both", label: "الاثنان", label_en: "Both" },
+    { id: "unsure", label: "لست متأكدًا", label_en: "Not sure" },
+  ];
+
+  // Who is taking the diagnostic.
+  const WHO = [
+    { id: "child", label: "طفل", label_en: "A child" },
+    { id: "adult", label: "بالغ", label_en: "An adult" },
+    { id: "teacher", label: "معلم أو معلمة", label_en: "A teacher" },
+  ];
+
+  // The adult track: own reading, an ayah read aloud, goals and time.
+  const ADULT_AGE_BANDS = ["18–25", "26–35", "36–50", "51+"];
+  const ADULT_SELF = [
+    { id: "none", label: "لا أقرأ العربية بعد", label_en: "I don't read Arabic yet" },
+    { id: "slow", label: "أقرأ ببطء وأخطئ أحيانًا", label_en: "I read slowly and make some mistakes" },
+    { id: "fluent", label: "أقرأ من المصحف بطلاقة", label_en: "I read from the Mushaf fluently" },
+  ];
+  const AYAH_SELF = [
+    { id: "easy", label: "قرأتها بسهولة", label_en: "I read it easily" },
+    { id: "hard", label: "قرأتها بصعوبة", label_en: "I read it with difficulty" },
+    { id: "no", label: "لم أستطع قراءتها", label_en: "I couldn't read it" },
+  ];
+  // Each adult goal and the curriculum goal its path follows (ijaza: the teacher decides after a test).
+  const ADULT_GOALS = [
+    { id: "tilawa", label: "تصحيح التلاوة", label_en: "Correct my recitation", program: "tilawa", path: "tajweed" },
+    { id: "hifz", label: "الحفظ", label_en: "Memorization (Hifz)", program: "hifz", path: "hifz" },
+    { id: "tajweed", label: "التجويد", label_en: "Tajweed", program: "tajweed", path: "tajweed" },
+    { id: "ijaza", label: "الإجازة", label_en: "Ijazah (certified recitation)", program: "ijaza", path: null },
+  ];
+  const EXPLAIN_LANGS = [
+    { id: "ar", label: "العربية", label_en: "Arabic" },
+    { id: "en", label: "الإنجليزية", label_en: "English" },
+  ];
+  // The adult's level from the self-assessment and the ayah: A1 → starts with the letters, A2 → reading from the Mushaf,
+  // A3 → recitation and memorization. Each maps to the child level whose start stage it shares.
+  function adultLevel(self, ayah) {
+    if (self === "none" || ayah === "no") return "A1";
+    if (self === "fluent" && ayah === "easy") return "A3";
+    return "A2";
+  }
+  const ADULT_TO_LEVEL = { A1: "R1", A2: "R5", A3: "R6" };
+
+  PROGRAMS.tilawa = { name: "تصحيح التلاوة", name_en: "Correcting recitation" };
+  PROGRAMS.ijaza = { name: "الإجازة", name_en: "Ijazah" };
+
   const PLANS = {
     seed: { name: "البذرة", name_en: "Seed", per_week: 2 },
     growth: { name: "النماء", name_en: "Growth", per_week: 3 },
   };
 
-  // Suggestion on the result page — fixed rules, shown as a suggestion the teacher reviews in the trial.
-  // Track: English track when the child mostly speaks another language at home.
-  // Program: from the parent's goals (in the order of the list), except that a child still learning to read starts with
-  // reading foundations; "then" is the next chosen program after it.
-  // Plan: from the lessons a week the parent chose (Seed = 2, Growth = 3).
-  function suggestion(profile, level) {
-    const track = profile.home_language === "en" || profile.home_language === "other" ? "english" : "arabic";
-    const ids = Array.isArray(profile.goals) && profile.goals.length ? profile.goals : [profile.goal];
-    const chosen = GOALS.filter((g) => ids.includes(g.id)).map((g) => g.program);
-    const learningToRead = ["R1", "R2", "R3", "R4"].includes(level);
-    const program = learningToRead ? "reading" : chosen.find((p) => p !== "reading") || chosen[0] || "hifz";
-    const plan = Number(profile.lessons_per_week) === 2 ? "seed" : "growth";
-    const then = chosen.find((p) => p !== program && p !== "reading") || null;
-    return { track, program, plan, then };
+  // The goals a profile's path follows (older child results saved a single `goal`; adults map theirs).
+  function pathGoals(profile) {
+    if (profile.who === "adult") return ADULT_GOALS.filter((g) => profile.goals.includes(g.id) && g.path).map((g) => g.path);
+    return Array.isArray(profile.goals) && profile.goals.length ? profile.goals : [profile.goal].filter(Boolean);
   }
 
-  const api = { AGE_BANDS, COUNTRIES, countryFromZone, HOME_LANGUAGES, PROGRAMS, GOALS, TEACHER, SURAHS, SURAH_NAMES, LESSONS_PER_WEEK, MEM_SOURCES, TAJWEED_QS, TAJWEED_ANSWERS, PLANS, suggestion };
+  // Suggestion on the result page — fixed rules, shown as a suggestion the teacher reviews in the trial.
+  // Track: English track when the child mostly speaks another language at home (an adult: the language they chose).
+  // Program: from the goals (in the order of the list), except that a learner still learning to read starts with
+  // reading foundations; "then" is the next chosen program after it. A reader who memorizes gets Tajweed alongside
+  // ("with_tajweed") instead of after it.
+  // Plan: from the lessons a week chosen (Seed = 2, Growth = 3).
+  function suggestion(profile, level) {
+    const adult = profile.who === "adult";
+    const track = adult ? (profile.explain_lang === "en" ? "english" : "arabic")
+      : profile.home_language === "en" || profile.home_language === "other" ? "english" : "arabic";
+    const ids = adult ? profile.goals : Array.isArray(profile.goals) && profile.goals.length ? profile.goals : [profile.goal];
+    const chosen = (adult ? ADULT_GOALS : GOALS).filter((g) => ids.includes(g.id)).map((g) => g.program);
+    const learningToRead = ["R1", "R2", "R3", "R4"].includes(level);
+    let program = learningToRead ? "reading" : chosen.find((p) => p !== "reading") || chosen[0] || "hifz";
+    const plan = Number(profile.lessons_per_week) === 2 ? "seed" : "growth";
+    const withTajweed = readsMushaf(level) && chosen.includes("hifz") && focusOrder(profile.tajweed).length > 0;
+    if (withTajweed) program = "hifz";
+    const then = withTajweed ? null : chosen.find((p) => p !== program && p !== "reading" && !(learningToRead && p === "tilawa" && program === "reading")) || null;
+    return { track, program, plan, then, with_tajweed: withTajweed };
+  }
+
+  const api = {
+    AGE_BANDS, COUNTRIES, countryFromZone, HOME_LANGUAGES, PROGRAMS, GOALS, TEACHER, SURAHS, SURAH_NAMES, LESSONS_PER_WEEK, MEM_SOURCES,
+    TAJWEED_QS, TAJWEED_QS_ADULT, TAJWEED_ANSWERS, FOCUS, focusOrder, readsMushaf, LIKES_QS, LIKES_ANSWERS, MOTIVATION, WHO,
+    ADULT_AGE_BANDS, ADULT_SELF, AYAH_SELF, ADULT_GOALS, EXPLAIN_LANGS, adultLevel, ADULT_TO_LEVEL, PLANS, pathGoals, suggestion,
+  };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.QuranaOptions = api;
 })(typeof window !== "undefined" ? window : globalThis);

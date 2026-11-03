@@ -69,7 +69,14 @@
     return "R6";
   }
 
-  const api = { STAGES, PASS, ESTIMATES, LEVELS, startStage, runStages, levelFrom };
+  // Adult levels (from the self-assessment and the ayah read aloud; see adultLevel in options.js).
+  const ADULT_LEVELS = {
+    A1: { name: "البداية بالحروف", focus: "قراءة الحروف وأصواتها ثم الكلمات.", name_en: "Starting with the letters", focus_en: "Reading the letters and their sounds, then words." },
+    A2: { name: "القراءة من المصحف", focus: "قراءة المصحف قراءة صحيحة بثقة.", name_en: "Reading from the Mushaf", focus_en: "Reading the Mushaf correctly and with confidence." },
+    A3: { name: "التلاوة والحفظ", focus: "تحسين التلاوة وتطبيق التجويد والحفظ.", name_en: "Recitation and memorization", focus_en: "Improving recitation, applying Tajweed, and memorizing." },
+  };
+
+  const api = { STAGES, PASS, ESTIMATES, LEVELS, ADULT_LEVELS, startStage, runStages, levelFrom };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.QuranaLevels = api;
 })(typeof window !== "undefined" ? window : globalThis);

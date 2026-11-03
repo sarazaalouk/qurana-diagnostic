@@ -97,6 +97,7 @@ function build() {
     ["4) تبويب «قواعد الخطة»: اكتبوا اللي لازم يتقال لولي الأمر واللي ممنوع يتقال.", {}],
     ["5) تبويب «الاعتماد»: اسم اللي راجعت، والتاريخ، وحالة المنهج. الخطط ما بتظهرش للأهل إلا لما الحالة تبقى «معتمد».", {}],
     ["6) الخانات الصفرا هي اللي بتتملي. أول سطر رمادي في كل تبويب «مثال» يوضّح الشكل المطلوب — امسحوه أو اكتبوا فوقه (السطر اللي اسمه بيبدأ بكلمة «مثال» ما بيتقراش).", {}],
+    ["6ب) مراحل الحفظ: اكتبوا أسماء السور في عمود «السور»، فالطفل اللي ولي أمره قال إنه يحفظ سور المرحلة كلها ما تظهرلوش، ولو حافظ بعضها تظهر بالباقي مع مراجعة ما حفظه. وعمود «تركيز مصاحب ممكن» فيه نقاط التجويد اللي ممكن تمشي مع المرحلة (المد، الغنة، القلقلة): الطفل اللي بيقرا من المصحف ياخد التجويد معاها بدل ما يتأجل.", {}],
     ["7) الأعمدة الإنجليزي (اختيارية) بتظهر للأهل اللي بيستخدموا الصفحة بالإنجليزي. لو فاضية، الأهل دول هيشوفوا النص العربي.", {}],
     ["", {}],
     ["قواعد مهمة", { bold: true, color: { argb: OLIVE } }],
@@ -164,6 +165,8 @@ function build() {
     { h: "كود المرحلة (تلقائي)", w: 13, auto: true },
     { h: "شرط الدخول (اختياري)", w: 30 },
     { h: "شرط الدخول بالإنجليزي (اختياري)", w: 30 },
+    { h: "السور (لمراحل الحفظ، بينها فاصلة)", w: 36 },
+    { h: "تركيز مصاحب ممكن (المد، الغنة، القلقلة)", w: 28 },
   ];
   header(st, "المراحل", "كل مرحلة في سطر، بكود المستوى بتاعها ورقمها بالترتيب. أول سطر مثال. البرنامج والمسار من القائمة المنسدلة. الأعمدة الإنجليزي اختيارية.", stCols);
   rows(st, STAGE_ROWS, stCols, [
@@ -184,7 +187,9 @@ function build() {
     undefined,
     "بداية الرحلة: ما فيش شرط",
     "Start of the journey: no condition",
-  ], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16]);
+    "",
+    "",
+  ], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18]);
   const lastStageRow = FIRST_ROW + STAGE_ROWS - 1;
   for (let r = FIRST_ROW; r <= lastStageRow; r++) {
     st.getCell(r, 4).dataValidation = { type: "list", allowBlank: true, formulae: [`'${SHEETS.lists}'!$A$2:$A$30`] };
@@ -334,6 +339,8 @@ function prefill(wb, c) {
       s.teacher_note, s.name_en, s.goals_en, s.content_en, s.exit_sign_en].forEach((v, j) => (row.getCell(j + 1).value = v === undefined ? null : v));
     row.getCell(16).value = s.entry || null;
     row.getCell(17).value = s.entry_en || null;
+    row.getCell(18).value = s.surahs ? s.surahs.join("، ") : null;
+    row.getCell(19).value = s.focus ? s.focus.map((id) => options.FOCUS.find((f) => f.id === id).name).join("، ") : null;
   });
   const mp = wb.getWorksheet(SHEETS.map);
   for (let r = FIRST_ROW; r < FIRST_ROW + 6; r++) mp.getRow(r).getCell(4).value = c.diagnosis_map[mp.getRow(r).getCell(1).value] || null;

@@ -43,6 +43,18 @@
     </div>
   </section>
 
+  <section class="card" id="results" hidden>
+    <h2>آخر النتائج</h2>
+    <div class="steps-done" id="results-list"></div>
+    <div id="result-detail" hidden>
+      <h3 id="rd-title"></h3>
+      <p class="small"><a id="rd-link" target="_blank" rel="noopener">فتح صفحة النتيجة</a></p>
+      <h3>كيف نبدأ معه</h3>
+      <ul id="rd-start"></ul>
+      <p class="small muted" id="rd-signals"></p>
+    </div>
+  </section>
+
   <section class="card" id="no-pin" hidden>
     <h1>الإدارة غير مفعّلة</h1>
     <p>رقم الإدارة (ADMIN_PIN) غير مضبوط على السيرفر، فالمعاينة الداخلية لا تفتح. الرابط يصبح عامًا فقط بعد اعتماد المنهج.</p>
@@ -52,7 +64,47 @@
 <script>
 (function () {
   const $ = (id) => document.getElementById(id);
-  const show = (id) => ["login", "status", "no-pin"].forEach((s) => ($(s).hidden = s !== id));
+  const show = (id) => {
+    ["login", "status", "no-pin"].forEach((s) => ($(s).hidden = s !== id));
+    $("results").hidden = id !== "status";
+    if (id === "status") loadResults();
+  };
+  const li = (text) => { const el = document.createElement("li"); el.textContent = text; return el; };
+
+  // Recent results, and for one of them the practical points for the teacher (fixed rules, no model).
+  async function loadResults() {
+    const res = await fetch("/api/admin/results");
+    if (!res.ok) return;
+    const list = await res.json();
+    const box = $("results-list");
+    box.innerHTML = "";
+    if (!list.length) { box.textContent = "لا توجد نتائج بعد."; return; }
+    for (const r of list) {
+      const row = document.createElement("div");
+      const a = document.createElement("a");
+      a.href = "#";
+      a.textContent = `${r.created_at.slice(0, 10)} · ${r.who === "adult" ? "بالغ" : "طفل"}${r.nickname ? ` (${r.nickname})` : ""} · ${r.level} · ${r.market}`;
+      a.addEventListener("click", (e) => { e.preventDefault(); openResult(r.id); });
+      row.appendChild(a);
+      box.appendChild(row);
+    }
+  }
+  async function openResult(id) {
+    const res = await fetch(`/api/admin/results/${encodeURIComponent(id)}`);
+    if (!res.ok) return;
+    const d = await res.json();
+    $("rd-title").textContent = `النتيجة ${d.id} · ${d.who === "adult" ? "بالغ" : "طفل"} · ${d.level}`;
+    $("rd-link").href = d.link;
+    $("rd-link").textContent = d.link;
+    $("rd-start").innerHTML = "";
+    (d.start_with.length ? d.start_with : ["لا توجد إشارات كافية من الألعاب أو إجابات الأهل؛ ابدئي بالمعتاد ولاحظي."]).forEach((x) => $("rd-start").appendChild(li(x)));
+    const k = (d.signals && d.signals.kinds) || {};
+    const part = (name, x) => (x ? `${name}: ${x.correct} من ${x.n}، الوسيط ${(x.median_ms / 1000).toFixed(1)} ث` : null);
+    $("rd-signals").textContent = d.signals
+      ? [part("السمع", k.sound), part("الشكل", k.shape), part("القراءة", k.read), `تلميحات: ${d.signals.hints}`, `تخطٍّ: ${d.signals.skips}`].filter(Boolean).join(" · ")
+      : "";
+    $("result-detail").hidden = false;
+  }
 
   async function load() {
     const res = await fetch("/api/admin/status");

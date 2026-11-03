@@ -7,6 +7,7 @@ const ExcelJS = require("exceljs");
 const T = require("./curriculum-template");
 const curriculum = require("../lib/curriculum");
 const { looksLikeQuran } = require("../lib/plan");
+const options = require("../public/js/options");
 
 const ARABIC_RE = /[؀-ۿ]/;
 
@@ -79,7 +80,7 @@ function fromWorkbook(wb, sourceName = "") {
       const s = {
         level: c(1), n: c(2), name: c(3), program: c(4), track: c(5), goals: c(6), content: c(7), sessions: c(8), exit_sign: c(9),
         teacher_note: c(10), name_en: c(11), goals_en: c(12), content_en: c(13), exit_sign_en: c(14),
-        entry: c(16), entry_en: c(17),
+        entry: c(16), entry_en: c(17), surahs: c(18), focus: c(19),
       };
       if (![s.level, s.n, s.name, s.goals, s.content, s.exit_sign].some(Boolean)) continue;
       if (isExample(s.name)) continue;
@@ -101,6 +102,12 @@ function fromWorkbook(wb, sourceName = "") {
       for (const [f, label] of Object.entries(english)) englishCheck("stages", r, label, s[f]);
       englishCheck("stages", r, "شرط الدخول بالإنجليزي", s.entry_en);
       if (Object.keys(english).some((f) => !s[f])) missingEnglish++;
+      // Memorization stages: the surah names, and the Tajweed points that may go alongside (by name → id).
+      const list = (v) => v.split(/[،,]/).map((x) => x.trim()).filter(Boolean);
+      const surahs = list(s.surahs);
+      const focusNames = list(s.focus);
+      const focus = focusNames.map((nm) => (options.FOCUS.find((f) => f.name === nm) || {}).id);
+      if (focus.some((x) => !x)) problems.push(`${at}: «تركيز مصاحب» يقبل فقط: ${options.FOCUS.map((f) => f.name).join("، ")}`);
       const id = `${s.level}-S${n}`;
       if (stages.some((x) => x.id === id)) problems.push(`${at}: المرحلة ${id} متكررة (نفس المستوى ونفس الرقم)`);
       stages.push({
@@ -109,6 +116,8 @@ function fromWorkbook(wb, sourceName = "") {
         ...Object.fromEntries(Object.keys(english).filter((f) => s[f]).map((f) => [f, s[f]])),
         ...(s.entry && { entry: s.entry }),
         ...(s.entry_en && { entry_en: s.entry_en }),
+        ...(surahs.length && { surahs }),
+        ...(focus.length && { focus }),
         ...(s.teacher_note && { teacher_note: s.teacher_note }),
       });
     }

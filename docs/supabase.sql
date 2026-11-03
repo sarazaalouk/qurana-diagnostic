@@ -18,3 +18,14 @@ create index if not exists diagnoses_created_at_idx on public.diagnoses (created
 create index if not exists diagnoses_market_status_idx on public.diagnoses (market, status);
 
 alter table public.diagnoses enable row level security;
+
+-- Teachers who asked to hear when the teachers' diagnostic opens (the "coming soon" page). Email only.
+create table if not exists public.waitlist (
+  id          bigint generated always as identity primary key,
+  created_at  timestamptz not null default now(),
+  email       text not null check (char_length(email) <= 200 and email ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'),
+  role        text not null default 'teacher' check (role in ('teacher')),
+  lang        text not null default 'ar' check (lang in ('ar', 'en'))
+);
+
+alter table public.waitlist enable row level security;

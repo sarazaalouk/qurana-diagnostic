@@ -7,7 +7,9 @@ const content = require("./lib/content");
 const store = require("./lib/store");
 const { validateSubmission } = require("./lib/validate");
 const levels = require("./public/js/levels");
-const { pathFor, writeNotes } = require("./lib/plan");
+const { pathFor, writeNotes, voice } = require("./lib/plan");
+const signals = require("./public/js/signals");
+const voiceVersion = () => require("crypto").createHash("sha256").update(voice().text).digest("hex").slice(0, 12);
 const access = require("./lib/access");
 
 const PORT = process.env.PORT || 3100;
@@ -71,14 +73,19 @@ app.post("/api/results", saveLimit, wrap(async (req, res) => {
 app.get("/api/results/:id", wrap(async (req, res) => {
   const r = await store.get(req.params.id);
   if (!r) return res.status(404).json({ error: "result not found" });
-  const level = levels.LEVELS[r.level];
+  const adult = r.profile.who === "adult";
+  const level = adult ? levels.ADULT_LEVELS[r.profile.adult_level] : levels.LEVELS[r.level];
+  const lang = req.query.lang === "en" ? "en" : "ar";
   res.json({
     id: r.id,
     created_at: r.created_at,
+    who: adult ? "adult" : "child",
     profile: r.profile,
     stages: r.stages,
-    level: { code: r.level, name: level.name, focus: level.focus, name_en: level.name_en, focus_en: level.focus_en },
+    level: { code: adult ? r.profile.adult_level : r.level, name: level.name, focus: level.focus, name_en: level.name_en, focus_en: level.focus_en },
     suggestion: r.suggestion,
+    // "ما لاحظناه": three gentle sentences from the games and the parent's answers (children only; fixed rules).
+    ...(!adult && { observed: signals.observe(r.signals, r.profile.likes, r.profile.motivation, lang).parent }),
     links: {
       result: `${PUBLIC_BASE_URL}/r/${r.id}`,
       booking: `${SITE_URL}/register?diagnosis=${r.id}`,
@@ -103,9 +110,10 @@ app.get("/api/results/:id/notes", wrap(async (req, res) => {
   const r = await store.get(req.params.id);
   if (!r) return res.status(404).json({ error: "result not found" });
   const lang = req.query.lang === "en" ? "en" : "ar";
-  const version = access.current().fingerprint;
+  // Kept notes are used only for the same curriculum and the same voice guide (prompts/voice.md) they were written with.
+  const version = `${access.current().fingerprint}:${voiceVersion()}`;
   const kept = r.plans && r.plans[lang];
-  if (kept && kept.curriculum === version && kept.notes) return res.json(kept.notes);
+  if (kept && kept.curriculum === version && kept.notes && kept.notes.windows) return res.json(kept.notes);
   if (!notesAllowed(req)) return res.status(429).json({ status: "failed", error: "too many requests from this address, try again later" });
   const key = `${r.id}:${lang}`;
   if (!building.has(key)) {
@@ -113,12 +121,45 @@ app.get("/api/results/:id/notes", wrap(async (req, res) => {
   }
   const out = await building.get(key);
   if (out.problems.length) console.warn(`notes ${key}: ${out.status} (${out.problems.join("; ")})`);
-  const shown = out.status === "ready" ? { status: "ready", intro: out.intro, tip: out.tip, notes: out.notes } : { status: out.status };
+  const shown = out.status === "ready" ? { status: "ready", windows: out.windows, tip: out.tip } : { status: out.status };
   if (out.status === "ready") {
     const latest = await store.get(r.id);
     await store.update(r.id, { plans: { ...(latest.plans || {}), [lang]: { curriculum: version, notes: shown } } });
   }
   res.json(shown);
+}));
+
+// Teachers: "coming soon" — an email to hear when the teachers' diagnostic opens. Email only, nothing else.
+const waitlistAllowed = limit(10);
+app.post("/api/waitlist", wrap(async (req, res) => {
+  const email = String((req.body && req.body.email) || "").trim().toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || email.length > 200) return res.status(400).json({ error: "email is not valid" });
+  if (!req.body.consent) return res.status(400).json({ error: "consent is needed" });
+  if (!waitlistAllowed(req)) return res.status(429).json({ error: "too many requests from this address, try again later" });
+  await store.addWaitlist({ email, role: "teacher", lang: req.body.lang === "en" ? "en" : "ar" });
+  res.status(201).json({ ok: true });
+}));
+
+// For the teacher in /admin: recent results, and "كيف نبدأ معه" for one of them (practical points, fixed rules).
+app.get("/api/admin/results", wrap(async (req, res) => {
+  if (!access.isAdmin(req)) return res.status(401).json({ error: "enter the PIN first" });
+  const list = await store.list(30);
+  res.set("Cache-Control", "no-store");
+  res.json(list.map((r) => ({
+    id: r.id, created_at: r.created_at, who: r.profile.who || "child", market: r.market || store.marketOf(r.profile.country),
+    level: r.profile.who === "adult" ? r.profile.adult_level : r.level, nickname: r.profile.nickname || "",
+  })));
+}));
+app.get("/api/admin/results/:id", wrap(async (req, res) => {
+  if (!access.isAdmin(req)) return res.status(401).json({ error: "enter the PIN first" });
+  const r = await store.get(req.params.id);
+  if (!r) return res.status(404).json({ error: "result not found" });
+  const o = signals.observe(r.signals, r.profile.likes, r.profile.motivation, "ar");
+  res.set("Cache-Control", "no-store");
+  res.json({
+    id: r.id, who: r.profile.who || "child", level: r.profile.who === "adult" ? r.profile.adult_level : r.level,
+    link: `${PUBLIC_BASE_URL}/r/${r.id}`, profile: r.profile, signals: r.signals || null, start_with: o.teacher, observed: o.parent,
+  });
 }));
 
 // Result page at /r/<id>

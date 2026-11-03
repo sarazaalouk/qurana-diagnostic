@@ -1,23 +1,46 @@
-// Qurana diagnostic page: consent → about the child → adaptive games → save → result page.
+// Qurana diagnostic page: consent and who it is for →
+//   child: about the child → adaptive games (with response signals) → save → result page;
+//   adult: own reading, ayah 1:1, Tajweed, goals, time → save → result page;
+//   teacher: "coming soon" with an email.
 (function () {
   const L = window.QuranaLevels;
   const O = window.QuranaOptions;
   const I = window.QuranaI18n;
+  const S = window.QuranaSignals;
   const t = I.t;
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((x) => x[1]);
-  const show = (id) => ["welcome", "about", "game", "saving"].forEach((s) => ($(s).hidden = s !== id));
+  const show = (id) => ["welcome", "about", "adult", "teacher", "game", "saving"].forEach((s) => ($(s).hidden = s !== id));
 
   I.apply();
   let content = null;
   let profile = null;
   let stages = null;
+  let rec = null;
 
-  // ---------- welcome ----------
+  function chips(id, name, items, type = "radio") {
+    $(id).innerHTML = items
+      .map((it) => `<label${it.ar ? ' lang="ar"' : ""}><input type="${type}" name="${name}" value="${esc(it.value)}"> ${esc(it.label)}</label>`)
+      .join("");
+  }
+  const picked = (name) => (document.querySelector(`input[name="${name}"]:checked`) || {}).value;
+  const checked = (name) => [...document.querySelectorAll(`input[name="${name}"]:checked`)].map((x) => x.value);
+  const fillCountries = (id) => {
+    $(id).innerHTML = `<option value="">${esc(t("choose_country"))}</option>` + O.COUNTRIES.map((c) => `<option value="${c.code}">${esc(I.label(c, "name"))}</option>`).join("");
+    try { $(id).value = O.countryFromZone(Intl.DateTimeFormat().resolvedOptions().timeZone) || ""; } catch { /* no time zone */ }
+  };
+  const missingText = (missing) => t("missing") + missing.join(I.lang === "en" ? ", " : "، ") + ".";
+
+  // ---------- welcome: who is it for ----------
+  chips("who", "who", O.WHO.map((x) => ({ value: x.id, label: I.label(x) })));
+  document.querySelector('input[name="who"][value="child"]').checked = true;
+
   $("start").addEventListener("click", async () => {
     if (!$("consent").checked) { $("consent-error").textContent = t("consent_err"); $("consent-error").hidden = false; return; }
     $("consent-error").hidden = true;
+    const who = picked("who") || "child";
+    if (who === "teacher") { show("teacher"); window.scrollTo({ top: 0 }); return; }
     $("start").disabled = true;
     try {
       const res = await fetch("/api/content");
@@ -29,21 +52,14 @@
       $("consent-error").hidden = false;
       return;
     }
-    buildAbout();
-    show("about");
+    if (who === "adult") { buildAdult(); show("adult"); } else { buildAbout(); show("about"); }
     window.scrollTo({ top: 0 });
   });
 
   // ---------- about the child ----------
-  function chips(id, name, items, type = "radio") {
-    $(id).innerHTML = items
-      .map((it) => `<label${it.ar ? ' lang="ar"' : ""}><input type="${type}" name="${name}" value="${esc(it.value)}"> ${esc(it.label)}</label>`)
-      .join("");
-  }
   function buildAbout() {
     chips("age", "age", O.AGE_BANDS.map((a) => ({ value: a, label: `${a} ${t("age_unit")}` })));
-    $("country").innerHTML = `<option value="">${esc(t("choose_country"))}</option>` + O.COUNTRIES.map((c) => `<option value="${c.code}">${esc(I.label(c, "name"))}</option>`).join("");
-    try { $("country").value = O.countryFromZone(Intl.DateTimeFormat().resolvedOptions().timeZone) || ""; } catch { /* no time zone */ }
+    fillCountries("country");
     chips("lang", "lang", O.HOME_LANGUAGES.map((x) => ({ value: x.id, label: I.label(x) })));
     chips("goal", "goal", O.GOALS.map((x) => ({ value: x.id, label: I.label(x) })), "checkbox");
     chips("surahs", "surah", O.SURAHS.map((s) => ({ value: s.ar, label: I.lang === "en" ? s.en : s.ar })), "checkbox");
@@ -51,34 +67,45 @@
     chips("estimate", "estimate", L.ESTIMATES.map((x) => ({ value: x.id, label: I.label(x) })));
     chips("mem-from", "mem_from", O.MEM_SOURCES.map((x) => ({ value: x.id, label: I.label(x) })));
     chips("per-week", "per_week", O.LESSONS_PER_WEEK.map((x) => ({ value: x.id, label: I.label(x) })));
-    $("tajweed").innerHTML = O.TAJWEED_QS.map((q) => `
+    $("tajweed").innerHTML = tajweedHtml("tj", (q) => I.label(q));
+    $("likes").innerHTML = O.LIKES_QS.map((q) => `
       <div><p class="small">${esc(I.label(q))}</p>
-      <div class="chips">${O.TAJWEED_ANSWERS.map((a) => `<label><input type="radio" name="tj_${q.id}" value="${a.id}"> ${esc(I.label(a))}</label>`).join("")}</div></div>`).join("");
+      <div class="chips">${O.LIKES_ANSWERS.map((a) => `<label><input type="radio" name="lk_${q.id}" value="${a.id}"> ${esc(I.label(a))}</label>`).join("")}</div></div>`).join("");
+    chips("motivation", "motivation", O.MOTIVATION.map((x) => ({ value: x.id, label: I.label(x) })));
     // Where the memorization came from: only when surahs are listed. Tajweed basics: only for a child who reads from the Mushaf.
     const memToggle = () => ($("mem-from-field").hidden = !document.querySelector('input[name="surah"]:checked') && !$("more").checked);
     $("surahs").addEventListener("change", memToggle);
     $("more").addEventListener("change", memToggle);
     $("estimate").addEventListener("change", () => ($("tajweed-field").hidden = picked("estimate") !== "mushaf"));
   }
-  const picked = (name) => (document.querySelector(`input[name="${name}"]:checked`) || {}).value;
+  function tajweedHtml(prefix, label) {
+    return O.TAJWEED_QS.map((q) => `
+      <div><p class="small">${esc(label(q))}</p>
+      <div class="chips">${O.TAJWEED_ANSWERS.map((a) => `<label><input type="radio" name="${prefix}_${q.id}" value="${a.id}"> ${esc(I.label(a))}</label>`).join("")}</div></div>`).join("");
+  }
+  const tajweedOf = (prefix) => Object.fromEntries(O.TAJWEED_QS.map((q) => [q.id, picked(`${prefix}_${q.id}`) || "unsure"]));
 
   $("about-form").addEventListener("submit", (e) => {
     e.preventDefault();
     const p = {
+      who: "child",
       nickname: $("nickname").value.trim(),
       age_band: picked("age"),
       country: $("country").value,
       home_language: picked("lang"),
-      goals: [...document.querySelectorAll('input[name="goal"]:checked')].map((x) => x.value),
+      goals: checked("goal"),
       teacher: picked("teacher"),
       estimate: picked("estimate"),
-      memorized: [...document.querySelectorAll('input[name="surah"]:checked')].map((x) => x.value),
+      memorized: checked("surah"),
       memorized_more: $("more").checked,
       lessons_per_week: Number(picked("per_week")) || undefined,
       lang: I.lang,
     };
     if (!$("mem-from-field").hidden) p.memorized_from = picked("mem_from");
-    if (p.estimate === "mushaf") p.tajweed = Object.fromEntries(O.TAJWEED_QS.map((q) => [q.id, picked(`tj_${q.id}`) || "unsure"]));
+    if (p.estimate === "mushaf") p.tajweed = tajweedOf("tj");
+    const likes = Object.fromEntries(O.LIKES_QS.map((q) => [q.id, picked(`lk_${q.id}`)]).filter(([, v]) => v));
+    if (Object.keys(likes).length) p.likes = likes;
+    if (picked("motivation")) p.motivation = picked("motivation");
     const missing = [];
     if (!p.age_band) missing.push(t("m_age"));
     if (!p.country) missing.push(t("m_country"));
@@ -89,13 +116,83 @@
     if (!p.lessons_per_week) missing.push(t("m_per_week"));
     if (!$("mem-from-field").hidden && !p.memorized_from) missing.push(t("m_mem_from"));
     if (missing.length) {
-      $("about-error").textContent = t("missing") + missing.join(I.lang === "en" ? ", " : "، ") + (I.lang === "en" ? "." : ".");
+      $("about-error").textContent = missingText(missing);
       $("about-error").hidden = false;
       return;
     }
     $("about-error").hidden = true;
     profile = p;
     play();
+  });
+
+  // ---------- the adult track ----------
+  function buildAdult() {
+    chips("ad-age", "ad_age", O.ADULT_AGE_BANDS.map((a) => ({ value: a, label: a })));
+    fillCountries("ad-country");
+    chips("ad-explain", "ad_explain", O.EXPLAIN_LANGS.map((x) => ({ value: x.id, label: I.label(x) })));
+    chips("ad-goal", "ad_goal", O.ADULT_GOALS.map((x) => ({ value: x.id, label: I.label(x) })), "checkbox");
+    chips("ad-teacher", "ad_teacher", O.TEACHER.map((x) => ({ value: x.id, label: I.label(x) })));
+    chips("ad-self", "ad_self", O.ADULT_SELF.map((x) => ({ value: x.id, label: I.label(x) })));
+    chips("ad-ayah-self", "ad_ayah", O.AYAH_SELF.map((x) => ({ value: x.id, label: I.label(x) })));
+    chips("ad-per-week", "ad_per_week", O.LESSONS_PER_WEEK.map((x) => ({ value: x.id, label: I.label(x) })));
+    $("ad-ayah").textContent = content.ayah.items[0].text;
+    $("ad-tajweed").innerHTML = tajweedHtml("atj", (q) => I.label(O.TAJWEED_QS_ADULT[q.id]));
+    // The Tajweed questions only for someone who reads.
+    $("ad-self").addEventListener("change", () => ($("ad-tajweed-field").hidden = picked("ad_self") === "none"));
+  }
+
+  $("adult-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const p = {
+      who: "adult",
+      age_band: picked("ad_age"),
+      country: $("ad-country").value,
+      explain_lang: picked("ad_explain"),
+      goals: checked("ad_goal"),
+      teacher: picked("ad_teacher"),
+      self: picked("ad_self"),
+      ayah: picked("ad_ayah"),
+      lessons_per_week: Number(picked("ad_per_week")) || undefined,
+      lang: I.lang,
+    };
+    if (p.self && p.self !== "none") p.tajweed = tajweedOf("atj");
+    const missing = [];
+    if (!p.age_band) missing.push(t("m_age"));
+    if (!p.country) missing.push(t("m_country"));
+    if (!p.explain_lang) missing.push(t("m_explain"));
+    if (!p.goals.length) missing.push(t("m_goal"));
+    if (!p.self) missing.push(t("m_self"));
+    if (!p.ayah) missing.push(t("m_ayah"));
+    if (!p.teacher) missing.push(t("m_teacher"));
+    if (!p.lessons_per_week) missing.push(t("m_per_week"));
+    if (missing.length) {
+      $("adult-error").textContent = missingText(missing);
+      $("adult-error").hidden = false;
+      return;
+    }
+    $("adult-error").hidden = true;
+    profile = p;
+    stages = {};
+    rec = null;
+    save();
+  });
+
+  // ---------- teachers: coming soon ----------
+  $("teacher-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = $("t-email").value.trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $("t-error").textContent = t("t_email_err"); $("t-error").hidden = false; return; }
+    if (!$("t-consent").checked) { $("t-error").textContent = t("t_consent_err"); $("t-error").hidden = false; return; }
+    $("t-error").hidden = true;
+    try {
+      const res = await fetch("/api/waitlist", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, consent: true, lang: I.lang }) });
+      if (!res.ok) throw new Error();
+      $("teacher-form").hidden = true;
+      $("t-done").hidden = false;
+    } catch {
+      $("t-error").textContent = t("t_save_err");
+      $("t-error").hidden = false;
+    }
   });
 
   // ---------- games ----------
@@ -109,11 +206,15 @@
   }
 
   // One multiple-choice round; resolves with the picked option, or null when the grown-up skips.
-  function choiceRound(promptHtml, options, canSkip) {
+  // `stage` is recorded with the time to answer and whether the hint was opened.
+  function choiceRound(stage, promptHtml, options, canSkip) {
     return new Promise((resolve) => {
       $("g-body").innerHTML = `${promptHtml}
         <div class="choices" dir="rtl">${options.map((o, i) => `<button class="choice" data-i="${i}" lang="ar">${esc(o)}</button>`).join("")}</div>
         ${canSkip ? `<button class="btn secondary" id="skip">${esc(t("skip"))}</button>` : ""}`;
+      rec.shown(stage);
+      const cue = $("g-body").querySelector("details");
+      if (cue) cue.addEventListener("toggle", () => { if (cue.open) rec.hint(); });
       $("g-body").querySelectorAll(".choice").forEach((b) =>
         b.addEventListener("click", () => {
           b.classList.add("picked");
@@ -121,12 +222,12 @@
           setTimeout(() => resolve(options[Number(b.dataset.i)]), 300);
         })
       );
-      if (canSkip) $("skip").addEventListener("click", () => resolve(null));
+      if (canSkip) $("skip").addEventListener("click", () => { rec.skipped(); resolve(null); });
     });
   }
 
   // The grown-up confirms each reading.
-  function readRounds(words, label, title, prompt, cls) {
+  function readRounds(stage, words, label, title, prompt, cls) {
     return new Promise((resolve) => {
       let i = 0, score = 0;
       const next = () => {
@@ -137,8 +238,9 @@
           <div class="word ${cls}" lang="ar" dir="rtl">${esc(words[i])}</div>
           <p class="cue">${esc(t("read_q"))}</p>
           <div class="row"><button class="btn" id="yes">${esc(t("read_yes"))}</button><button class="btn secondary" id="no">${esc(t("read_no"))}</button></div>`;
-        $("yes").onclick = () => { score++; i++; next(); };
-        $("no").onclick = () => { i++; next(); };
+        rec.shown(stage);
+        $("yes").onclick = () => { rec.answered(true); score++; i++; next(); };
+        $("no").onclick = () => { rec.answered(false); i++; next(); };
       };
       next();
     });
@@ -154,15 +256,16 @@
       frame(t("s1_label"), t("s1_title"), total, answered);
       const it = queue.shift();
       const letterName = I.lang === "en" ? `${esc(it.name_latin)} (<span lang="ar">${esc(it.letter)}</span>)` : `${esc(it.name_ar || it.letter)} (${esc(it.letter)})`;
-      const picked = await choiceRound(
+      const pick = await choiceRound("sound",
         `<p>${esc(t("s1_prompt", { name: name() }))}</p>
          <details class="cue"><summary>${esc(t("s1_cue_sum"))}</summary>${t("s1_cue", { letter: `<b>${letterName}</b>` })}</details>`,
         shuffle(it.choices),
         skips < 2 && reserve.length > 0
       );
-      if (picked === null) { skips++; queue.push(reserve.shift()); continue; }
+      if (pick === null) { skips++; queue.push(reserve.shift()); continue; }
       answered++;
-      if (picked === it.letter) score++;
+      rec.answered(pick === it.letter);
+      if (pick === it.letter) score++;
     }
     return { score, total, passed: score >= L.PASS.sound };
   }
@@ -173,19 +276,20 @@
     for (let i = 0; i < items.length; i++) {
       frame(t("s2_label"), t("s2_title"), items.length, i);
       const it = items[i];
-      const picked = await choiceRound(
+      const pick = await choiceRound("shape",
         `<div class="big-letter quran" lang="ar">${esc(it.letter)}</div><p class="center">${esc(t("s2_prompt"))}</p>`,
         shuffle(it.choices),
         false
       );
-      if (picked === it.answer) score++;
+      rec.answered(pick === it.answer);
+      if (pick === it.answer) score++;
     }
     return { score, total: items.length, passed: score >= L.PASS.shape };
   }
 
   async function stageWords(key, n, cls, getText) {
     const words = content[key].items.map(getText);
-    const r = await readRounds(words, t(`s${n}_label`), t(`s${n}_title`), t(`s${n}_prompt`), cls);
+    const r = await readRounds(key, words, t(`s${n}_label`), t(`s${n}_title`), t(`s${n}_prompt`), cls);
     return { ...r, passed: r.score >= L.PASS[key] };
   }
 
@@ -199,6 +303,7 @@
   };
 
   async function play() {
+    rec = S.recorder();
     const result = await L.runStages(L.startStage(profile.estimate), (key) => PLAY[key]());
     stages = result.stages;
     save();
@@ -213,7 +318,7 @@
       const res = await fetch("/api/results", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profile, stages }),
+        body: JSON.stringify({ profile, stages, ...(rec && { signals: rec.summary() }) }),
       });
       if (!res.ok) throw new Error(String(res.status));
       const { id } = await res.json();

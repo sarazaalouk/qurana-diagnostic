@@ -27,6 +27,7 @@
     <p data-i18n="w_text"></p>
     <div class="facts"><span data-i18n="fact1"></span><span data-i18n="fact2"></span><span data-i18n="fact3"></span><span data-i18n="fact4"></span></div>
     <p class="small muted" data-i18n="w_after"></p>
+    <fieldset class="field"><legend data-i18n="who_q"></legend><div class="chips" id="who"></div></fieldset>
     <label class="check"><input type="checkbox" id="consent"><span data-i18n="consent"></span></label>
     <p class="error" id="consent-error" hidden></p>
     <button class="btn block" id="start" data-i18n="start"></button>
@@ -57,9 +58,55 @@
       <fieldset class="field"><legend data-i18n="teacher"></legend><div class="chips" id="teacher"></div></fieldset>
       <fieldset class="field"><legend data-i18n="estimate"></legend><div class="chips" id="estimate"></div></fieldset>
       <fieldset class="field" id="tajweed-field" hidden><legend data-i18n="tajweed_q"></legend><div class="form-stack" id="tajweed"></div><p class="small muted" data-i18n="tajweed_note"></p></fieldset>
+      <fieldset class="field"><legend data-i18n="likes_q"></legend>
+        <div class="form-stack" id="likes"></div>
+        <p class="small" data-i18n="motivation_q"></p><div class="chips" id="motivation"></div>
+        <p class="small muted" data-i18n="likes_note"></p>
+      </fieldset>
       <p class="error" id="about-error" hidden></p>
       <button class="btn block" type="submit" data-i18n="go_games"></button>
     </form>
+  </section>
+
+  <!-- 2b. The adult track -->
+  <section class="card" id="adult" hidden aria-labelledby="ad-title">
+    <span class="eyebrow" data-i18n="ad_eyebrow"></span>
+    <h2 id="ad-title" data-i18n="ad_title"></h2>
+    <form id="adult-form" class="form-stack" novalidate>
+      <fieldset class="field"><legend data-i18n="age"></legend><div class="chips" id="ad-age"></div></fieldset>
+      <div class="field">
+        <label for="ad-country" data-i18n="country"></label>
+        <select id="ad-country"></select>
+      </div>
+      <fieldset class="field"><legend data-i18n="ad_self_q"></legend><div class="chips" id="ad-self"></div></fieldset>
+      <fieldset class="field"><legend data-i18n="ad_ayah_q"></legend>
+        <div class="word quran ayah" lang="ar" dir="rtl" id="ad-ayah"></div>
+        <div class="chips" id="ad-ayah-self"></div>
+      </fieldset>
+      <fieldset class="field" id="ad-tajweed-field" hidden><legend data-i18n="tajweed_q"></legend><div class="form-stack" id="ad-tajweed"></div></fieldset>
+      <fieldset class="field"><legend data-i18n="ad_goal_q"></legend><div class="chips" id="ad-goal"></div></fieldset>
+      <fieldset class="field"><legend data-i18n="ad_explain_q"></legend><div class="chips" id="ad-explain"></div></fieldset>
+      <fieldset class="field"><legend data-i18n="per_week_q"></legend><div class="chips" id="ad-per-week"></div></fieldset>
+      <fieldset class="field"><legend data-i18n="ad_teacher_q"></legend><div class="chips" id="ad-teacher"></div></fieldset>
+      <p class="error" id="adult-error" hidden></p>
+      <button class="btn block" type="submit" data-i18n="ad_go"></button>
+    </form>
+  </section>
+
+  <!-- 2c. Teachers: coming soon -->
+  <section class="card" id="teacher" hidden aria-labelledby="t-title">
+    <h2 id="t-title" data-i18n="t_title"></h2>
+    <p data-i18n="t_text"></p>
+    <form id="teacher-form" class="form-stack" novalidate>
+      <div class="field">
+        <label for="t-email" data-i18n="t_email"></label>
+        <input type="email" id="t-email" maxlength="200" autocomplete="email" dir="ltr">
+      </div>
+      <label class="check"><input type="checkbox" id="t-consent"><span data-i18n="t_consent"></span></label>
+      <p class="error" id="t-error" hidden></p>
+      <button class="btn block" type="submit" data-i18n="t_go"></button>
+    </form>
+    <p id="t-done" hidden data-i18n="t_done"></p>
   </section>
 
   <!-- 3. Games -->
@@ -83,6 +130,7 @@
 <script src="js/i18n.js"></script>
 <script src="js/levels.js"></script>
 <script src="js/options.js"></script>
+<script src="js/signals.js"></script>
 <script src="js/sukun.js"></script>
 <script src="js/diagnosis.js"></script>
 </body>

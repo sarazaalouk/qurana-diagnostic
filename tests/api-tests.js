@@ -90,11 +90,11 @@ const setCurriculum = (c) => { fs.writeFileSync(curriculumFile, JSON.stringify(c
     app.locals.planClient = { beta: { messages: { create: async (req) => {
       calls++;
       if (modelFails) throw new Error("model down");
-      const ids = req.output_config.format.schema.properties.notes.items.properties.stage_id.enum;
       const reply = {
-        intro: "A suggested plan that the teacher reviews with you in the free trial lesson.",
+        month1: "In the first month your child goes over the short vowels.",
+        month3: "After about three months we expect your child to be reading from the Mushaf.",
+        longer: "Further on, your child memorizes the short surahs.",
         tip: "A few calm minutes most days.",
-        notes: ids.map((id) => ({ stage_id: id, note: "This stage comes next for your child." })),
       };
       return { stop_reason: "end_turn", content: [{ type: "text", text: JSON.stringify(reply) }] };
     } } } };
@@ -138,6 +138,29 @@ const setCurriculum = (c) => { fs.writeFileSync(curriculumFile, JSON.stringify(c
     for (let i = 0; i < 5; i++) await login("wrong-again");
     r = await login(process.env.ADMIN_PIN);
     check("G13. after 5 wrong PINs even the right one waits (429)", r.status === 429);
+
+    // ---- the adult track, the teachers' list, and the teacher's view in /admin ----
+    const adult = await post({ profile: { who: "adult", age_band: "26–35", country: "AE", explain_lang: "ar", goals: ["hifz"], teacher: "any", self: "fluent", ayah: "easy", lessons_per_week: 3, tajweed: { madd: "no" } } });
+    const adultGot = await get(`/api/results/${adult.body.id}`).then((x) => x.json());
+    const adultPath = await get(`/api/results/${adult.body.id}/path`).then((x) => x.json());
+    check("A23. an adult result is saved with the adult level and gets the adult path", adult.status === 201 && adultGot.who === "adult" && adultGot.level.code === "A3" && adultPath.status === "ready" && adultPath.stages[0].focus === "المد" && !adultGot.observed);
+    bad = await post({ profile: { who: "adult", age_band: "6–7", country: "AE", explain_lang: "ar", goals: ["hifz"], teacher: "any", self: "fluent", ayah: "easy", lessons_per_week: 3 } });
+    check("A24. an adult with a child's age band is refused", bad.status === 400);
+    const withSignals = await post({ profile: { ...profile, likes: { listening: "yes" }, motivation: "praise" }, stages: { sound: { score: 6, total: 6, passed: true }, shape: { score: 2, total: 4, passed: false } },
+      signals: { kinds: { sound: { n: 6, correct: 6, median_ms: 1800 }, shape: { n: 4, correct: 2, median_ms: 5200 } }, hints: 0, skips: 0, after_error: { n: 2, correct: 1 }, slower_later: false, total_ms: 90000 } });
+    const sGot = await get(`/api/results/${withSignals.body.id}`).then((x) => x.json());
+    check("A25. «ما لاحظناه» comes from the games and the parent's answers", sGot.observed.length >= 2 && sGot.observed[0].includes("يسمع الحرف"), JSON.stringify(sGot.observed));
+    bad = await post({ profile, stages: { sound: { score: 5, total: 6, passed: true } }, signals: { kinds: {}, hints: "many" } });
+    check("A26. signals in the wrong form are refused", bad.status === 400);
+    const detail = await get(`/api/admin/results/${withSignals.body.id}`).then((x) => x.json());
+    check("A27. /admin shows the teacher «كيف نبدأ معه»", detail.start_with.includes("ابدئي بالسمع ثم القراءة.") && detail.start_with.some((x) => x.includes("للمدح")));
+    const list = await get("/api/admin/results").then((x) => x.json());
+    check("A28. /admin lists recent results with who, level and market", list.some((x) => x.id === adult.body.id && x.who === "adult" && x.market === "gulf"));
+    r = await get("/api/admin/results", false);
+    check("A29. the list needs the PIN", r.status === 401);
+    const wl = (body) => fetch(base + "/api/waitlist", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    check("A30. a teacher's email is kept for «قريبًا» (with consent)", (await wl({ email: "teacher@example.com", consent: true })).status === 201 && fs.readFileSync(path.join(tmp, "waitlist.jsonl"), "utf8").includes("teacher@example.com"));
+    check("A31. a bad email, or no consent, is refused", (await wl({ email: "not-an-email", consent: true })).status === 400 && (await wl({ email: "a@b.co" })).status === 400);
   } finally {
     server.close();
     fs.rmSync(tmp, { recursive: true, force: true });
