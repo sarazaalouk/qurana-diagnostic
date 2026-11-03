@@ -31,7 +31,7 @@ const fakeClient = (...replies) => {
 (async () => {
   check("P1. the sample curriculum has no structural problems", curriculum.problems(c).length === 0, curriculum.problems(c).join("; "));
   check("P2. the link is public only when approved with a reviewer's name and a date",
-    !curriculum.isPublic(c) && !curriculum.isPublic({ ...c, status: "approved", approved_at: "2026-11-03" })
+    !curriculum.isPublic({ ...c, status: "draft" }) && !curriculum.isPublic({ ...c, status: "approved", approved_by: "", approved_at: "2026-11-03" })
     && curriculum.isPublic({ ...c, status: "approved", approved_by: "Sara Zaalouk", approved_at: "2026-11-03" }));
 
   // ---- the path, by rules ----

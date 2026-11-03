@@ -5,7 +5,8 @@ const path = require("path");
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "qurana-diag-"));
 const curriculumFile = path.join(tmp, "curriculum.json");
-const sample = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "data", "curriculum.json"), "utf8"));
+// The tests start from a draft copy (whatever the real file's status), to check the lock before and after approval.
+const sample = { ...JSON.parse(fs.readFileSync(path.join(__dirname, "..", "data", "curriculum.json"), "utf8")), status: "draft", approved_by: "", approved_at: "" };
 fs.writeFileSync(curriculumFile, JSON.stringify(sample));
 process.env.DATA_STORE_DIR = tmp;
 process.env.CURRICULUM_PATH = curriculumFile;

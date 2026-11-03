@@ -19,6 +19,7 @@ function filled({ approve = true } = {}) {
   const wb = T.prefill(T.build(), { ...sample, stages: [...sample.stages].reverse() });
   const ap = wb.getWorksheet(T.SHEETS.approval);
   if (approve) { ap.getCell("B5").value = "Sara Zaalouk"; ap.getCell("B6").value = new Date("2026-11-03"); ap.getCell("B7").value = "معتمد"; }
+  else { ap.getCell("B5").value = null; ap.getCell("B6").value = null; ap.getCell("B7").value = "مسودة"; }
   return wb;
 }
 
