@@ -98,6 +98,7 @@
       r_done_adult: "ما أجبت عنه", r_suggest_adult: "نقترح أن تبدأ بـ", r_self: "قراءتك:", r_ayah: "الآية:",
       p_reached_adult: "حسب إجاباتك، تجاوزت مراحل ما اخترته من أهداف في المنهج. المعلمة تقترح الخطوة التالية معك في الحصة التجريبية.",
       wa_hello_adult: "السلام عليكم، أجريت تشخيص قرآنا.",
+      local_link: "رابط محلي للتطوير، لا يعمل خارج هذا الجهاز",
     },
     en: {
       brand_sub: "Level check",
@@ -194,6 +195,7 @@
       r_done_adult: "Your answers", r_suggest_adult: "We suggest you start with", r_self: "Your reading:", r_ayah: "The ayah:",
       p_reached_adult: "From your answers, you are already past the curriculum stages of the goals you chose. The teacher suggests the next step with you in the free trial lesson.",
       wa_hello_adult: "Assalamu alaikum, I did the Qurana level check.",
+      local_link: "A local development link — it does not work outside this computer",
     },
   };
 

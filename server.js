@@ -14,7 +14,11 @@ const access = require("./lib/access");
 
 const PORT = process.env.PORT || 3100;
 // Where the result links point, and the main site for booking and prices.
-const PUBLIC_BASE_URL = (process.env.PUBLIC_BASE_URL || `http://localhost:${PORT}`).replace(/\/$/, "");
+// The public address of result links (e.g. https://test.quraana-institute.com, or the Render address for now).
+// Without it, the address the request came to; a localhost address only works on this computer, and the page says so.
+const baseUrl = (req) => (process.env.PUBLIC_BASE_URL || `${req.protocol}://${req.get("host")}`).replace(/\/$/, "");
+const isLocal = (url) => /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\]|[^/]+\.localhost)(:\d+)?(\/|$)/i.test(url);
+const resultLink = (req, id) => `${baseUrl(req)}/r/${id}`;
 const SITE_URL = (process.env.SITE_URL || "https://quraana-institute.com").replace(/\/$/, "");
 const WHATSAPP = process.env.WHATSAPP_NUMBER || "201142847626";
 
@@ -55,7 +59,8 @@ app.get("/api/content", (req, res) => {
 });
 
 app.get("/api/config", (req, res) => {
-  res.json({ site_url: SITE_URL, public_base_url: PUBLIC_BASE_URL, whatsapp: WHATSAPP });
+  const base = baseUrl(req);
+  res.json({ site_url: SITE_URL, public_base_url: base, base_from_env: !!process.env.PUBLIC_BASE_URL, local: isLocal(base), whatsapp: WHATSAPP });
 });
 
 // Express 5 passes a rejected promise to the error handler; this keeps the routes short.
@@ -66,7 +71,7 @@ app.post("/api/results", saveLimit, wrap(async (req, res) => {
   const { error, value } = validateSubmission(req.body);
   if (error) return res.status(400).json({ error });
   const record = await store.save(value);
-  res.status(201).json({ id: record.id, url: `${PUBLIC_BASE_URL}/r/${record.id}` });
+  res.status(201).json({ id: record.id, url: resultLink(req, record.id) });
 }));
 
 // A saved result, for the result page and (later) for the site's booking form.
@@ -87,8 +92,9 @@ app.get("/api/results/:id", wrap(async (req, res) => {
     // "ما لاحظناه": three gentle sentences from the games and the parent's answers (children only; fixed rules).
     ...(!adult && { observed: signals.observe(r.signals, r.profile.likes, r.profile.motivation, lang).parent }),
     links: {
-      result: `${PUBLIC_BASE_URL}/r/${r.id}`,
-      booking: `${SITE_URL}/register?diagnosis=${r.id}`,
+      result: resultLink(req, r.id),
+      // The booking form gets the id and the full result link, so the site can open the result from any device.
+      booking: `${SITE_URL}/register?diagnosis=${r.id}&result=${encodeURIComponent(resultLink(req, r.id))}`,
       prices: `${SITE_URL}/#plans`,
     },
   });
@@ -158,7 +164,7 @@ app.get("/api/admin/results/:id", wrap(async (req, res) => {
   res.set("Cache-Control", "no-store");
   res.json({
     id: r.id, who: r.profile.who || "child", level: r.profile.who === "adult" ? r.profile.adult_level : r.level,
-    link: `${PUBLIC_BASE_URL}/r/${r.id}`, profile: r.profile, signals: r.signals || null, start_with: o.teacher, observed: o.parent,
+    link: resultLink(req, r.id), local: isLocal(baseUrl(req)), profile: r.profile, signals: r.signals || null, start_with: o.teacher, observed: o.parent,
   });
 }));
 

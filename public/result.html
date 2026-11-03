@@ -163,6 +163,8 @@
   $("cta-wa").href = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(waText)}`;
   $("cta-prices").href = r.links.prices;
   $("r-link").textContent = link;
+  // A localhost link only works on this computer (PUBLIC_BASE_URL not set while developing).
+  if (cfg.local) $("r-link").insertAdjacentHTML("afterend", `<br><span class="draft-note">${esc(I.t("local_link"))}</span>`);
   $("copy").addEventListener("click", async () => {
     try { await navigator.clipboard.writeText(link); $("copy").textContent = I.t("copied"); }
     catch { const rg = document.createRange(); rg.selectNodeContents($("r-link")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(rg); }

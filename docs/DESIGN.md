@@ -38,9 +38,9 @@ In 3–5 minutes the parent and child find the child's starting level, and get a
 | R6 | التلاوة والتجويد | 6 passed |
 
 ## Handoff (nothing is lost)
-- Result link: `<PUBLIC_BASE_URL>/r/<id>`.
+- Result link: `<PUBLIC_BASE_URL>/r/<id>`, used on the result page and its copy button, in the WhatsApp message, in the booking link and in `/admin`. Set `PUBLIC_BASE_URL` in Render (the Render address for now, then `https://test.quraana-institute.com`). Without it the address of the request is used; a localhost one shows «رابط محلي للتطوير، لا يعمل خارج هذا الجهاز».
 - WhatsApp: `https://wa.me/201142847626` with a message holding the level and the result link.
-- Prices: `<SITE_URL>/#plans`. Booking: `<SITE_URL>/register?diagnosis=<id>` (the site reads it in step 3).
+- Prices: `<SITE_URL>/#plans`. Booking: `<SITE_URL>/register?diagnosis=<id>&result=<full result link>` (the site reads them in step 3).
 
 ## Languages
 - Arabic (RTL) and English (LTR): `?lang=ar|en`, then the last choice (`localStorage` `qurana.lang`), then Arabic. Text in `public/js/i18n.js`; `npm test` checks both languages have the same keys.

@@ -37,6 +37,7 @@
     <ul id="status-problems" class="small"></ul>
     <p class="small muted" id="status-file"></p>
     <p class="small" id="status-storage"></p>
+    <p class="small" id="status-links"></p>
     <div class="ctas">
       <a class="btn block" href="/">افتح التشخيص</a>
       <button class="btn block secondary" id="logout" type="button">خروج</button>
@@ -134,6 +135,12 @@
     $("status-storage").textContent = s.storage === "supabase"
       ? "حفظ النتائج: قاعدة بيانات Supabase."
       : "حفظ النتائج: ملفات على السيرفر نفسه — تضيع مع كل نشر. اضبطي SUPABASE_URL وSUPABASE_SERVICE_KEY في Render.";
+    // Where result links point (PUBLIC_BASE_URL), and whether they work outside this computer.
+    try {
+      const cfg = await fetch("/api/config").then((x) => x.json());
+      $("status-links").textContent = `روابط النتائج: ${cfg.public_base_url}/r/…` + (cfg.base_from_env ? " (من PUBLIC_BASE_URL)" : " (من عنوان الطلب — اضبطي PUBLIC_BASE_URL في Render)")
+        + (cfg.local ? " — رابط محلي للتطوير، لا يعمل خارج هذا الجهاز." : "");
+    } catch { /* config not reachable */ }
     show("status");
   }
 

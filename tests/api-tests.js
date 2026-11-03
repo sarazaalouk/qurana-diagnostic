@@ -61,7 +61,20 @@ const setCurriculum = (c) => { fs.writeFileSync(curriculumFile, JSON.stringify(c
     r = await get(`/api/results/${res.body.id}`);
     const got = await r.json();
     check("A3. the level is worked out on the server from the score (1 of 3 fatha → R3)", got.level.code === "R3" && got.stages.fatha.passed === false, got.level.code);
-    check("A4. the result has the booking, prices and result links", got.links.booking.endsWith(`/register?diagnosis=${res.body.id}`) && got.links.prices.endsWith("/#plans"));
+    check("A4. the result has the booking, prices and result links", got.links.booking.includes(`/register?diagnosis=${res.body.id}&`) && got.links.prices.endsWith("/#plans"));
+    check("B1. result link, booking link and admin all use PUBLIC_BASE_URL",
+      got.links.result === `https://test.quraana-institute.com/r/${res.body.id}` &&
+      new URL(got.links.booking).searchParams.get("result") === got.links.result);
+    let cfgNow = await get("/api/config").then((x) => x.json());
+    check("B2. with PUBLIC_BASE_URL the config says the links are public", cfgNow.public_base_url === "https://test.quraana-institute.com" && cfgNow.base_from_env === true && cfgNow.local === false);
+    const savedBase = process.env.PUBLIC_BASE_URL;
+    delete process.env.PUBLIC_BASE_URL;
+    const res2 = await post({ profile, stages: { sound: { score: 5, total: 6, passed: true } } });
+    cfgNow = await get("/api/config").then((x) => x.json());
+    const got2 = await get(`/api/results/${res2.body.id}`).then((x) => x.json());
+    check("B3. without PUBLIC_BASE_URL the links use the address of the request, and a localhost one is marked local",
+      res2.body.url === `${base}/r/${res2.body.id}` && got2.links.result === `${base}/r/${res2.body.id}` && cfgNow.local === true && cfgNow.base_from_env === false, res2.body.url);
+    process.env.PUBLIC_BASE_URL = savedBase;
     check("A5. nothing beyond the answers is stored (no phone or email fields)", !JSON.stringify(got).match(/phone|email|whatsapp_number/i));
 
     let bad = await post({ profile: { ...profile, goals: ["something-else"] }, stages: { sound: { score: 5, total: 6, passed: true } } });

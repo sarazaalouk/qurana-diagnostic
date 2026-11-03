@@ -16,8 +16,10 @@ services:
         sync: false
       - key: SUPABASE_SERVICE_KEY
         sync: false
+      # Where result links point: the Render address for now (https://<service>.onrender.com),
+      # then https://test.quraana-institute.com once the domain is connected. Set it in the Render dashboard.
       - key: PUBLIC_BASE_URL
-        value: https://test.quraana-institute.com
+        sync: false
       - key: SITE_URL
         value: https://quraana-institute.com
       - key: WHATSAPP_NUMBER
