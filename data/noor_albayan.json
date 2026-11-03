@@ -1,0 +1,1776 @@
+{
+  "source": {
+    "title": "نور البيان لتعليم القراءة وترتيل القرآن",
+    "author": "محمد حسن محمد (طارق السعيد)",
+    "edition_note": "الطبعة المصوّرة التي رفعتها سارة؛ أرقام الصفحات حسب ترقيم الكتاب. الكلمات منقولة كما طُبعت (التشكيل كما في الكتاب).",
+    "scope": "الوحدة الأولى: حروف الهجاء، حركة الفتح (الدروس 1–10)، نماذج من الكسر والضم. تُستخدم لمسار الحروف للأطفال في مستوى (لا يعرف الحروف بعد)."
+  },
+  "rules": {
+    "only_these_words": "أي كلمة عربية تُعرض في مسار الحروف يجب أن تكون من هذا الملف أو من data/quran_fatiha.json بالحرف.",
+    "no_model_text": "مسار الحروف لا يستخدم النموذج؛ المحتوى ثابت من هذا الملف."
+  },
+  "letters": [
+    {
+      "letter": "ا",
+      "name_ar": "ألف",
+      "name_latin": "alif",
+      "forms": {
+        "isolated": "ا",
+        "initial": "ا",
+        "medial": "ـا",
+        "final": "ـا"
+      }
+    },
+    {
+      "letter": "ب",
+      "name_ar": "باء",
+      "name_latin": "ba",
+      "forms": {
+        "isolated": "ب",
+        "initial": "بـ",
+        "medial": "ـبـ",
+        "final": "ـب"
+      }
+    },
+    {
+      "letter": "ت",
+      "name_ar": "تاء",
+      "name_latin": "ta",
+      "forms": {
+        "isolated": "ت",
+        "initial": "تـ",
+        "medial": "ـتـ",
+        "final": "ـت"
+      }
+    },
+    {
+      "letter": "ث",
+      "name_ar": "ثاء",
+      "name_latin": "tha",
+      "forms": {
+        "isolated": "ث",
+        "initial": "ثـ",
+        "medial": "ـثـ",
+        "final": "ـث"
+      }
+    },
+    {
+      "letter": "ج",
+      "name_ar": "جيم",
+      "name_latin": "jeem",
+      "forms": {
+        "isolated": "ج",
+        "initial": "جـ",
+        "medial": "ـجـ",
+        "final": "ـج"
+      }
+    },
+    {
+      "letter": "ح",
+      "name_ar": "حاء",
+      "name_latin": "Ha",
+      "forms": {
+        "isolated": "ح",
+        "initial": "حـ",
+        "medial": "ـحـ",
+        "final": "ـح"
+      }
+    },
+    {
+      "letter": "خ",
+      "name_ar": "خاء",
+      "name_latin": "kha",
+      "forms": {
+        "isolated": "خ",
+        "initial": "خـ",
+        "medial": "ـخـ",
+        "final": "ـخ"
+      }
+    },
+    {
+      "letter": "د",
+      "name_ar": "دال",
+      "name_latin": "dal",
+      "forms": {
+        "isolated": "د",
+        "initial": "د",
+        "medial": "ـد",
+        "final": "ـد"
+      }
+    },
+    {
+      "letter": "ذ",
+      "name_ar": "ذال",
+      "name_latin": "dhal",
+      "forms": {
+        "isolated": "ذ",
+        "initial": "ذ",
+        "medial": "ـذ",
+        "final": "ـذ"
+      }
+    },
+    {
+      "letter": "ر",
+      "name_ar": "راء",
+      "name_latin": "ra",
+      "forms": {
+        "isolated": "ر",
+        "initial": "ر",
+        "medial": "ـر",
+        "final": "ـر"
+      }
+    },
+    {
+      "letter": "ز",
+      "name_ar": "زاي",
+      "name_latin": "zay",
+      "forms": {
+        "isolated": "ز",
+        "initial": "ز",
+        "medial": "ـز",
+        "final": "ـز"
+      }
+    },
+    {
+      "letter": "س",
+      "name_ar": "سين",
+      "name_latin": "seen",
+      "forms": {
+        "isolated": "س",
+        "initial": "سـ",
+        "medial": "ـسـ",
+        "final": "ـس"
+      }
+    },
+    {
+      "letter": "ش",
+      "name_ar": "شين",
+      "name_latin": "sheen",
+      "forms": {
+        "isolated": "ش",
+        "initial": "شـ",
+        "medial": "ـشـ",
+        "final": "ـش"
+      }
+    },
+    {
+      "letter": "ص",
+      "name_ar": "صاد",
+      "name_latin": "Sad",
+      "forms": {
+        "isolated": "ص",
+        "initial": "صـ",
+        "medial": "ـصـ",
+        "final": "ـص"
+      }
+    },
+    {
+      "letter": "ض",
+      "name_ar": "ضاد",
+      "name_latin": "Dad",
+      "forms": {
+        "isolated": "ض",
+        "initial": "ضـ",
+        "medial": "ـضـ",
+        "final": "ـض"
+      }
+    },
+    {
+      "letter": "ط",
+      "name_ar": "طاء",
+      "name_latin": "Ta",
+      "forms": {
+        "isolated": "ط",
+        "initial": "طـ",
+        "medial": "ـطـ",
+        "final": "ـط"
+      }
+    },
+    {
+      "letter": "ظ",
+      "name_ar": "ظاء",
+      "name_latin": "Dha",
+      "forms": {
+        "isolated": "ظ",
+        "initial": "ظـ",
+        "medial": "ـظـ",
+        "final": "ـظ"
+      }
+    },
+    {
+      "letter": "ع",
+      "name_ar": "عين",
+      "name_latin": "ayn",
+      "forms": {
+        "isolated": "ع",
+        "initial": "عـ",
+        "medial": "ـعـ",
+        "final": "ـع"
+      }
+    },
+    {
+      "letter": "غ",
+      "name_ar": "غين",
+      "name_latin": "ghayn",
+      "forms": {
+        "isolated": "غ",
+        "initial": "غـ",
+        "medial": "ـغـ",
+        "final": "ـغ"
+      }
+    },
+    {
+      "letter": "ف",
+      "name_ar": "فاء",
+      "name_latin": "fa",
+      "forms": {
+        "isolated": "ف",
+        "initial": "فـ",
+        "medial": "ـفـ",
+        "final": "ـف"
+      }
+    },
+    {
+      "letter": "ق",
+      "name_ar": "قاف",
+      "name_latin": "qaf",
+      "forms": {
+        "isolated": "ق",
+        "initial": "قـ",
+        "medial": "ـقـ",
+        "final": "ـق"
+      }
+    },
+    {
+      "letter": "ك",
+      "name_ar": "كاف",
+      "name_latin": "kaf",
+      "forms": {
+        "isolated": "ك",
+        "initial": "كـ",
+        "medial": "ـكـ",
+        "final": "ـك"
+      }
+    },
+    {
+      "letter": "ل",
+      "name_ar": "لام",
+      "name_latin": "lam",
+      "forms": {
+        "isolated": "ل",
+        "initial": "لـ",
+        "medial": "ـلـ",
+        "final": "ـل"
+      }
+    },
+    {
+      "letter": "م",
+      "name_ar": "ميم",
+      "name_latin": "meem",
+      "forms": {
+        "isolated": "م",
+        "initial": "مـ",
+        "medial": "ـمـ",
+        "final": "ـم"
+      }
+    },
+    {
+      "letter": "ن",
+      "name_ar": "نون",
+      "name_latin": "noon",
+      "forms": {
+        "isolated": "ن",
+        "initial": "نـ",
+        "medial": "ـنـ",
+        "final": "ـن"
+      }
+    },
+    {
+      "letter": "ه",
+      "name_ar": "هاء",
+      "name_latin": "ha",
+      "forms": {
+        "isolated": "ه",
+        "initial": "هـ",
+        "medial": "ـهـ",
+        "final": "ـه"
+      }
+    },
+    {
+      "letter": "و",
+      "name_ar": "واو",
+      "name_latin": "waw",
+      "forms": {
+        "isolated": "و",
+        "initial": "و",
+        "medial": "ـو",
+        "final": "ـو"
+      }
+    },
+    {
+      "letter": "ء",
+      "name_ar": "همزة",
+      "name_latin": "hamza",
+      "forms": {
+        "isolated": "ء",
+        "initial": "ء",
+        "medial": "ء",
+        "final": "ء"
+      }
+    },
+    {
+      "letter": "ي",
+      "name_ar": "ياء",
+      "name_latin": "ya",
+      "forms": {
+        "isolated": "ي",
+        "initial": "يـ",
+        "medial": "ـيـ",
+        "final": "ـي"
+      }
+    }
+  ],
+  "picture_words": [
+    {
+      "letter": "أ",
+      "word": "أَقصى",
+      "lesson": "الفتح 1",
+      "page": 3
+    },
+    {
+      "letter": "ب",
+      "word": "بَيت",
+      "lesson": "الفتح 1",
+      "page": 3
+    },
+    {
+      "letter": "ت",
+      "word": "تَمر",
+      "lesson": "الفتح 1",
+      "page": 3
+    },
+    {
+      "letter": "ث",
+      "word": "ثَلاجة",
+      "lesson": "الفتح 1",
+      "page": 3
+    },
+    {
+      "letter": "ج",
+      "word": "جَمَل",
+      "lesson": "الفتح 1",
+      "page": 3
+    },
+    {
+      "letter": "ح",
+      "word": "حَمامة",
+      "lesson": "الفتح 1",
+      "page": 3
+    },
+    {
+      "letter": "خ",
+      "word": "خَروف",
+      "lesson": "الفتح 1",
+      "page": 3
+    },
+    {
+      "letter": "د",
+      "word": "دَائرة",
+      "lesson": "الفتح 1",
+      "page": 3
+    },
+    {
+      "letter": "ذ",
+      "word": "ذَيل",
+      "lesson": "الفتح 1",
+      "page": 3
+    },
+    {
+      "letter": "ر",
+      "word": "رَغيف",
+      "lesson": "الفتح 2",
+      "page": 4
+    },
+    {
+      "letter": "ز",
+      "word": "زَرافة",
+      "lesson": "الفتح 2",
+      "page": 4
+    },
+    {
+      "letter": "س",
+      "word": "سَمَكة",
+      "lesson": "الفتح 2",
+      "page": 4
+    },
+    {
+      "letter": "ش",
+      "word": "شَمعة",
+      "lesson": "الفتح 2",
+      "page": 4
+    },
+    {
+      "letter": "ص",
+      "word": "صَاروخ",
+      "lesson": "الفتح 2",
+      "page": 4
+    },
+    {
+      "letter": "ض",
+      "word": "ضَابط",
+      "lesson": "الفتح 2",
+      "page": 4
+    },
+    {
+      "letter": "ط",
+      "word": "طَائرة",
+      "lesson": "الفتح 2",
+      "page": 4
+    },
+    {
+      "letter": "ظ",
+      "word": "ظَرف",
+      "lesson": "الفتح 2",
+      "page": 4
+    },
+    {
+      "letter": "ع",
+      "word": "عَلَم",
+      "lesson": "الفتح 2",
+      "page": 4
+    },
+    {
+      "letter": "غ",
+      "word": "غَسّالة",
+      "lesson": "الفتح 3",
+      "page": 5
+    },
+    {
+      "letter": "ف",
+      "word": "فَراشة",
+      "lesson": "الفتح 3",
+      "page": 5
+    },
+    {
+      "letter": "ق",
+      "word": "قَلَم",
+      "lesson": "الفتح 3",
+      "page": 5
+    },
+    {
+      "letter": "ك",
+      "word": "كَعبة",
+      "lesson": "الفتح 3",
+      "page": 5
+    },
+    {
+      "letter": "ل",
+      "word": "لَيمون",
+      "lesson": "الفتح 3",
+      "page": 5
+    },
+    {
+      "letter": "م",
+      "word": "مَوز",
+      "lesson": "الفتح 3",
+      "page": 5
+    },
+    {
+      "letter": "ن",
+      "word": "نَخلة",
+      "lesson": "الفتح 3",
+      "page": 5
+    },
+    {
+      "letter": "ه",
+      "word": "هَرَم",
+      "lesson": "الفتح 3",
+      "page": 5
+    },
+    {
+      "letter": "و",
+      "word": "وَردة",
+      "lesson": "الفتح 3",
+      "page": 5
+    },
+    {
+      "letter": "ي",
+      "word": "يَد",
+      "lesson": "الفتح 3",
+      "page": 5
+    }
+  ],
+  "fatha_words": [
+    {
+      "word": "أَمَرَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "سَأَلَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "لَجَأَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "بَطَشَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "نَبَذَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "ثَقَبَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "تَجَرَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "كَتَبَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "ثَبَتَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "ذَرَأَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "ثَرَدَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "بَعَثَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "جَلَسَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "سَجَدَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "نَسَجَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "حَبَسَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "طَحَنَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "مَسَحَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "خَضَعَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "ذَخَرَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "نَسَخَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "صَدَعَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "دَفَنَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "قَعَدَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "ذَهَبَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "لَذَعَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "أَخَذَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "رَزَقَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "رَكَعَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "قَرَأَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "غَسَلَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "نَصَرَ",
+      "lesson": "الفتح 6",
+      "page": 8
+    },
+    {
+      "word": "وَعَظَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "حَرَثَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "أَكَلَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "ضَجَعَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "قَرَضَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "ظَهَرَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "زَحَفَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "لَزَقَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "غَمَزَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "سَكَبَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "مَسَخَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "عَبَسَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "شَرَعَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "خَمَشَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "خَشَعَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "صَدَقَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "بَصَمَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "فَحَصَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "ضَرَبَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "هَضَمَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "غَمَضَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "خَطَبَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "لَدَغَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "غَبَطَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "ظَلَمَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "حَفَظَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "نَظَرَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "عَكَفَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "سَعَلَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "قَلَعَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "غَفَرَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "ضَغَطَ",
+      "lesson": "الفتح 7",
+      "page": 9
+    },
+    {
+      "word": "صَعَدَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "وَلَهَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "فَطَمَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "شَغَفَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "مَضَغَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "نَفَخَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "شَفَعَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "شَرَحَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "قَنَتَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "سَقَطَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "خَلَقَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "كَسَرَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "شَكَرَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "مَلَكَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "لَطَمَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "حَلَفَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "قَفَلَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "مَلَأَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "هَمَسَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "هَجَمَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "نَشَأَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "مَنَحَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "سَكَنَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "هَتَفَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "نَهَبَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "نَدَهَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "يَنَعَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "دَيَنَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "يَفَعَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "وَزَعَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "صَنَعَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "صَمَدَ",
+      "lesson": "الفتح 8",
+      "page": 10
+    },
+    {
+      "word": "سَمَحَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "نَهَرَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "وَلَجَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "رَبَأَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "عَرَضَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "خَلَدَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "قَنَصَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "صَهَرَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "صَدَرَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "مَقَتَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "نَبَضَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "طَلَقَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "أَثَرَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "قَنَعَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "لَقَطَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "نَسَفَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "نَصَفَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "فَتَنَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "فَطَرَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "شَمَخَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "طَرَقَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "رَقَدَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "تَرَكَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "رَكَضَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "فَقَدَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "لَمَسَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "هَمَزَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "حَسَدَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "عَشَرَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "جَثَمَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "وَلَدَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "وَرَدَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "بَسَطَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "بَضَعَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "غَبَقَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "نَكَصَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "نَثَرَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "نَقَصَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "نَفَثَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    },
+    {
+      "word": "لَفَحَ",
+      "lesson": "الفتح 9",
+      "page": 11
+    }
+  ],
+  "fatha_sentences": [
+    {
+      "sentence": "رَكَعَ وَسَجَدَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "دَخَلَ وَجَلَسَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "مَسَكَ فَنَظَرَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "قَنَتَ فَذَكَرَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "زَرَعَ وَحَصَدَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "عَرَفَ وَكَتَمَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "حَلَفَ فَصَدَقَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "سَأَلَ فَعَرَفَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "غَرَسَ فَنَبَتَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "خَلَقَ فَرَزَقَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "بَسَطَ فَوَهَبَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "عَبَدَ فَشَكَرَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "قَفَزَ فَوَقَعَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "عَبَسَ وَبَسَرَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "قَرَأَ وَكَتَبَ فَنَجَحَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "حَكَمَ وَعَدَلَ فَصَدَقَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "قَطَعَ وَنَشَرَ فَصَنَعَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    },
+    {
+      "sentence": "طَحَنَ وَنَخَلَ فَعَجَنَ",
+      "lesson": "الفتح 10",
+      "page": 12
+    }
+  ],
+  "kasra_words": [
+    {
+      "word": "يَئِسَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "حَبِطَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "عَتِهَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "وَثِقَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "وَجِلَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "رَحِمَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "بَخِلَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "قَدِمَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "حَذِرَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "حَرِصَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "حَزِنَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "أَسِفَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "خَشِيَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "نَصِبَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "رَضِيَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "خَطِفَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "حَظِيَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "لَعِبَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "نَعِمَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "سَغِبَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "حَفِظَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "بَقِيَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "بَكِمَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "عَلِمَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "سَمِعَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "حَنِقَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "عَهِدَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "عَوِرَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "رَكِبَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "سَعِدَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "شَرِبَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    },
+    {
+      "word": "ظَفِرَ",
+      "lesson": "الكسر 2",
+      "page": 14
+    }
+  ],
+  "damma_words": [
+    {
+      "word": "أُذِنَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "بُهِتَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "تُلِيَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "ثُقِبَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "جُمِعَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "حُمِدَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "خُلِقَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "دُعِيَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "ذُبِحَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "رُحِمَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "زُرِعَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "سُئِلَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "شُكِرَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "صُعِقَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "ضُرِبَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "طُرِحَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "ظُلِمَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "عُتِقَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "غُلِبَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "فُعِلَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "قُتِلَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "كُتِبَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "لُعِنَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "مُنِعَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "نُسِيَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "هُدِيَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "وُجِدَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "وُضِعَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "شُرِبَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "رُسِمَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "فُتِحَ",
+      "lesson": "الضم 2",
+      "page": 19
+    },
+    {
+      "word": "دُبِغَ",
+      "lesson": "الضم 2",
+      "page": 19
+    }
+  ],
+  "similar_letters": {
+    "by_shape": [
+      [
+        "ب",
+        "ن"
+      ],
+      [
+        "ت",
+        "ي"
+      ],
+      [
+        "ث",
+        "ش"
+      ],
+      [
+        "ج",
+        "خ"
+      ],
+      [
+        "ز",
+        "ر"
+      ],
+      [
+        "ذ",
+        "د"
+      ],
+      [
+        "ض",
+        "ص"
+      ],
+      [
+        "ظ",
+        "ط"
+      ],
+      [
+        "غ",
+        "ع"
+      ],
+      [
+        "ش",
+        "س"
+      ],
+      [
+        "ف",
+        "ق"
+      ],
+      [
+        "ل",
+        "ك"
+      ],
+      [
+        "ة",
+        "ه"
+      ],
+      [
+        "أ",
+        "ل"
+      ],
+      [
+        "ف",
+        "غ"
+      ],
+      [
+        "ن",
+        "ذ"
+      ]
+    ],
+    "by_sound": [
+      [
+        "ق",
+        "ك"
+      ],
+      [
+        "ز",
+        "ذ"
+      ],
+      [
+        "ظ",
+        "ذ"
+      ],
+      [
+        "ث",
+        "س"
+      ],
+      [
+        "ت",
+        "ذ"
+      ],
+      [
+        "ض",
+        "د"
+      ],
+      [
+        "س",
+        "ص"
+      ],
+      [
+        "ف",
+        "ث"
+      ],
+      [
+        "ط",
+        "ة"
+      ],
+      [
+        "ل",
+        "ر"
+      ],
+      [
+        "ظ",
+        "ز"
+      ],
+      [
+        "غ",
+        "خ"
+      ],
+      [
+        "أ",
+        "ه"
+      ],
+      [
+        "ع",
+        "ح"
+      ],
+      [
+        "ذ",
+        "ث"
+      ],
+      [
+        "ه",
+        "ح"
+      ]
+    ],
+    "page": 7
+  },
+  "basmala_path": {
+    "note": "نص البسملة يؤخذ دائمًا من data/quran_fatiha.json (الآية 1:1)؛ هنا فقط ترتيب الحروف والكلمات المصاحبة لكل نصف.",
+    "steps": [
+      {
+        "step": 1,
+        "ayah_ref": "1:1",
+        "word_indexes": [
+          1,
+          2
+        ],
+        "label_en": "Bismillah",
+        "letters": [
+          "ب",
+          "س",
+          "م",
+          "ا",
+          "ل",
+          "ه"
+        ]
+      },
+      {
+        "step": 2,
+        "ayah_ref": "1:1",
+        "word_indexes": [
+          3,
+          4
+        ],
+        "label_en": "Ar-Rahman Ar-Raheem",
+        "letters": [
+          "ا",
+          "ل",
+          "ر",
+          "ح",
+          "م",
+          "ن",
+          "ي"
+        ]
+      }
+    ]
+  }
+}

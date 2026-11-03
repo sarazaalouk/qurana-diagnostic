@@ -1,0 +1,130 @@
+/* Qurana diagnostic — brand palette (olive, brown, sand, cream). One column, phone first. */
+:root {
+  --olive: #4A520A;
+  --olive-2: #8CA12B;
+  --brown: #3E2A18;
+  --sand: #D0C3A5;
+  --cream: #F4F0E6;
+  --card: #FBF8F1;
+  --muted: #6B5A45;
+  --line: #DED3BC;
+  --tint: #ECE5D3;
+  --ok: #3F7A2A;
+  --on-olive: #F4F0E6;
+  --display: "El Messiri", "Cairo", "Segoe UI", Tahoma, sans-serif;
+  --body: "Cairo", "Segoe UI", Tahoma, sans-serif;
+  --quran: "Amiri Quran", "Amiri", "Traditional Arabic", serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --olive: #B7C46A; --olive-2: #9DB23C; --brown: #EDE4D3; --sand: #5A4E3A; --cream: #1B1A14;
+    --card: #23211A; --muted: #BBAE95; --line: #3D3729; --tint: #2C2A20; --ok: #8FCB6E; --on-olive: #1B1A14;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --olive: #B7C46A; --olive-2: #9DB23C; --brown: #EDE4D3; --sand: #5A4E3A; --cream: #1B1A14;
+  --card: #23211A; --muted: #BBAE95; --line: #3D3729; --tint: #2C2A20; --ok: #8FCB6E; --on-olive: #1B1A14;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--cream); color: var(--brown); font-family: var(--body); font-size: 17px; line-height: 1.8;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.top { display: flex; align-items: center; justify-content: space-between; max-width: 640px; margin: 0 auto; padding-block: 16px 4px; }
+.brand { font-family: var(--display); font-size: 26px; font-weight: 700; color: var(--olive); text-decoration: none; }
+.top small { color: var(--muted); font-size: 14px; }
+main { max-width: 640px; margin: 0 auto; padding-block: 12px 48px; display: grid; gap: 18px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: grid; gap: 14px; }
+h1 { font-family: var(--display); font-size: clamp(26px, 6vw, 34px); line-height: 1.35; margin: 0; color: var(--olive); text-wrap: balance; }
+h2 { font-family: var(--display); font-size: 23px; margin: 0; color: var(--olive); text-wrap: balance; }
+h3 { font-size: 17px; margin: 0; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+.eyebrow { font-size: 13px; font-weight: 700; color: var(--olive-2); letter-spacing: .02em; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; }
+.facts span { background: var(--tint); border-radius: 999px; padding: 2px 12px; font-size: 14px; }
+.btn {
+  appearance: none; border: 0; border-radius: 12px; background: var(--olive); color: var(--on-olive);
+  font: 700 17px/1.4 var(--body); padding: 14px 20px; min-height: 52px; cursor: pointer; text-align: center; text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn:disabled { opacity: .5; cursor: default; }
+.btn.secondary { background: transparent; color: var(--olive); border: 2px solid var(--olive); }
+.btn.block { width: 100%; }
+.btn:focus-visible, .choice:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--olive-2); outline-offset: 2px; }
+.field { display: grid; gap: 6px; }
+.field > label, .field > legend { font-weight: 700; }
+fieldset.field { border: 0; padding: 0; margin: 0; }
+input[type="text"], select {
+  font: 17px var(--body); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--sand);
+  background: var(--card); color: var(--brown); min-height: 48px; width: 100%;
+}
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips label {
+  display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--sand); border-radius: 999px;
+  padding: 6px 14px; cursor: pointer; background: var(--card); min-height: 40px;
+}
+.chips input { accent-color: var(--olive); }
+.chips label:has(input:checked) { background: var(--tint); border-color: var(--olive); font-weight: 700; }
+.check { display: flex; gap: 10px; align-items: flex-start; }
+.check input { margin-top: 7px; accent-color: var(--olive); width: 18px; height: 18px; flex: none; }
+.error { color: #A3301B; font-weight: 700; }
+.progress { display: flex; gap: 6px; justify-content: center; }
+.progress span { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+.progress span.done { background: var(--olive); }
+.stage-label { text-align: center; }
+.big-letter { font-family: var(--quran); font-size: 84px; line-height: 1.3; text-align: center; color: var(--olive); }
+.choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.choice {
+  appearance: none; border: 2px solid var(--sand); border-radius: 16px; background: var(--card); color: var(--brown);
+  font-family: var(--quran); font-size: 54px; line-height: 1.4; padding: 10px 0; min-height: 96px; cursor: pointer;
+}
+.choice.picked { border-color: var(--olive); background: var(--tint); }
+.word { font-family: "Cairo", var(--body); font-size: 52px; font-weight: 700; text-align: center; line-height: 1.6; }
+.quran { font-family: var(--quran); }
+.word.quran { font-weight: 400; font-size: 56px; }
+.word.ayah { font-size: 38px; line-height: 2; }
+.cue { background: var(--tint); border-radius: 10px; padding: 10px 14px; font-size: 15px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; }
+.row > .btn { flex: 1 1 160px; }
+.level-badge { display: inline-block; background: var(--olive); color: var(--on-olive); border-radius: 999px; padding: 4px 16px; font-weight: 700; font-size: 15px; }
+.steps-done { display: grid; gap: 6px; }
+.steps-done div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--line); padding-bottom: 6px; }
+.steps-done div:last-child { border-bottom: 0; }
+.tick { color: var(--ok); font-weight: 700; }
+.ctas { display: grid; gap: 10px; }
+.note { font-size: 14px; color: var(--muted); }
+footer.site { max-width: 640px; margin: 0 auto; padding-block: 8px 32px; font-size: 13px; color: var(--muted); text-align: center; }
+@media (max-width: 420px) { .choice { font-size: 44px; min-height: 84px; } .big-letter { font-size: 72px; } }
+
+.stack-col { display: grid; gap: 18px; }
+[hidden] { display: none !important; }
+
+/* Language: English pages use Inter for running text, left to right (set on <html dir>). */
+html[lang="en"] body { font-family: "Inter", "Segoe UI", Arial, sans-serif; font-size: 16px; }
+html[lang="en"] h1, html[lang="en"] h2 { font-family: "Inter", "Segoe UI", Arial, sans-serif; font-weight: 700; letter-spacing: -0.01em; }
+.top-end { display: inline-flex; align-items: center; gap: 12px; }
+.lang-switch { color: var(--olive); font-weight: 700; text-decoration: none; border: 1px solid var(--olive); border-radius: 999px; padding: 2px 12px; font-size: 14px; }
+.form-stack { display: grid; gap: 16px; }
+.center { text-align: center; }
+/* Learning plan */
+.plan { display: grid; gap: 12px; }
+.plan-stage { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 6px; background: var(--cream); }
+.plan-stage h3 { font-size: 18px; color: var(--olive); display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.plan-stage .n { font-size: 13px; color: var(--muted); font-weight: 600; }
+.plan-stage dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; font-size: 15px; }
+.plan-stage dt { color: var(--muted); }
+.plan-stage dd { margin: 0; min-width: 0; }
+.plan-stage .why { font-size: 15px; background: var(--card); border-radius: 8px; padding: 8px 10px; }
+.draft-flag { display: inline-block; background: #F6E3B4; color: #6B4A00; border-radius: 6px; padding: 2px 10px; font-size: 13px; font-weight: 700; }
+.spinner { width: 22px; height: 22px; border: 3px solid var(--line); border-top-color: var(--olive); border-radius: 50%; animation: spin 0.9s linear infinite; display: inline-block; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+@media (max-width: 420px) { .plan-stage dl { grid-template-columns: 1fr; } }

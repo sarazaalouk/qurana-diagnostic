@@ -1,0 +1,121 @@
+{
+  "status": "draft",
+  "note": "SAMPLE FOR TESTING ONLY — not Qurana's curriculum. Stage order follows the Noor Al-Bayan order in Sara's notes; every lesson count is a placeholder until the teachers write their own. Replace by importing the teachers' approved Excel (npm run import-curriculum). A draft is never used for parents unless ALLOW_DRAFT_CURRICULUM=1 (local demo).",
+  "owner": "",
+  "approved_by": "",
+  "approved_at": "",
+  "levels": [
+    { "code": "L1", "name": "تأسيس القراءة (نور البيان)", "name_en": "Reading foundations (Noor Al-Bayan)" },
+    { "code": "L2", "name": "القراءة من المصحف", "name_en": "Reading from the Mushaf" },
+    { "code": "L3", "name": "الحفظ", "name_en": "Memorization (Hifz)" },
+    { "code": "L4", "name": "أساسيات التجويد", "name_en": "Tajweed basics" }
+  ],
+  "stages": [
+    {
+      "id": "L1-S1", "level": "L1", "n": 1, "program": "reading", "track": "both", "sessions": 8,
+      "name": "الحروف الهجائية", "name_en": "The Arabic letters",
+      "goals": "يميّز أصوات الحروف الهجائية وأسماءها.", "goals_en": "Recognizes the sounds and names of the Arabic letters.",
+      "content": "نور البيان: دروس الحروف المفردة", "content_en": "Noor Al-Bayan: single-letter lessons",
+      "exit_sign": "يسمّي الحروف الهجائية عند سماع أصواتها.", "exit_sign_en": "Names the letters on hearing their sounds."
+    },
+    {
+      "id": "L1-S2", "level": "L1", "n": 2, "program": "reading", "track": "both", "sessions": 6,
+      "name": "أشكال الحروف في الكلمة", "name_en": "Letter shapes in a word",
+      "goals": "يتعرّف على شكل الحرف في أول الكلمة ووسطها وآخرها.", "goals_en": "Knows each letter's shape at the start, middle and end of a word.",
+      "content": "نور البيان: دروس الحروف المركّبة", "content_en": "Noor Al-Bayan: joined-letter lessons",
+      "exit_sign": "يميّز الحرف في الكلمة أينما جاء.", "exit_sign_en": "Finds a letter in a word wherever it comes."
+    },
+    {
+      "id": "L1-S3", "level": "L1", "n": 3, "program": "reading", "track": "both", "sessions": 4,
+      "name": "القراءة بالفتحة", "name_en": "Reading with fatha",
+      "goals": "يقرأ كلمات قصيرة بحركة الفتح.", "goals_en": "Reads short words with fatha.",
+      "content": "نور البيان: دروس الفتحة", "content_en": "Noor Al-Bayan: fatha lessons",
+      "exit_sign": "يقرأ كلمات بالفتح دون مساعدة.", "exit_sign_en": "Reads fatha words without help."
+    },
+    {
+      "id": "L1-S4", "level": "L1", "n": 4, "program": "reading", "track": "both", "sessions": 6,
+      "name": "الكسرة والضمة", "name_en": "Kasra and damma",
+      "goals": "يقرأ كلمات بالحركات الثلاث.", "goals_en": "Reads words with all three short vowels.",
+      "content": "نور البيان: دروس الكسرة والضمة", "content_en": "Noor Al-Bayan: kasra and damma lessons",
+      "exit_sign": "يقرأ كلمات بالحركات الثلاث بدقة.", "exit_sign_en": "Reads words with all three short vowels accurately."
+    },
+    {
+      "id": "L1-S5", "level": "L1", "n": 5, "program": "reading", "track": "both", "sessions": 6,
+      "name": "المدود", "name_en": "Long vowels (madd)",
+      "goals": "يقرأ المد بالألف والواو والياء.", "goals_en": "Reads the long vowels with alif, waw and ya.",
+      "content": "نور البيان: دروس المدود", "content_en": "Noor Al-Bayan: long-vowel lessons",
+      "exit_sign": "يمدّ حروف المد في الكلمات بمقدارها.", "exit_sign_en": "Lengthens the long vowels in words for their full length."
+    },
+    {
+      "id": "L1-S6", "level": "L1", "n": 6, "program": "reading", "track": "both", "sessions": 6,
+      "name": "السكون والتنوين", "name_en": "Sukun and tanween",
+      "goals": "يقرأ الحرف الساكن والتنوين.", "goals_en": "Reads letters with sukun and tanween.",
+      "content": "نور البيان: دروس السكون والتنوين", "content_en": "Noor Al-Bayan: sukun and tanween lessons",
+      "exit_sign": "يقرأ كلمات فيها سكون وتنوين دون تردد.", "exit_sign_en": "Reads words with sukun and tanween without hesitating."
+    },
+    {
+      "id": "L1-S7", "level": "L1", "n": 7, "program": "reading", "track": "both", "sessions": 5,
+      "name": "الشدة", "name_en": "Shaddah",
+      "goals": "يقرأ الحرف المشدد.", "goals_en": "Reads doubled letters (shaddah).",
+      "content": "نور البيان: دروس الشدة", "content_en": "Noor Al-Bayan: shaddah lessons",
+      "exit_sign": "يقرأ كلمات فيها شدة قراءة صحيحة.", "exit_sign_en": "Reads words with shaddah correctly."
+    },
+    {
+      "id": "L2-S1", "level": "L2", "n": 1, "program": "reading", "track": "both", "sessions": 8,
+      "name": "القراءة من المصحف", "name_en": "Reading from the Mushaf",
+      "goals": "يقرأ سورة الفاتحة وقصار السور من المصحف.", "goals_en": "Reads Al-Fatiha and the short surahs from the Mushaf.",
+      "content": "الفاتحة (1–7) · قصار السور من جزء عمّ", "content_en": "Al-Fatiha (1–7) · short surahs of Juz' Amma",
+      "exit_sign": "يقرأ صفحة من المصحف بأخطاء قليلة.", "exit_sign_en": "Reads a page of the Mushaf with few mistakes."
+    },
+    {
+      "id": "L3-S1", "level": "L3", "n": 1, "program": "hifz", "track": "both", "sessions": 8,
+      "name": "حفظ الفاتحة وقصار السور", "name_en": "Memorizing Al-Fatiha and the shortest surahs",
+      "goals": "يحفظ الفاتحة والإخلاص والفلق والناس ويسمّعها.", "goals_en": "Memorizes Al-Fatiha, Al-Ikhlas, Al-Falaq and An-Nas and recites them.",
+      "content": "الفاتحة · الإخلاص · الفلق · الناس", "content_en": "Al-Fatiha · Al-Ikhlas · Al-Falaq · An-Nas",
+      "exit_sign": "يسمّع السور الأربع للمعلمة.", "exit_sign_en": "Recites the four surahs to the teacher."
+    },
+    {
+      "id": "L3-S2", "level": "L3", "n": 2, "program": "hifz", "track": "both", "sessions": 16,
+      "name": "حفظ قصار السور", "name_en": "Memorizing the short surahs",
+      "goals": "يحفظ السور من المسد إلى الضحى.", "goals_en": "Memorizes the surahs from Al-Masad back to Ad-Duha.",
+      "content": "من المسد إلى الضحى (جزء عمّ)", "content_en": "Al-Masad back to Ad-Duha (Juz' Amma)",
+      "exit_sign": "يسمّع سور المرحلة للمعلمة.", "exit_sign_en": "Recites the stage's surahs to the teacher."
+    },
+    {
+      "id": "L3-S3", "level": "L3", "n": 3, "program": "hifz", "track": "both", "sessions": 30,
+      "name": "إتمام جزء عمّ", "name_en": "Completing Juz' Amma",
+      "goals": "يحفظ باقي سور جزء عمّ.", "goals_en": "Memorizes the rest of Juz' Amma.",
+      "content": "من الليل إلى النبأ (جزء عمّ)", "content_en": "Al-Layl back to An-Naba' (Juz' Amma)",
+      "exit_sign": "يسمّع جزء عمّ كاملًا للمعلمة.", "exit_sign_en": "Recites all of Juz' Amma to the teacher."
+    },
+    {
+      "id": "L4-S1", "level": "L4", "n": 1, "program": "tajweed", "track": "both", "sessions": 6,
+      "name": "الغنة", "name_en": "Ghunnah (the nasal sound)",
+      "goals": "يُخرج الغنة في النون والميم المشددتين.", "goals_en": "Makes the ghunnah on doubled noon and meem.",
+      "content": "تطبيق على الفاتحة وقصار السور", "content_en": "Practice on Al-Fatiha and the short surahs",
+      "exit_sign": "يطبّق الغنة في قراءته من المصحف.", "exit_sign_en": "Applies ghunnah when reading from the Mushaf."
+    },
+    {
+      "id": "L4-S2", "level": "L4", "n": 2, "program": "tajweed", "track": "both", "sessions": 6,
+      "name": "المدود في التلاوة", "name_en": "Madd in recitation",
+      "goals": "يميّز المد الطبيعي ويمده بمقداره.", "goals_en": "Recognizes the natural madd and lengthens it correctly.",
+      "content": "تطبيق على الفاتحة وقصار السور", "content_en": "Practice on Al-Fatiha and the short surahs",
+      "exit_sign": "يطبّق المد الطبيعي في قراءته.", "exit_sign_en": "Applies the natural madd when reading."
+    },
+    {
+      "id": "L4-S3", "level": "L4", "n": 3, "program": "tajweed", "track": "both", "sessions": 4,
+      "name": "القلقلة", "name_en": "Qalqalah",
+      "goals": "يقلقل حروف «قطب جد» الساكنة.", "goals_en": "Bounces the qalqalah letters when they have sukun.",
+      "content": "تطبيق على قصار السور", "content_en": "Practice on the short surahs",
+      "exit_sign": "يطبّق القلقلة في قراءته.", "exit_sign_en": "Applies qalqalah when reading."
+    }
+  ],
+  "diagnosis_map": { "R1": "L1-S1", "R2": "L1-S2", "R3": "L1-S3", "R4": "L1-S4", "R5": "L2-S1", "R6": "L3-S1" },
+  "goal_map": { "read": "", "hifz": "L3-S3", "tajweed": "L4-S3", "arabic": "", "islamic": "" },
+  "rules": [
+    { "type": "must", "rule": "الخطة مقترحة ويراجعها المعلم في الحصة التجريبية." },
+    { "type": "never", "rule": "وعود بنتيجة في مدة محددة." },
+    { "type": "never", "rule": "نص آيات مكتوب في الخطة؛ اسم السورة وأرقام الآيات فقط." },
+    { "type": "never", "rule": "وصف الطفل بصفة سلبية أو مقارنته بغيره." }
+  ]
+}

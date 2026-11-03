@@ -1,0 +1,30 @@
+# Render Blueprint for the Qurana diagnostic (test.quraana-institute.com).
+services:
+  - type: web
+    name: qurana-diagnostic
+    runtime: node
+    plan: starter            # a lasting disk needs a paid instance; results must survive deploys
+    region: frankfurt
+    branch: main
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    disk:
+      name: qurana-diagnostic-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DATA_STORE_DIR
+        value: /var/data
+      - key: PUBLIC_BASE_URL
+        value: https://test.quraana-institute.com
+      - key: SITE_URL
+        value: https://quraana-institute.com
+      - key: WHATSAPP_NUMBER
+        value: "201142847626"
+      - key: NODE_VERSION
+        value: "22"
+      # For step 2 (learning plan with Claude). Set in Render, never in the repository.
+      - key: ANTHROPIC_API_KEY
+        sync: false

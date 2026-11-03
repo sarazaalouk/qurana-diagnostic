@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>تشخيص قرآنا · Qurana level check</title>
+  <meta name="description" content="اعرف مستوى طفلك في قراءة القرآن في دقائق، مع خطة تعليمية مقترحة. Find your child's Quran reading level in minutes, with a suggested learning plan.">
+  <meta name="theme-color" content="#4A520A">
+  <link rel="alternate" hreflang="ar" href="/?lang=ar">
+  <link rel="alternate" hreflang="en" href="/?lang=en">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Cairo:wght@400;600;700&family=Inter:wght@400;600;700&family=Amiri+Quran&display=swap">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="https://quraana-institute.com" lang="ar">قرآنا</a>
+  <span class="top-end"><small data-i18n="brand_sub"></small><a id="lang-switch" class="lang-switch" href="#"></a></span>
+</header>
+
+<main>
+  <!-- 1. Welcome -->
+  <section class="card" id="welcome" aria-labelledby="w-title">
+    <span class="eyebrow" data-i18n="w_eyebrow"></span>
+    <h1 id="w-title" data-i18n="w_title"></h1>
+    <p data-i18n="w_text"></p>
+    <div class="facts"><span data-i18n="fact1"></span><span data-i18n="fact2"></span><span data-i18n="fact3"></span><span data-i18n="fact4"></span></div>
+    <p class="small muted" data-i18n="w_after"></p>
+    <label class="check"><input type="checkbox" id="consent"><span data-i18n="consent"></span></label>
+    <p class="error" id="consent-error" hidden></p>
+    <button class="btn block" id="start" data-i18n="start"></button>
+  </section>
+
+  <!-- 2. About the child (parent) -->
+  <section class="card" id="about" hidden aria-labelledby="a-title">
+    <span class="eyebrow" data-i18n="a_eyebrow"></span>
+    <h2 id="a-title" data-i18n="a_title"></h2>
+    <form id="about-form" class="form-stack" novalidate>
+      <div class="field">
+        <label for="nickname" data-i18n="nickname"></label>
+        <input type="text" id="nickname" maxlength="30" autocomplete="off" data-i18n-ph="nickname_ph">
+      </div>
+      <fieldset class="field"><legend data-i18n="age"></legend><div class="chips" id="age"></div></fieldset>
+      <div class="field">
+        <label for="country" data-i18n="country"></label>
+        <select id="country"></select>
+      </div>
+      <fieldset class="field"><legend data-i18n="lang_home"></legend><div class="chips" id="lang"></div></fieldset>
+      <fieldset class="field"><legend data-i18n="goal"></legend><div class="chips" id="goal"></div></fieldset>
+      <fieldset class="field"><legend data-i18n="surahs"></legend>
+        <div class="chips" id="surahs"></div>
+        <label class="check"><input type="checkbox" id="more"><span data-i18n="more"></span></label>
+      </fieldset>
+      <fieldset class="field" id="mem-from-field" hidden><legend data-i18n="mem_from"></legend><div class="chips" id="mem-from"></div></fieldset>
+      <fieldset class="field"><legend data-i18n="per_week_q"></legend><div class="chips" id="per-week"></div></fieldset>
+      <fieldset class="field"><legend data-i18n="teacher"></legend><div class="chips" id="teacher"></div></fieldset>
+      <fieldset class="field"><legend data-i18n="estimate"></legend><div class="chips" id="estimate"></div></fieldset>
+      <fieldset class="field" id="tajweed-field" hidden><legend data-i18n="tajweed_q"></legend><div class="form-stack" id="tajweed"></div></fieldset>
+      <p class="error" id="about-error" hidden></p>
+      <button class="btn block" type="submit" data-i18n="go_games"></button>
+    </form>
+  </section>
+
+  <!-- 3. Games -->
+  <section class="card" id="game" hidden aria-live="polite">
+    <div class="progress" id="dots" aria-hidden="true"></div>
+    <span class="eyebrow stage-label" id="g-label"></span>
+    <h2 class="stage-label" id="g-title"></h2>
+    <div id="g-body" class="form-stack"></div>
+  </section>
+
+  <!-- 4. Saving -->
+  <section class="card" id="saving" hidden aria-live="polite">
+    <h2 data-i18n="saving"></h2>
+    <p class="muted" id="saving-text"></p>
+    <button class="btn secondary" id="retry" hidden data-i18n="retry"></button>
+  </section>
+</main>
+
+<footer class="site" data-i18n="footer"></footer>
+
+<script src="js/i18n.js"></script>
+<script src="js/levels.js"></script>
+<script src="js/options.js"></script>
+<script src="js/sukun.js"></script>
+<script src="js/diagnosis.js"></script>
+</body>
+</html>

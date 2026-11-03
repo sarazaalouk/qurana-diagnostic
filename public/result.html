@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>نتيجة تشخيص قرآنا · Qurana result</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#4A520A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Cairo:wght@400;600;700&family=Inter:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="https://quraana-institute.com" lang="ar">قرآنا</a>
+  <span class="top-end"><small data-i18n="r_sub"></small><a id="lang-switch" class="lang-switch" href="#"></a></span>
+</header>
+
+<main>
+  <section class="card" id="loading"><p class="muted" data-i18n="r_loading"></p></section>
+  <section class="card" id="missing" hidden>
+    <h2 data-i18n="r_missing"></h2>
+    <p data-i18n="r_missing_text"></p>
+    <a class="btn block" href="/" data-i18n="r_restart"></a>
+  </section>
+
+  <div id="result" class="stack-col" hidden>
+    <section class="card" aria-labelledby="r-title">
+      <span class="eyebrow" id="r-date"></span>
+      <h1 id="r-title"></h1>
+      <div><span class="level-badge" id="r-level"></span></div>
+      <p id="r-focus"></p>
+      <p class="note" data-i18n="r_note"></p>
+    </section>
+
+    <section class="card" aria-labelledby="p-title">
+      <h2 id="p-title" data-i18n="p_title"></h2>
+      <div id="plan"><p class="muted"><span class="spinner" aria-hidden="true"></span> <span data-i18n="p_loading"></span></p></div>
+    </section>
+
+    <section class="card" aria-labelledby="d-title">
+      <h2 id="d-title" data-i18n="r_done"></h2>
+      <div class="steps-done" id="r-stages"></div>
+      <div id="r-memorized"></div>
+    </section>
+
+    <section class="card" aria-labelledby="s-title">
+      <h2 id="s-title" data-i18n="r_suggest"></h2>
+      <div class="steps-done" id="r-suggest"></div>
+    </section>
+
+    <section class="card" aria-labelledby="n-title">
+      <h2 id="n-title" data-i18n="r_next"></h2>
+      <div class="ctas">
+        <a class="btn block" id="cta-book" target="_blank" rel="noopener" data-i18n="cta_book"></a>
+        <a class="btn block secondary" id="cta-wa" target="_blank" rel="noopener" data-i18n="cta_wa"></a>
+        <a class="btn block secondary" id="cta-prices" target="_blank" rel="noopener" data-i18n="cta_prices"></a>
+      </div>
+      <div class="row" style="align-items:center">
+        <p class="small muted" style="flex:1 1 240px"><span data-i18n="r_link"></span><br><span id="r-link" dir="ltr" style="word-break:break-all"></span></p>
+        <button class="btn secondary" id="copy" type="button" data-i18n="copy"></button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site" data-i18n="footer"></footer>
+
+<script src="/js/i18n.js"></script>
+<script src="/js/levels.js"></script>
+<script src="/js/options.js"></script>
+<script>
+(async function () {
+  const I = window.QuranaI18n, O = window.QuranaOptions, L = window.QuranaLevels;
+  const t = I.t;
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  I.apply();
+  const id = location.pathname.split("/").filter(Boolean).pop();
+  let r, cfg;
+  try {
+    const [a, b] = await Promise.all([fetch(`/api/results/${encodeURIComponent(id)}`), fetch("/api/config")]);
+    if (!a.ok) throw new Error();
+    r = await a.json();
+    cfg = await b.json();
+  } catch {
+    $("loading").hidden = true;
+    $("missing").hidden = false;
+    return;
+  }
+  const lvl = L.LEVELS[r.level.code];
+  const levelName = I.label(lvl, "name");
+  const nick = r.profile.nickname;
+  $("r-date").textContent = t("r_date", { date: new Date(r.created_at).toLocaleDateString(I.lang === "en" ? "en-GB" : "ar", { day: "numeric", month: "long", year: "numeric" }) });
+  $("r-title").textContent = nick ? t("r_title_named", { name: nick }) : t("r_title");
+  $("r-level").textContent = levelName;
+  $("r-focus").textContent = t("r_focus", { focus: I.label(lvl, "focus") });
+
+  $("r-stages").innerHTML = L.STAGES.filter((k) => r.stages[k]).map((k) => {
+    const s = r.stages[k];
+    const v = s.inferred ? `<span class="tick">✓</span> <span class="small muted">${esc(t("r_not_needed"))}</span>`
+      : `${esc(t("r_of", { a: s.score, b: s.total }))} ${s.passed ? `<span class="tick">✓</span>` : ""}`;
+    return `<div><span>${esc(t("st_" + k))}</span><span>${v}</span></div>`;
+  }).join("");
+  const mem = r.profile.memorized.map((ar) => (I.lang === "en" ? (O.SURAHS.find((s) => s.ar === ar) || { en: ar }).en : ar));
+  $("r-memorized").innerHTML = mem.length || r.profile.memorized_more
+    ? `<p class="small"><b>${esc(t("r_memorizes"))}</b> ${esc(mem.join(I.lang === "en" ? ", " : "، "))}${r.profile.memorized_more ? esc(t("r_and_more")) : ""}</p>`
+    : `<p class="small muted">${esc(t("r_no_mem"))}</p>`;
+  const memFrom = O.MEM_SOURCES.find((x) => x.id === r.profile.memorized_from);
+  if (memFrom) $("r-memorized").innerHTML += `<p class="small"><b>${esc(t("r_mem_from"))}</b> ${esc(I.label(memFrom))}</p>`;
+  if (r.profile.tajweed) {
+    $("r-memorized").innerHTML += `<p class="small"><b>${esc(t("r_tajweed"))}</b></p><div class="steps-done">` + O.TAJWEED_QS.map((q) =>
+      `<div><span class="small">${esc(I.label(q))}</span><span class="small">${esc(I.label(O.TAJWEED_ANSWERS.find((a) => a.id === r.profile.tajweed[q.id])))}</span></div>`).join("") + "</div>";
+  }
+
+  const s = r.suggestion;
+  const prog = (pid) => I.label(O.PROGRAMS[pid], "name");
+  const plan = O.PLANS[s.plan];
+  const teacher = O.TEACHER.find((x) => x.id === r.profile.teacher);
+  $("r-suggest").innerHTML = [
+    [t("k_program"), prog(s.program) + (s.then ? ` ${t("then")} ${prog(s.then)}` : "")],
+    [t("k_track"), s.track === "english" ? t("track_en") : t("track_ar")],
+    [t("k_plan"), `${I.label(plan, "name")} · ${t("per_week", { n: plan.per_week })}`],
+    [t("k_teacher"), teacher.id === "any" ? t("any_teacher") : I.label(teacher)],
+  ].map(([k, v]) => `<div><span class="muted">${esc(k)}</span><span>${esc(v)}</span></div>`).join("");
+
+  const link = r.links.result;
+  const waText = [
+    nick ? t("wa_hello_named", { name: nick }) : t("wa_hello"),
+    t("wa_level", { level: levelName }),
+    t("wa_suggest", { program: prog(s.program), plan: I.label(plan, "name") }),
+    t("wa_link", { link }),
+    t("wa_book"),
+  ].join("\n");
+  $("cta-book").href = r.links.booking + (r.links.booking.includes("?") ? "&" : "?") + `lang=${I.lang}`;
+  $("cta-wa").href = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(waText)}`;
+  $("cta-prices").href = r.links.prices;
+  $("r-link").textContent = link;
+  $("copy").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(link); $("copy").textContent = t("copied"); }
+    catch { const rg = document.createRange(); rg.selectNodeContents($("r-link")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(rg); }
+  });
+
+  $("loading").hidden = true;
+  $("result").hidden = false;
+  document.title = t("r_doc_title", { level: levelName });
+
+  // ---- learning plan (built on the server from the approved curriculum) ----
+  try {
+    const res = await fetch(`/api/results/${encodeURIComponent(id)}/plan?lang=${I.lang}`);
+    const p = await res.json();
+    if (res.ok && p.status === "reached") {
+      $("plan").innerHTML = `${p.draft ? `<span class="draft-flag">${esc(t("p_draft"))}</span>` : ""}<p>${esc(t("p_reached"))}</p>`;
+      return;
+    }
+    if (!res.ok || p.status !== "ready") throw new Error();
+    const tot = p.plan.totals;
+    const stagesHtml = p.plan.stages.map((st, i) => `
+      <article class="plan-stage">
+        <h3><span class="n">${i + 1}</span> ${esc(st.name)}</h3>
+        ${st.note ? `<p class="why">${esc(st.note)}</p>` : ""}
+        <dl>
+          <dt>${esc(t("p_goals"))}</dt><dd>${esc(st.goals)}</dd>
+          <dt>${esc(t("p_content"))}</dt><dd>${esc(st.content)}</dd>
+          <dt>${esc(t("p_exit"))}</dt><dd>${esc(st.exit_sign)}</dd>
+          <dt></dt><dd class="small muted">${esc(t("p_sessions", { n: st.sessions }))}</dd>
+        </dl>
+      </article>`).join("");
+    $("plan").innerHTML = `
+      <div class="plan">
+        ${p.draft ? `<span class="draft-flag">${esc(t("p_draft"))}</span>` : ""}
+        <p>${esc(p.plan.intro)}</p>
+        ${stagesHtml}
+        <p class="small"><b>${esc(t("p_totals", { sessions: tot.sessions, weeks: tot.weeks, per_week: tot.per_week }))}</b></p>
+        <p><b>${esc(t("p_tip"))}:</b> ${esc(p.plan.tip)}</p>
+        <p class="note">${esc(p.plan.source === "claude" ? t("p_footer") : t("p_footer_cur"))}</p>
+      </div>`;
+  } catch {
+    $("plan").innerHTML = `<p class="note">${esc(t("p_unavailable"))}</p>`;
+  }
+})();
+</script>
+</body>
+</html>
