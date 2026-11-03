@@ -92,7 +92,7 @@ const fakeClient = (...replies) => {
   const good = {
     month1: "يقرأ طفلكم من المصحف. في الشهر الأول نبدأ بالمد في سورة الفاتحة.",
     month3: "بعد ثلاثة أشهر تقريبًا نتوقع أن يطبّق الغنة في قراءته.",
-    longer: "على المدى الأبعد يطبّق القلقلة والوقف في قراءته.",
+    longer: "على المدى الأبعد يطبّق طفلكم ما تعلّمه عند الوقف في قراءته.",
     tip: "دقائق قليلة هادئة في أغلب الأيام.",
   };
   const problems = (reply, lang = "ar") => plan.validateReply(reply, lang, allowed);
@@ -105,6 +105,30 @@ const fakeClient = (...replies) => {
   check("P16. Arabic script in the English plan is refused", problems({ ...good, tip: "Practise الحروف daily." }, "en").length > 0);
   check("P17. a long window is refused", problems({ ...good, longer: "ا".repeat(400) }).length > 0);
   check("P53. the totals are not repeated in the windows (the page states them once)", problems({ ...good, longer: `المسار كله ${tot.sessions} حصة، نحو ${tot.weeks_at[2]} أسابيع.` }).length > 0);
+  // ---- concise, non-repetitive text (voice.md «قواعد الإيجاز») ----
+  const has = (reply, part, opts) => plan.validateReply(reply, "ar", allowed, opts).some((x) => x.includes(part));
+  check("P56. a window of three sentences is refused", has({ ...good, month1: "يقرأ طفلكم. نبدأ بالمد. ثم نكمل." }, "sentences"));
+  check("P57. a window of more than about 35 words is refused", has({ ...good, month3: Array(40).fill("كلمة").join(" ") }, "words"));
+  check("P58. a window that repeats the stage names in the chip above it is refused",
+    has({ ...good, month1: "نبدأ بالغنة والنون الساكنة والتنوين مع طفلكم." }, "stage names", { chips: { month1: ["الغنة والنون الساكنة والتنوين"] } }));
+  check("P59. «تقدير لا وعد» and «تراجعها المعلمة» are refused in the windows and the tip",
+    has({ ...good, longer: "والمدة تقدير لا وعد." }, "تقدير لا وعد") && has({ ...good, tip: "تراجعها المعلمة معكم." }, "تراجعها المعلمة"));
+  check("P60. …but «موعد» and reviewing surahs («تراجع معه ما حفظه») are fine",
+    !has({ ...good, tip: "اختاروا موعدًا ثابتًا كل يوم." }, "تقدير") && !has({ ...good, month1: "المعلمة تراجع معه ما حفظه أولًا." }, "تراجعها"));
+  check("P61. speaking to the child («تقرأ / تحفظ») is refused; the adult track speaks to the learner",
+    has({ ...good, month1: "في الشهر الأول تحفظ سورة جديدة." }, "speaks to the child") && !has({ ...good, month1: "في الشهر الأول تحفظ سورة جديدة." }, "speaks to the child", { adult: true }));
+  check("P62. six words in a row from voice.md's samples are refused (tone only, not copying)",
+    has({ ...good, month1: "لاحظنا أنه يجيب بسرعة عندما يسمع الحرف." }, "copies"));
+  const terms = { terms: ["المد", "الغنة", "الفاتحة"] };
+  check("P63. the same Tajweed point in two windows is refused",
+    has({ ...good, month1: "نبدأ بالمد مع طفلكم.", month3: "يستمر المد في قراءته." }, "more than one window", terms)
+    || has({ ...good, month1: "نبدأ مع طفلكم على المد.", month3: "ويبقى المد معه." }, "more than one window", terms));
+  check("P64. the same five words in two windows are refused", has({ ...good, month1: "يقرأ طفلكم الكلمات القصيرة بثقة كل يوم.", month3: "ثم يقرأ طفلكم الكلمات القصيرة بثقة أكبر." }, "repeat the same words"));
+  check("P65. the good reply passes every rule", problems(good).length === 0, problems(good).join(" | "));
+  const chips = plan.chipsFor(plan.pathFor({ ...r6, profile: { ...r6.profile, goals: ["hifz"], memorized: [], tajweed: { madd: "no" } } }, "ar", approved));
+  check("P66. the chip above a window: short stage names and the Tajweed point (no «المراحل:» sentence)",
+    chips.month1.join(" · ") === "حفظ الفاتحة والمعوذات والإخلاص · المد · حفظ قصار السور" && chips.longer[0] === "حفظ باقي جزء عمّ", chips.month1.join(" · "));
+
   check("P41. a phrase from voice.md's banned list is refused", problems({ ...good, month3: "نتقدم خطوة بخطوة مع المراجعة المستمرة." }).some((x) => x.includes("خطوة بخطوة")));
   check("P42. repeating «ذكرتم» across the windows is refused", problems({ ...good, month1: "ذكرتم أنه يقرأ.", month3: "ذكرتم أنه يحفظ." }).length > 0);
   check("P43. labels (types of intelligence, learning styles) are refused", problems({ ...good, month1: "طفلكم من النمط السمعي." }).length > 0);

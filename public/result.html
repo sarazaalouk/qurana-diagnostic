@@ -205,14 +205,12 @@
   tick(2);
   const byId = new Map(p.stages.map((x) => [x.id, x]));
   const sep = I.lang === "en" ? ", " : "، ";
-  const withFocus = (x) => x.name + (x.focus ? ` + ${x.focus}` : "");
   const unit = (n) => I.t(n === 1 ? "unit_one" : n === 2 ? "unit_two" : n <= 10 ? "unit_few" : "unit_many");
   const w = p.windows, tot = p.totals;
-  const rule = {
-    month1: I.t("w_stages", { names: w.month1.map((i) => withFocus(byId.get(i))).join(sep) }),
-    month3: w.done_by_month3 ? I.t("w_done_by") : I.t("w_at", { name: withFocus(byId.get(w.month3)) }),
-    longer: I.t("w_goal", { name: byId.get(w.longer).name }),
-  };
+  // Above each window, short chips with the stage names (and the Tajweed point alongside) — no sentence.
+  const chipRow = (k) => (k === "month3" && w.done_by_month3)
+    ? `<p class="small muted">${esc(I.t("w_done_by"))}</p>`
+    : `<div class="stage-chips">${p.chips[k].map((c) => `<span class="stage-chip">${esc(c)}</span>`).join('<span class="dot" aria-hidden="true">·</span>')}</div>`;
   // The total once, at the chosen rate; with two a week, one sentence on how three a week shortens it.
   const weeksLine = I.t("p_weeks", { weeks: tot.weeks, unit: unit(tot.weeks), rate: I.t(`rate${tot.per_week}`) }) + " "
     + (tot.per_week === 2 ? I.t("p_weeks_less", { weeks: tot.weeks_at[3], unit: unit(tot.weeks_at[3]) })
@@ -222,7 +220,7 @@
       ${["month1", "month3", "longer"].map((k) => `
       <article class="window">
         <h3>${esc(I.t(`w_${k}`))}</h3>
-        <p class="small muted">${esc(rule[k])}</p>
+        ${chipRow(k)}
         <div class="window-text" data-window="${k}">${waiting}</div>
       </article>`).join("")}
       <p class="small"><b>${esc(weeksLine)}</b></p>
@@ -243,7 +241,6 @@
           </dl>
         </article>`).join("")}
       </details>
-      <p class="note">${esc(I.t("p_footer"))}</p>
     </div>`;
 
   const slots = () => [$("p-tip"), ...document.querySelectorAll(".window-text")];
