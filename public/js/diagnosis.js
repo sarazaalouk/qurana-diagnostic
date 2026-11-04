@@ -382,7 +382,7 @@
       try { localStorage.setItem("qurana.lastResult", id); } catch { /* storage blocked */ }
       location.href = `/r/${id}?lang=${I.lang}`;
     } catch {
-      $("saving-text").textContent = t("save_err");
+      $("saving-text").textContent = t(profile && profile.who === "adult" ? "save_err_adult" : "save_err");
       $("retry").hidden = false;
     }
   }

@@ -187,7 +187,7 @@
   // and fill their places when they arrive. Four steps: the first two on a fixed timer, the third when the path has really
   // arrived, the fourth only when the words have really arrived.
   const STEPS = ["p_step1", "p_step2", "p_step3", "p_step4"];
-  $("plan").innerHTML = `<ol class="build-steps" id="plan-steps">${STEPS.map((k, i) => `<li id="ps${i}"><span class="mark" aria-hidden="true"></span>${esc(I.t(k))}</li>`).join("")}</ol><div id="plan-body"></div>`;
+  $("plan").innerHTML = `<ol class="build-steps" id="plan-steps">${STEPS.map((k, i) => `<li id="ps${i}"><span class="mark" aria-hidden="true"></span>${esc(t(k))}</li>`).join("")}</ol><div id="plan-body"></div>`;
   const tick = (i) => $(`ps${i}`).classList.add("done");
   const wait = (ms) => new Promise((res) => setTimeout(res, ms));
   const timed = wait(350).then(() => { tick(0); return wait(450); }).then(() => tick(1));
