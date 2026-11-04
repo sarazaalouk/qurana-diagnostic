@@ -131,9 +131,25 @@
   }
   const wordsAt = (x, idx) => idx.map((i) => x.words[i - 1]).join(" ");
 
+  // The letter that decides the rule, read from the marks: the letter after the noon / tanween / meem or after the
+  // lam of «ال», or the qalqalah letter with sukun. (Used for the «ولماذا؟» questions; public/js/skills.js checks that
+  // it matches the rule.)
+  const clustersOf = (w) => { const out = []; for (const ch of w) { if (/[ء-يٱ]/.test(ch)) out.push({ b: ch, m: "" }); else if (out.length) out[out.length - 1].m += ch; } return out; };
+  function decidingLetter(x, r) {
+    const cs = clustersOf(x.words[r.words[0] - 1] || "");
+    if (r.kind === "noon" || r.kind === "meem") {
+      if (r.words.length === 2) return (clustersOf(x.words[r.words[1] - 1] || "")[0] || {}).b;
+      const i = cs.findIndex((c, j) => c.b === "ن" && ["", "ْ", "ۢ"].includes(c.m) && cs[j + 1] && !"ينمو".includes(cs[j + 1].b));
+      return i >= 0 ? cs[i + 1].b : undefined;
+    }
+    if (r.kind === "lam") { const i = cs.findIndex((c, j) => c.b === "ل" && j > 0 && cs[j - 1].b === "ٱ"); return i >= 0 && cs[i + 1] ? cs[i + 1].b : undefined; }
+    if (r.kind === "qalqalah") return (cs.find((c) => "قطبجد".includes(c.b) && c.m.includes("ْ")) || {}).b;
+    return undefined;
+  }
+
   // One question from one marked place of an ayah, or null when it cannot be asked fairly.
   function question(x, r, rng) {
-    const base = { ref: x.ref, surah: x.surah, surah_name: x.surah_name, tokens: x.tokens, kind: r.kind, word: wordsAt(x, r.words) };
+    const base = { ref: x.ref, surah: x.surah, surah_name: x.surah_name, tokens: x.tokens, kind: r.kind, word: wordsAt(x, r.words), letter: decidingLetter(x, r) };
     if (r.kind === "qalqalah") {
       const q = new Set((x.tajweed && x.tajweed.qalqalah) || []);
       const others = shuffle(x.words.map((w, i) => ({ w, i: i + 1 })).filter((o) => !q.has(o.i) && !/[قطبجد]ْ/.test(o.w) && letters(o.w) >= 3 && o.w !== base.word), rng).slice(0, 2);

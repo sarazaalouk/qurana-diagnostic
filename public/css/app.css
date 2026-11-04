@@ -156,3 +156,5 @@ html[lang="en"] h1, html[lang="en"] h2 { font-family: "Inter", "Segoe UI", Arial
 .rep-h.ok { color: var(--olive, #4f6b2f); }
 .rep-h.no { color: #9b3b1f; }
 .rep-list { margin: 0; padding-inline-start: 20px; display: grid; gap: 4px; }
+.choices.reasons { display: grid; gap: 8px; }
+.choices.reasons .choice { font-size: 1rem; line-height: 1.6; text-align: start; padding: 10px 14px; }

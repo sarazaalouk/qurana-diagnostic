@@ -122,7 +122,7 @@
       [I.t("r_self"), lab(O.ADULT_SELF, r.profile.self)],
       ...(r.profile.juz ? [[I.t("r_juz"), lab(O.ADULT_JUZ, r.profile.juz)]] : []),
       // The assessment (recitation, rules, memorization); older results without it show the ayah rating instead.
-      ...(r.stages && r.stages.recite
+      ...(r.stages && (r.stages.recite || r.stages.rules)
         ? L.ASSESS_STAGES.filter((k) => r.stages[k]).map((k) => [I.t("st_" + k), `${I.t("r_of", { a: r.stages[k].score, b: r.stages[k].total })}${r.stages[k].passed ? " ✓" : ""}`])
         : [[I.t("r_ayah"), lab(O.AYAH_SELF, r.profile.ayah) + (r.profile.ayah_ref ? ` (${r.profile.ayah_ref})` : "")]]),
     ].map(([k, v]) => `<div><span>${esc(k)}</span><span>${esc(v)}</span></div>`).join("");
@@ -147,7 +147,7 @@
   }
 
   // ---- the skills report (a reader's assessment): mastered / needs work, with the words, recitation and memorization ----
-  if (r.stages && r.stages.recite) {
+  if (r.stages && (r.stages.recite || r.stages.rules)) {
     const SK = window.QuranaSkills;
     const D_KEY = { 1: "rep_d1", 2: "rep_d2", 3: "rep_d3" };
     const RES_KEY = { right: "rep_res_right", partial: "rep_res_partial", wrong: "rep_res_wrong" };
@@ -162,7 +162,7 @@
       list(I.t("rep_mastered"), "ok", ln.mastered) +
       list(I.t("rep_needs"), "no", ln.needs) +
       (rep.unsure.length ? `<p class="small muted">${esc(I.t("rep_unsure"))}: ${esc(rep.unsure.map((x) => x.label).join(I.lang === "en" ? ", " : "، "))}</p>` : "") +
-      `<h3 class="rep-h">${esc(I.t("rep_recite"))}</h3><p class="small">${esc(rep.recite.top ? I.t("rep_recite_top", { d: I.t(D_KEY[rep.recite.top]) }) : I.t("rep_recite_none"))}</p><ul class="rep-list small">${passages}</ul>` +
+      (rep.recite.passages.length ? `<h3 class="rep-h">${esc(I.t("rep_recite"))}</h3><p class="small">${esc(rep.recite.top ? I.t("rep_recite_top", { d: I.t(D_KEY[rep.recite.top]) }) : I.t("rep_recite_none"))}</p><ul class="rep-list small">${passages}</ul>` : "") +
       (hifz ? `<h3 class="rep-h">${esc(I.t("rep_hifz"))}</h3><ul class="rep-list small">${hifz}</ul>` : "") +
       (fallback ? `<p class="small muted">${esc(I.t("rep_fallback"))}</p>` : "");
     $("rep").hidden = false;

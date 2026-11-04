@@ -193,11 +193,8 @@
     $("adult-error").hidden = true;
     profile = p;
     assess().then((st) => {
+      // The adult's level comes from their own reading answer and the Tajweed test (marked by the page, not by them).
       stages = st;
-      // How the passages were read decides the adult's ayah rating (and with it the level A1–A3).
-      const r = st.recite && st.recite.total ? st.recite : st.check;
-      profile.ayah = r.score === r.total ? "easy" : r.score >= r.total / 2 ? "hard" : "no";
-      profile.ayah_ref = (st.recite && st.recite.items[0] ? st.recite.items[0] : st.check.items[0]).ref;
       save();
     });
   });
@@ -235,7 +232,7 @@
   function choiceRound(stage, promptHtml, options, canSkip) {
     return new Promise((resolve) => {
       $("g-body").innerHTML = `${promptHtml}
-        <div class="choices${["find", "madd", "qalqalah"].includes(stage) ? " quran" : ""}" dir="rtl">${options.map((o, i) => `<button class="choice" data-i="${i}" lang="ar">${esc(o)}</button>`).join("")}</div>
+        <div class="choices${["find", "madd", "qalqalah"].includes(stage) ? " quran" : stage === "reasons" ? " reasons" : ""}" dir="rtl">${options.map((o, i) => `<button class="choice" data-i="${i}" lang="ar">${esc(o)}</button>`).join("")}</div>
         ${canSkip ? `<button class="btn secondary" id="skip">${esc(t("skip"))}</button>` : ""}`;
       rec.shown(stage);
       const cue = $("g-body").querySelector("details");
@@ -379,6 +376,8 @@
     });
   }
   const passageHtml = (x, promptKey, hint) => `<p>${esc(tw(promptKey))}</p><div class="word quran ayah" lang="ar" dir="rtl">${esc(x.text)}</div>${caption(x)}${hint ? `<p class="small muted center">${esc(t("a1_hint"))}</p>` : ""}`;
+  // The position (from 1, among words) of a word in the ayah's tokens.
+  const positionOf = (tokens, word) => { let w = 0; for (const tok of tokens) { if (/[ء-يٱ]/.test(tok)) { w++; if (tok === word) return w; } } return 0; };
   const pointsOf = (items) => items.reduce((n, x) => n + (x.result === "right" ? 2 : x.result === "partial" ? 1 : 0), 0);
 
   // Application: the places in the passage the listener can hear, numbered; each is applied / not applied / not sure.
@@ -409,18 +408,22 @@
     const usedSurahs = new Set();
     const adult = profile.who === "adult";
 
+    // An adult has no one listening: instead of rating their own reading, they take a Tajweed test that the page marks
+    // — name the rule at a marked place, then say why (step 3) — and memorization (step 4).
+    const st = {};
+    let level = pool.start;
+    if (!adult) {
     // 1. The reading check: one short ayah.
     const first = A.nextPassage(pool, 1, usedSurahs);
     usedSurahs.add(first.surah);
     frame(tw("a0_label"), tw("a0_title"), 1, 0);
     const r0 = RATED[await rateRound("check", passageHtml(first, "a0_prompt"), ["rate_none", "rate_few", "rate_many"])];
     const checkItems = [{ skill: `recite_${first.d}`, ref: first.ref, d: first.d, result: r0 }];
-    const st = { check: { score: pointsOf(checkItems), total: 2, passed: r0 !== "wrong", items: checkItems } };
+    st.check = { score: pointsOf(checkItems), total: 2, passed: r0 !== "wrong", items: checkItems };
     // A child who stumbles badly on a short ayah goes to the foundational games instead.
-    if (!adult && r0 === "wrong") return { ...st, stop: true };
+    if (r0 === "wrong") return { ...st, stop: true };
 
     // 2. Recitation, harder or easier with each passage, and the rules heard in it.
-    let level = r0 === "wrong" ? 1 : pool.start;
     const recite = [], apply = [];
     for (let i = 0; i < A.RECITE_COUNT; i++) {
       const x = A.nextPassage(pool, level, usedSurahs);
@@ -438,12 +441,14 @@
     st.recite = { score: pointsOf(recite), total: recite.length * 2, passed: L.passed("recite", pointsOf(recite), recite.length * 2), items: recite };
     const heard = apply.filter((x) => x.result !== "unsure");
     if (apply.length) st.apply = { score: heard.filter((x) => x.result === "right").length, total: heard.length, passed: false, items: apply };
+    }
 
     // 3. Tajweed rules: name the rule at a marked place (or pick the word with qalqalah).
     level = pool.start;
     const used = { items: new Set(), refs: new Set(), skills: new Set() };
-    const rules = [];
-    for (let i = 0; i < A.SLOTS.length; i++) {
+    const rules = [], reasons = [];
+    const nRules = A.SLOTS.length;
+    for (let i = 0; i < nRules; i++) {
       const q = A.nextRule(pool, i, level, used);
       if (!q) break;
       used.items.add(q); used.refs.add(q.ref); used.skills.add(q.skill);
@@ -455,7 +460,21 @@
       rec.answered(right);
       const res = right ? "right" : "wrong";
       rules.push({ skill: q.skill, ref: q.ref, word: q.word, d: q.d, result: res });
+      // «ولماذا؟» (adults): the rule is named, and the reason is chosen.
+      const why = adult && SK.reasonQuestion(q, I.lang);
+      if (why) {
+        frame(tw("a4_label"), tw("a4_title"), nRules, i);
+        const at = q.words.length ? q.words : [positionOf(q.tokens, q.word)];
+        const wpick = await choiceRound("reasons", `<p>${esc(t("a4_q", { rule: SK.label(q.skill, I.lang) }))}</p><div class="word quran ayah rule-ayah" lang="ar" dir="rtl">${marked(q.tokens, at)}</div>${caption(q)}`, shuffle(why.choices), false);
+        const ok = wpick === why.answer;
+        rec.answered(ok);
+        reasons.push({ skill: q.skill, ref: q.ref, word: q.word, d: q.d, result: ok ? "right" : "wrong" });
+      }
       level = A.step(level, res);
+    }
+    if (reasons.length) {
+      const score = reasons.filter((x) => x.result === "right").length;
+      st.reasons = { score, total: reasons.length, passed: L.passed("reasons", score, reasons.length), items: reasons };
     }
     if (rules.length) {
       const score = rules.filter((x) => x.result === "right").length;

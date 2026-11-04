@@ -181,12 +181,12 @@
   // The adult's level from the self-assessment and the ayah: A1 → strengthening reading (vowels, madd, sukun, shaddah,
   // then the Mushaf), A2 → reading from the Mushaf, A3 → recitation and memorization. Each maps to the child level whose
   // start stage it shares.
-  // From how the adult reads (their own rating and the passages read aloud), then the Tajweed rules questions:
-  // failing them brings «التلاوة والحفظ» (A3) down to «القراءة من المصحف» (A2). Reading itself is not in question
-  // there, so they never bring an adult down to A1.
-  function adultLevel(self, ayah, rules) {
+  // From how the adult says they read, then the Tajweed test (naming the rule and its reason, marked by the page):
+  // failing it brings «التلاوة والحفظ» (A3) down to «القراءة من المصحف» (A2). Reading itself is not in question
+  // there, so it never brings an adult down to A1. (Older results also had an ayah read aloud and rated: `ayah`.)
+  function adultLevel(self, ayah, tajweed) {
     if (self === "stumble" || ayah === "no") return "A1";
-    if (self === "fluent" && ayah === "easy") return rules && rules.passed === false ? "A2" : "A3";
+    if (self === "fluent" && (ayah === undefined || ayah === "easy")) return tajweed && tajweed.passed === false ? "A2" : "A3";
     return "A2";
   }
   const ADULT_TO_LEVEL = { A1: "R4", A2: "R5", A3: "R6" };

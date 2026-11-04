@@ -197,6 +197,21 @@ const base = { ...content.gameContent(), bank };
   const low = validate(adultBody(2)).value, high = validate(adultBody(8)).value;
   check("D50. an adult who reads fluently but gets 2 of 8 rules: «القراءة من المصحف» (A2 / R5); 8 of 8: «التلاوة والحفظ» (A3 / R6)",
     [low.profile.adult_level, low.level, high.profile.adult_level, high.level], ["A2", "R5", "A3", "R6"]);
+  // ---- the adult's Tajweed test: the rule, then «ولماذا؟» ----
+  const adultQs = A.assessmentPool(real, { who: "adult", juz: "none" }, rng).questions;
+  const withWhy = adultQs.map((q) => [q, SKL.reasonQuestion(q, "ar")]);
+  check("D51. «ولماذا؟»: every noon / lam / qalqalah place has its deciding letter, matching the rule; the answer is among the choices; meem has none",
+    [withWhy.filter(([q, w]) => ["noon", "lam", "qalqalah"].includes(q.kind) && !w).length, withWhy.every(([q, w]) => !w || w.choices.includes(w.answer)), withWhy.some(([q, w]) => q.kind === "meem" && w)], [0, true, false]);
+  const ikhfa = adultQs.find((q) => q.skill === "ikhfa" && q.letter === "ت");
+  check("D52. the reason names the letter after the noon: «لأن الحرف الذي بعدها «ت» من حروف الإخفاء», with throat letters and «ينمو» as the wrong choices",
+    ikhfa ? SKL.reasonQuestion(ikhfa, "ar").choices : "no ikhfa before ت", ["لأن الحرف الذي بعدها «ت» من حروف الإخفاء", "لأن الحرف الذي بعدها «ت» من حروف الحلق", "لأن الحرف الذي بعدها «ت» من حروف «ينمو»"]);
+  const tq = sim.rules.map((x) => ({ skill: x.skill, ref: x.ref, word: wordOf(x), d: x.d, result: "right" }));
+  const adultTest = (rulesRight, reasonsRight) => validate({ profile: { who: "adult", age_band: O.ADULT_AGE_BANDS[1], country: O.COUNTRIES[0].code, juz: "none", goals: [O.ADULT_GOALS[0].id], teacher: O.TEACHER[0].id, self: "fluent", lessons_per_week: 3 },
+    stages: { rules: { score: rulesRight, total: 8, passed: true, items: tq }, reasons: { score: reasonsRight, total: 6, passed: true, items: tq.slice(0, 6) } } });
+  const strong = adultTest(8, 6), weak = adultTest(7, 1);
+  check("D53. an adult needs no recitation they rate themselves: the Tajweed test (rules + reasons) decides; 14/14 → A3, 8/14 → A2",
+    [strong.error || "", strong.value && strong.value.profile.adult_level, weak.value && weak.value.profile.adult_level, strong.value && "ayah" in strong.value.profile], ["", "A3", "A2", false]);
+  check("D54. the adult's report: «تعرف سبب …»", SKL.lines(SKL.report(strong.value.stages, "ar"), "ar", true).mastered.some((l) => l.startsWith("تعرف سبب")), true);
   fs.unlinkSync(tmp);
 
   console.log(failed ? `\n${failed} adaptive case(s) failed` : "\nall adaptive cases behaved as expected");

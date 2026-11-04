@@ -10,14 +10,15 @@
   // The assessment of someone who already reads (a child who reads words or the Mushaf, or an adult): no letter games
   // and no single words. A short reading check, then reciting passages that grow harder or easier with each answer,
   // whether rules were applied while reciting (apply), naming the rule at a marked place (rules), and memorization.
-  const ASSESS_STAGES = ["check", "recite", "apply", "rules", "hifz"];
+  // An adult has no recitation they rate themselves: naming the rule (rules), then its reason (reasons), then memorization.
+  const ASSESS_STAGES = ["check", "recite", "apply", "rules", "reasons", "hifz"];
   const ALL_STAGES = [...STAGES, ...READER_STAGES, ...ASSESS_STAGES];
 
   // Pass marks (out of the number of items in each stage). recite: 2 points per passage (no mistakes 2, a few 1).
   const PASS = { sound: 4, shape: 3, fatha: 2, harakat: 3, fatiha: 2, ayah: 1, find: 3, madd: 3 };
   // The assessment's stages have as many items as the bank allows: their pass mark is a share of the items.
   // recite / check: 2 points per passage (no mistakes 2, a few 1).
-  const PASS_RATIO = { check: 0.5, recite: 0.5, apply: 0.6, rules: 0.6, hifz: 0.5 };
+  const PASS_RATIO = { check: 0.5, recite: 0.5, apply: 0.6, rules: 0.6, reasons: 0.6, hifz: 0.5 };
   const passed = (key, score, total) => (PASS_RATIO[key] ? total > 0 && score >= Math.ceil(total * PASS_RATIO[key]) : score >= PASS[key]);
 
   // The parent's estimate of the child's reading, and the stage to start from.

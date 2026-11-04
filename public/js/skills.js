@@ -54,9 +54,10 @@
   // The report: for each skill, how many places were right, and the words. Mastered: every answered place right;
   // needs work: at least one wrong. Recognition (rules) and application (apply) are kept apart, as are recitation and
   // memorization.
+  const PARTS = ["rules", "reasons", "apply"];
   function report(stages, lang = "ar") {
     const by = {};
-    for (const part of ["rules", "apply"]) {
+    for (const part of PARTS) {
       for (const it of ((stages || {})[part] || {}).items || []) {
         if (!SKILLS[it.skill] || it.result === "unsure") continue;
         const k = `${part}:${it.skill}`;
@@ -70,7 +71,7 @@
     const mastered = all.filter((b) => b.right === b.total);
     const needs = all.filter((b) => b.right < b.total);
     const unsure = [];
-    for (const part of ["rules", "apply"]) for (const it of ((stages || {})[part] || {}).items || []) if (it.result === "unsure" && SKILLS[it.skill]) unsure.push({ part, skill: it.skill, label: label(it.skill, lang), word: it.word });
+    for (const part of PARTS) for (const it of ((stages || {})[part] || {}).items || []) if (it.result === "unsure" && SKILLS[it.skill]) unsure.push({ part, skill: it.skill, label: label(it.skill, lang), word: it.word });
     // Recitation: the hardest passage read without mistakes, and the passages with mistakes.
     const passages = [...(((stages || {}).check || {}).items || []), ...(((stages || {}).recite || {}).items || [])];
     const clean = passages.filter((x) => x.result === "right").map((x) => x.d || 1);
@@ -88,6 +89,8 @@
       rules_no: en ? (adult ? "You confuse" : "Confuses") : adult ? "تخلط في" : "يخلط في",
       apply_ok: en ? (adult ? "You apply" : "Applies") : adult ? "تطبّق" : "يطبّق",
       apply_no: en ? (adult ? "You do not yet apply" : "Does not yet apply") : adult ? "لا تطبّق بعد" : "لا يطبّق بعد",
+      reasons_ok: en ? (adult ? "You know the reason for" : "Knows the reason for") : adult ? "تعرف سبب" : "يعرف سبب",
+      reasons_no: en ? (adult ? "You do not yet know the reason for" : "Does not yet know the reason for") : adult ? "لا تعرف بعد سبب" : "لا يعرف بعد سبب",
     };
     const out = { mastered: [], needs: [] };
     for (const b of rep.mastered) out.mastered.push(`${say[`${b.part}_ok`]} ${b.label}${words(b.right_words)}`);
@@ -95,7 +98,58 @@
     return out;
   }
 
-  const api = { SKILLS, CHOICES, APPLY, ITEM_RESULTS, skillOf, label, report, lines };
+  // ---------- «ولماذا؟»: the reason of a rule (the adult's Tajweed test) ----------
+  // Fixed texts. Where the reason is a letter (noon / tanween, lam, qalqalah), the deciding letter is read from the
+  // ayah's marks (public/js/adaptive.js) and shown in every choice, so the question is about what the letter is, not
+  // which letter it is. A place whose letter does not match its rule is not asked.
+  const THROAT = "ءأإؤئهعحغخ";
+  const SUN = "تثدذرزسشصضطظلن";
+  const noonCategory = (L) => (THROAT.includes(L) ? "izhar" : "ينمو".includes(L) ? "idgham_ghunnah" : "لر".includes(L) ? "idgham_no_ghunnah" : L === "ب" ? "iqlab" : "ikhfa");
+  const lamCategory = (L) => (SUN.includes(L) ? "shamsiyah" : "qamariyah");
+  const R = {
+    ar: {
+      noon: (L, c) => `لأن الحرف الذي بعدها «${L}» ${{ izhar: "من حروف الحلق", idgham_ghunnah: "من حروف «ينمو»", idgham_no_ghunnah: "لام أو راء", iqlab: "باء", ikhfa: "من حروف الإخفاء" }[c]}`,
+      lam: (L, c) => `لأن الحرف الذي بعدها «${L}» ${c === "shamsiyah" ? "حرف شمسي، فتُدغم فيه اللام" : "حرف قمري، فتظهر معه اللام"}`,
+      madd: { madd_tabii: "لأن حرف المدّ لم يأتِ بعده همزة ولا سكون", madd_muttasil: "لأن بعد حرف المدّ همزة في الكلمة نفسها", madd_munfasil: "لأن حرف المدّ في آخر الكلمة والهمزة في أول الكلمة التالية", madd_lazim: "لأن بعد حرف المدّ سكونًا أصليًا أو شدّة" },
+      qalqalah: (L) => [`لأن «${L}» من حروف «قطب جد» وعليها سكون`, `لأن «${L}» من حروف «قطب جد» وهي متحركة`, `لأن «${L}» حرف مشدّد`, `لأن «${L}» من حروف الحلق وعليها سكون`],
+      ra: { ra_tafkhim: "لأن الراء مفتوحة أو مضمومة", ra_tarqiq: "لأن الراء مكسورة", other: "لأن الراء ساكنة وقبلها كسر" },
+      allah: { allah_tafkhim: "لأن قبل لفظ الجلالة فتحًا أو ضمًّا", allah_tarqiq: "لأن قبل لفظ الجلالة كسرًا", other: "لأن لفظ الجلالة في أول الكلام" },
+      wasl: { hamzat_wasl: "لأنها تُنطق عند البدء بالكلمة وتسقط عند وصلها بما قبلها", hamzat_qat: "لأنها تُنطق في البدء وفي الوصل", other: "لأنها تسقط في البدء وتُنطق في الوصل" },
+    },
+    en: {
+      noon: (L, c) => `Because the letter after it, «${L}», is ${{ izhar: "a throat letter", idgham_ghunnah: "one of «ينمو»", idgham_no_ghunnah: "lam or ra", iqlab: "ba", ikhfa: "one of the ikhfa letters" }[c]}`,
+      lam: (L, c) => `Because the letter after it, «${L}», is ${c === "shamsiyah" ? "a sun letter, so the lam merges into it" : "a moon letter, so the lam is pronounced"}`,
+      madd: { madd_tabii: "Because no hamza and no sukun come after the madd letter", madd_muttasil: "Because a hamza comes after the madd letter in the same word", madd_munfasil: "Because the madd letter ends the word and the next word starts with a hamza", madd_lazim: "Because a fixed sukun or a shaddah comes after the madd letter" },
+      qalqalah: (L) => [`Because «${L}» is one of «قطب جد» and has a sukun`, `Because «${L}» is one of «قطب جد» and has a vowel`, `Because «${L}» has a shaddah`, `Because «${L}» is a throat letter with a sukun`],
+      ra: { ra_tafkhim: "Because the ra has a fatha or a damma", ra_tarqiq: "Because the ra has a kasra", other: "Because the ra has a sukun after a kasra" },
+      allah: { allah_tafkhim: "Because a fatha or a damma comes before the name of Allah", allah_tarqiq: "Because a kasra comes before the name of Allah", other: "Because the name of Allah starts the sentence" },
+      wasl: { hamzat_wasl: "Because it is said when starting with the word and dropped when joining it to what comes before", hamzat_qat: "Because it is said both when starting and when joining", other: "Because it is dropped when starting and said when joining" },
+    },
+  };
+  // { answer, choices } (texts) for a question { kind, skill, letter }, or null when there is no fair reason question.
+  function reasonQuestion(q, lang = "ar") {
+    const T = R[lang === "en" ? "en" : "ar"];
+    const L = q.letter;
+    if (q.kind === "noon") {
+      if (!L || noonCategory(L) !== q.skill) return null;
+      const cats = [...new Set([q.skill, "izhar", "idgham_ghunnah", "ikhfa"])];
+      return { answer: T.noon(L, q.skill), choices: cats.map((c) => T.noon(L, c)) };
+    }
+    if (q.kind === "lam") {
+      if (!L || lamCategory(L) !== q.skill) return null;
+      return { answer: T.lam(L, q.skill), choices: ["shamsiyah", "qamariyah"].map((c) => T.lam(L, c)) };
+    }
+    if (q.kind === "qalqalah") {
+      if (!L || !"قطبجد".includes(L)) return null;
+      const c = T.qalqalah(L);
+      return { answer: c[0], choices: c };
+    }
+    if (q.kind === "madd") return { answer: T.madd[q.skill], choices: Object.values(T.madd) };
+    for (const k of ["ra", "allah", "wasl"]) if (q.kind === k) return { answer: T[k][q.skill], choices: Object.values(T[k]) };
+    return null; // meem: the reason is the next letter itself (meem / ba / another) — not a question
+  }
+
+  const api = { reasonQuestion, noonCategory, lamCategory, SKILLS, CHOICES, APPLY, ITEM_RESULTS, skillOf, label, report, lines };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.QuranaSkills = api;
 })(typeof window !== "undefined" ? window : globalThis);

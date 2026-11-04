@@ -3113,6 +3113,1541 @@
       "use": "warmup"
     },
     {
+      "id": "t4-68-49",
+      "tier": 4,
+      "surah": 68,
+      "surah_name": "القلم",
+      "ayah": 49,
+      "text_ar": "لَّوْلَآ أَن تَدَٰرَكَهُۥ نِعْمَةٌ مِّن رَّبِّهِۦ لَنُبِذَ بِٱلْعَرَآءِ وَهُوَ مَذْمُومٌ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (a long ayah with many rules, for difficulty 3)",
+      "tajweed_words": {
+        "madd": [
+          1,
+          3,
+          6,
+          8,
+          10
+        ],
+        "ghunnah": [
+          5
+        ],
+        "qalqalah": [],
+        "plain": [
+          4,
+          7,
+          9
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            5,
+            6
+          ],
+          "kind": "noon",
+          "rule": "idgham_no_ghunnah"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        }
+      ],
+      "difficulty": 3,
+      "use": "assess",
+      "verified_by": "",
+      "verified_on": ""
+    },
+    {
+      "id": "t4-69-7",
+      "tier": 4,
+      "surah": 69,
+      "surah_name": "الحاقة",
+      "ayah": 7,
+      "text_ar": "سَخَّرَهَا عَلَيْهِمْ سَبْعَ لَيَالٍ وَثَمَـٰنِيَةَ أَيَّامٍ حُسُومًا فَتَرَى ٱلْقَوْمَ فِيهَا صَرْعَىٰ كَأَنَّهُمْ أَعْجَازُ نَخْلٍ خَاوِيَةٍ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (a long ayah with many rules, for difficulty 3)",
+      "tajweed_words": {
+        "madd": [
+          1,
+          4,
+          5,
+          6,
+          7,
+          8,
+          10,
+          11,
+          13,
+          15
+        ],
+        "ghunnah": [
+          12
+        ],
+        "qalqalah": [
+          3
+        ],
+        "plain": [
+          3,
+          12,
+          14
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            6,
+            7
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            7,
+            8
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            12,
+            13
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            14,
+            15
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            10
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            11
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            13
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            13
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        }
+      ],
+      "difficulty": 3,
+      "use": "assess",
+      "verified_by": "",
+      "verified_on": ""
+    },
+    {
+      "id": "t4-70-4",
+      "tier": 4,
+      "surah": 70,
+      "surah_name": "المعارج",
+      "ayah": 4,
+      "text_ar": "تَعْرُجُ ٱلْمَلَـٰٓئِكَةُ وَٱلرُّوحُ إِلَيْهِ فِى يَوْمٍ كَانَ مِقْدَارُهُۥ خَمْسِينَ أَلْفَ سَنَةٍ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (a long ayah with many rules, for difficulty 3)",
+      "tajweed_words": {
+        "madd": [
+          2,
+          3,
+          5,
+          7,
+          8,
+          9
+        ],
+        "ghunnah": [],
+        "qalqalah": [
+          8
+        ],
+        "plain": [
+          1,
+          10,
+          11
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            6,
+            7
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            10
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        }
+      ],
+      "difficulty": 3,
+      "use": "assess",
+      "verified_by": "",
+      "verified_on": ""
+    },
+    {
+      "id": "t4-71-4",
+      "tier": 4,
+      "surah": 71,
+      "surah_name": "نوح",
+      "ayah": 4,
+      "text_ar": "يَغْفِرْ لَكُم مِّن ذُنُوبِكُمْ وَيُؤَخِّرْكُمْ إِلَىٰٓ أَجَلٍ مُّسَمًّى ۚ إِنَّ أَجَلَ ٱللَّهِ إِذَا جَآءَ لَا يُؤَخَّرُ ۖ لَوْ كُنتُمْ تَعْلَمُونَ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (a long ayah with many rules, for difficulty 3)",
+      "tajweed_words": {
+        "madd": [
+          4,
+          6,
+          12,
+          13,
+          14,
+          18
+        ],
+        "ghunnah": [
+          3,
+          8,
+          9
+        ],
+        "qalqalah": [],
+        "plain": [
+          1,
+          2,
+          5,
+          7,
+          8,
+          10,
+          15,
+          17
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "meem",
+          "rule": "idgham_shafawi"
+        },
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            5,
+            6
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            7,
+            8
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            17
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            17,
+            18
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            6,
+            7
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            10
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            11
+          ],
+          "kind": "allah",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            11
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            12
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            12
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            13
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        },
+        {
+          "words": [
+            14
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            15
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        }
+      ],
+      "difficulty": 3,
+      "use": "assess",
+      "verified_by": "",
+      "verified_on": ""
+    },
+    {
+      "id": "t4-72-10",
+      "tier": 4,
+      "surah": 72,
+      "surah_name": "الجن",
+      "ayah": 10,
+      "text_ar": "وَأَنَّا لَا نَدْرِىٓ أَشَرٌّ أُرِيدَ بِمَن فِى ٱلْأَرْضِ أَمْ أَرَادَ بِهِمْ رَبُّهُمْ رَشَدًا",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (a long ayah with many rules, for difficulty 3)",
+      "tajweed_words": {
+        "madd": [
+          1,
+          2,
+          3,
+          5,
+          7,
+          10
+        ],
+        "ghunnah": [
+          1
+        ],
+        "qalqalah": [
+          3
+        ],
+        "plain": [
+          4,
+          6,
+          8,
+          11,
+          12,
+          13
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            6,
+            7
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            9,
+            10
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            11,
+            12
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            12,
+            13
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "ra",
+          "rule": "tarqiq"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "ra",
+          "rule": "tarqiq"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            10
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            10
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            10
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            12
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        }
+      ],
+      "difficulty": 3,
+      "use": "assess",
+      "verified_by": "",
+      "verified_on": ""
+    },
+    {
+      "id": "t4-73-15",
+      "tier": 4,
+      "surah": 73,
+      "surah_name": "المزمل",
+      "ayah": 15,
+      "text_ar": "إِنَّآ أَرْسَلْنَآ إِلَيْكُمْ رَسُولًا شَـٰهِدًا عَلَيْكُمْ كَمَآ أَرْسَلْنَآ إِلَىٰ فِرْعَوْنَ رَسُولًا",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (a long ayah with many rules, for difficulty 3)",
+      "tajweed_words": {
+        "madd": [
+          1,
+          2,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11
+        ],
+        "ghunnah": [
+          1
+        ],
+        "qalqalah": [],
+        "plain": []
+      },
+      "rules": [
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            5,
+            6
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            6,
+            7
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            7,
+            8
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            8,
+            9
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        }
+      ],
+      "difficulty": 3,
+      "use": "assess",
+      "verified_by": "",
+      "verified_on": ""
+    },
+    {
+      "id": "t4-74-56",
+      "tier": 4,
+      "surah": 74,
+      "surah_name": "المدثر",
+      "ayah": 56,
+      "text_ar": "وَمَا يَذْكُرُونَ إِلَّآ أَن يَشَآءَ ٱللَّهُ ۚ هُوَ أَهْلُ ٱلتَّقْوَىٰ وَأَهْلُ ٱلْمَغْفِرَةِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (a long ayah with many rules, for difficulty 3)",
+      "tajweed_words": {
+        "madd": [
+          1,
+          2,
+          3,
+          5,
+          9
+        ],
+        "ghunnah": [],
+        "qalqalah": [
+          9
+        ],
+        "plain": [
+          8,
+          10,
+          11
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            11
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "allah",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            11
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 3,
+      "use": "assess",
+      "verified_by": "",
+      "verified_on": ""
+    },
+    {
+      "id": "t4-76-2",
+      "tier": 4,
+      "surah": 76,
+      "surah_name": "الإنسان",
+      "ayah": 2,
+      "text_ar": "إِنَّا خَلَقْنَا ٱلْإِنسَـٰنَ مِن نُّطْفَةٍ أَمْشَاجٍ نَّبْتَلِيهِ فَجَعَلْنَـٰهُ سَمِيعًۢا بَصِيرًا",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (a long ayah with many rules, for difficulty 3)",
+      "tajweed_words": {
+        "madd": [
+          1,
+          2,
+          3,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "ghunnah": [
+          1,
+          5,
+          7
+        ],
+        "qalqalah": [
+          2,
+          5,
+          7
+        ],
+        "plain": [
+          5
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            3
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            5,
+            6
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            6,
+            7
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            9,
+            10
+          ],
+          "kind": "noon",
+          "rule": "iqlab"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 3,
+      "use": "assess",
+      "verified_by": "",
+      "verified_on": ""
+    },
+    {
+      "id": "t4-78-40",
+      "tier": 4,
+      "surah": 78,
+      "surah_name": "النبأ",
+      "ayah": 40,
+      "text_ar": "إِنَّآ أَنذَرْنَـٰكُمْ عَذَابًا قَرِيبًا يَوْمَ يَنظُرُ ٱلْمَرْءُ مَا قَدَّمَتْ يَدَاهُ وَيَقُولُ ٱلْكَافِرُ يَـٰلَيْتَنِى كُنتُ تُرَٰبًۢا",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (a long ayah with many rules, for difficulty 3)",
+      "tajweed_words": {
+        "madd": [
+          1,
+          2,
+          3,
+          4,
+          8,
+          10,
+          11,
+          12,
+          13,
+          15
+        ],
+        "ghunnah": [
+          1
+        ],
+        "qalqalah": [],
+        "plain": [
+          6,
+          7,
+          9,
+          14
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            12
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            14
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "ra",
+          "rule": "tarqiq"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            10
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            11
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            12
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            12
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            12
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 3,
+      "use": "assess",
+      "verified_by": "",
+      "verified_on": ""
+    },
+    {
       "id": "t4-79-12",
       "tier": 4,
       "surah": 79,
@@ -4214,6 +5749,223 @@
       ],
       "difficulty": 2,
       "use": "assess"
+    },
+    {
+      "id": "t4-85-11",
+      "tier": 4,
+      "surah": 85,
+      "surah_name": "البروج",
+      "ayah": 11,
+      "text_ar": "إِنَّ ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّـٰلِحَـٰتِ لَهُمْ جَنَّـٰتٌ تَجْرِى مِن تَحْتِهَا ٱلْأَنْهَـٰرُ ۚ ذَٰلِكَ ٱلْفَوْزُ ٱلْكَبِيرُ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (a long ayah with many rules, for difficulty 3)",
+      "tajweed_words": {
+        "madd": [
+          2,
+          3,
+          4,
+          5,
+          7,
+          8,
+          10,
+          11,
+          12,
+          14
+        ],
+        "ghunnah": [
+          1,
+          7
+        ],
+        "qalqalah": [
+          8
+        ],
+        "plain": [
+          6
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            5
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            6,
+            7
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            7,
+            8
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            9,
+            10
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            11
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            11
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            13
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            14
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "ra",
+          "rule": "tarqiq"
+        },
+        {
+          "words": [
+            11
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            11
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            11
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            12
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            13
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            14
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 3,
+      "use": "assess",
+      "verified_by": "",
+      "verified_on": ""
     },
     {
       "id": "t4-88-6",
