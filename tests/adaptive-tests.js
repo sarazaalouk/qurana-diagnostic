@@ -164,6 +164,12 @@ const base = { ...content.gameContent(), bank };
     [rep.needs.some((b) => b.part === "rules") && rep.needs.filter((b) => b.part === "rules").every((b) => ["izhar", "idgham_ghunnah", "idgham_no_ghunnah", "iqlab", "ikhfa"].includes(b.skill)),
       lines.mastered.some((l) => l.startsWith("يطبّق الإقلاب (يَوْمَئِذٍۭ بِجَهَنَّمَ)")), lines.needs.some((l) => l.startsWith("لا يطبّق بعد الإدغام بغنة")), rep.unsure.length, rep.recite.top], [true, true, true, 1, 3]);
   check("D48. an adult's report speaks to them", SKL.lines(rep, "ar", true).mastered.some((l) => l.startsWith("تطبّق")), true);
+  const O = require("../public/js/options");
+  const adultBody = (rules) => ({ profile: { who: "adult", age_band: O.ADULT_AGE_BANDS[1], country: O.COUNTRIES[0].code, juz: "amma", goals: [O.ADULT_GOALS[0].id], teacher: O.TEACHER[0].id, self: "fluent", ayah: "easy", lessons_per_week: 3 },
+    stages: { check: st.check, recite: st.recite, rules: { ...st.rules, score: rules, passed: true } } });
+  const low = validate(adultBody(2)).value, high = validate(adultBody(8)).value;
+  check("D50. an adult who reads fluently but gets 2 of 8 rules: «القراءة من المصحف» (A2 / R5); 8 of 8: «التلاوة والحفظ» (A3 / R6)",
+    [low.profile.adult_level, low.level, high.profile.adult_level, high.level], ["A2", "R5", "A3", "R6"]);
   fs.unlinkSync(tmp);
 
   console.log(failed ? `\n${failed} adaptive case(s) failed` : "\nall adaptive cases behaved as expected");

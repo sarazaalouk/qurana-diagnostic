@@ -53,6 +53,8 @@ const run = (estimate, results) => L.runStages(L.startStage(estimate), async (k)
     O.focusOrder({ madd: "sometimes", ghunnah: "no", qalqalah: "yes" }), ["ghunnah", "madd"]);
   check("L14. adult level from the self-assessment and the ayah",
     [O.adultLevel("stumble", "easy"), O.adultLevel("slow", "hard"), O.adultLevel("fluent", "easy"), O.adultLevel("fluent", "no")], ["A1", "A2", "A3", "A1"]);
+  check("L19. the Tajweed rules questions bring an adult down: failed → A3 becomes A2; passed stays A3; never down to A1",
+    [O.adultLevel("fluent", "easy", { passed: false }), O.adultLevel("fluent", "easy", { passed: true }), O.adultLevel("slow", "hard", { passed: false })], ["A2", "A3", "A2"]);
   check("L18. the reader games do not change the level", L.levelFrom({ sound: { passed: true }, shape: { passed: true }, fatha: { passed: true }, harakat: { passed: true }, fatiha: { passed: true }, ayah: { passed: true }, find: { passed: false }, madd: { passed: false } }), "R6");
   check("L10. an older result with a single goal still works",
     O.suggestion({ home_language: "ar", goal: "tajweed", lessons_per_week: 3 }, "R6").program, "tajweed");
