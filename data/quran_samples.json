@@ -1,0 +1,36 @@
+{
+  "purpose": "Ayat the adult reads aloud in the diagnostic: from medium surahs that most adults have not memorized, with madd, ghunnah and qalqalah. Same procedure as data/quran_fatiha.json: the text is copied from the Madinah Mushaf (King Fahd Complex) and checked against it by hand; an ayah is shown only when text_ar, verified_by and verified_on are all filled in.",
+  "source": "مصحف المدينة النبوية — مجمع الملك فهد لطباعة المصحف الشريف (رواية حفص عن عاصم)",
+  "samples": [
+    {
+      "id": "s1",
+      "surah": 67,
+      "surah_name": "الملك",
+      "ayah": 3,
+      "text_ar": "",
+      "features_to_check": ["madd", "ghunnah", "qalqalah"],
+      "verified_by": "",
+      "verified_on": ""
+    },
+    {
+      "id": "s2",
+      "surah": 50,
+      "surah_name": "ق",
+      "ayah": 10,
+      "text_ar": "",
+      "features_to_check": ["madd", "ghunnah", "qalqalah"],
+      "verified_by": "",
+      "verified_on": ""
+    },
+    {
+      "id": "s3",
+      "surah": 19,
+      "surah_name": "مريم",
+      "ayah": 4,
+      "text_ar": "",
+      "features_to_check": ["madd", "ghunnah"],
+      "verified_by": "",
+      "verified_on": ""
+    }
+  ]
+}

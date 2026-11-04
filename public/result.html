@@ -111,13 +111,16 @@
   // ---- what was done ----
   const lab = (list, v) => I.label(list.find((x) => x.id === v) || { label: v });
   if (adult) {
-    $("r-stages").innerHTML = [[I.t("r_self"), lab(O.ADULT_SELF, r.profile.self)], [I.t("r_ayah"), lab(O.AYAH_SELF, r.profile.ayah)]]
-      .map(([k, v]) => `<div><span>${esc(k)}</span><span>${esc(v)}</span></div>`).join("");
+    $("r-stages").innerHTML = [
+      [I.t("r_self"), lab(O.ADULT_SELF, r.profile.self)],
+      [I.t("r_ayah"), lab(O.AYAH_SELF, r.profile.ayah) + (r.profile.ayah_ref ? ` (${r.profile.ayah_ref})` : "")],
+      ...(r.profile.juz ? [[I.t("r_juz"), lab(O.ADULT_JUZ, r.profile.juz)]] : []),
+    ].map(([k, v]) => `<div><span>${esc(k)}</span><span>${esc(v)}</span></div>`).join("");
   } else {
-    $("r-stages").innerHTML = L.STAGES.filter((k) => r.stages[k]).map((k) => {
+    // Only the games the child actually played (the ones below the starting point are not listed).
+    $("r-stages").innerHTML = L.ALL_STAGES.filter((k) => r.stages[k] && !r.stages[k].inferred).map((k) => {
       const s = r.stages[k];
-      const v = s.inferred ? `<span class="tick">✓</span> <span class="small muted">${esc(I.t("r_not_needed"))}</span>`
-        : `${esc(I.t("r_of", { a: s.score, b: s.total }))} ${s.passed ? `<span class="tick">✓</span>` : ""}`;
+      const v = `${esc(I.t("r_of", { a: s.score, b: s.total }))} ${s.passed ? `<span class="tick">✓</span>` : ""}`;
       return `<div><span>${esc(I.t("st_" + k))}</span><span>${v}</span></div>`;
     }).join("");
     const mem = r.profile.memorized.map((ar) => (I.lang === "en" ? (O.SURAHS.find((s) => s.ar === ar) || { en: ar }).en : ar));
@@ -129,7 +132,7 @@
   }
   if (r.profile.tajweed) {
     const qLabel = (q) => (adult ? I.label(O.TAJWEED_QS_ADULT[q.id]) : I.label(q));
-    $("r-memorized").innerHTML += `<p class="small"><b>${esc(I.t("r_tajweed"))}</b></p><div class="steps-done">` + O.TAJWEED_QS.map((q) =>
+    $("r-memorized").innerHTML += `<p class="small"><b>${esc(t("r_tajweed"))}</b></p><div class="steps-done">` + O.TAJWEED_QS.map((q) =>
       `<div><span class="small">${esc(qLabel(q))}</span><span class="small">${esc(lab(O.TAJWEED_ANSWERS, r.profile.tajweed[q.id]))}</span></div>`).join("") + "</div>";
   }
 
@@ -147,10 +150,11 @@
   const teacher = O.TEACHER.find((x) => x.id === r.profile.teacher);
   $("r-suggest").innerHTML = [
     [I.t("k_program"), progText],
-    [I.t("k_track"), s.track === "english" ? I.t("track_en") : I.t("track_ar")],
+    // The track row only while the English track exists (Qurana: Arabic track for everyone).
+    ...(O.ENGLISH_TRACK ? [[I.t("k_track"), s.track === "english" ? I.t("track_en") : I.t("track_ar")]] : []),
     [I.t("k_plan"), `${I.label(plan, "name")} · ${I.t("per_week", { n: plan.per_week })}`],
     // Seed shows only as what the family chose, when they chose two lessons a week.
-    ...(s.chosen === "seed" ? [[I.t("k_chosen"), `${I.label(O.PLANS.seed, "name")} · ${I.t("per_week", { n: O.PLANS.seed.per_week })}`]] : []),
+    ...(s.chosen === "seed" ? [[t("k_chosen"), `${I.label(O.PLANS.seed, "name")} · ${I.t("per_week", { n: O.PLANS.seed.per_week })}`]] : []),
     [I.t("k_teacher"), teacher.id === "any" ? I.t("any_teacher") : I.label(teacher)],
   ].map(([k, v]) => `<div><span class="muted">${esc(k)}</span><span>${esc(v)}</span></div>`).join("");
 

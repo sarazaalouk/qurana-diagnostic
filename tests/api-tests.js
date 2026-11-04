@@ -154,11 +154,15 @@ const setCurriculum = (c) => { fs.writeFileSync(curriculumFile, JSON.stringify(c
     check("G13. after 5 wrong PINs even the right one waits (429)", r.status === 429);
 
     // ---- the adult track, the teachers' list, and the teacher's view in /admin ----
-    const adult = await post({ profile: { who: "adult", age_band: "26–35", country: "AE", explain_lang: "ar", goals: ["hifz"], teacher: "any", self: "fluent", ayah: "easy", lessons_per_week: 3, tajweed: { madd: "no" } } });
+    const adult = await post({ profile: { who: "adult", age_band: "26–35", country: "AE", juz: "none", goals: ["hifz"], teacher: "any", self: "fluent", ayah: "easy", ayah_ref: "1:7", lessons_per_week: 3, tajweed: { madd: "no" } } });
     const adultGot = await get(`/api/results/${adult.body.id}`).then((x) => x.json());
     const adultPath = await get(`/api/results/${adult.body.id}/path`).then((x) => x.json());
     check("A23. an adult result is saved with the adult level and gets the adult path", adult.status === 201 && adultGot.who === "adult" && adultGot.level.code === "A3" && adultPath.status === "ready" && adultPath.stages[0].focus === "المد" && !adultGot.observed);
-    bad = await post({ profile: { who: "adult", age_band: "6–7", country: "AE", explain_lang: "ar", goals: ["hifz"], teacher: "any", self: "fluent", ayah: "easy", lessons_per_week: 3 } });
+    bad = await post({ profile: { who: "adult", age_band: "6–7", country: "AE", juz: "none", goals: ["hifz"], teacher: "any", self: "fluent", ayah: "easy", lessons_per_week: 3 } });
+    check("A24b. an adult without how much they know by heart is refused", (await post({ profile: { who: "adult", age_band: "26–35", country: "AE", goals: ["hifz"], teacher: "any", self: "fluent", ayah: "easy", lessons_per_week: 3 } })).status === 400);
+    const reader = await post({ profile: { ...profile, estimate: "mushaf" }, stages: { sound: { passed: true, inferred: true }, shape: { passed: true, inferred: true }, fatha: { passed: true, inferred: true }, harakat: { passed: true, inferred: true }, fatiha: { score: 4, total: 4, passed: true }, ayah: { score: 1, total: 1, passed: true }, find: { score: 4, total: 4, passed: true }, madd: { score: 2, total: 4, passed: true } } });
+    const readerGot = await get(`/api/results/${reader.body.id}`).then((x) => x.json());
+    check("A32. a reader's harder games are kept, the pass decided on the server, and the level unchanged", readerGot.stages.find.passed === true && readerGot.stages.madd.passed === false && readerGot.level.code === "R6");
     check("A24. an adult with a child's age band is refused", bad.status === 400);
     const withSignals = await post({ profile: { ...profile, likes: { listening: "yes" }, motivation: "praise" }, stages: { sound: { score: 6, total: 6, passed: true }, shape: { score: 2, total: 4, passed: false } },
       signals: { kinds: { sound: { n: 6, correct: 6, median_ms: 1800 }, shape: { n: 4, correct: 2, median_ms: 5200 } }, hints: 0, skips: 0, after_error: { n: 2, correct: 1 }, slower_later: false, total_ms: 90000 } });

@@ -35,11 +35,26 @@
   // ---------- welcome: who is it for ----------
   chips("who", "who", O.WHO.map((x) => ({ value: x.id, label: I.label(x) })));
   document.querySelector('input[name="who"][value="child"]').checked = true;
+  // The welcome text follows the choice: a child (with the parent beside them, and the parent's consent), an adult
+  // (no parent's box), or a teacher (the "coming soon" text).
+  function welcomeFor(who) {
+    const k = (key) => (who === "child" ? key : `${key}_${who}`);
+    $("w-eyebrow").textContent = t(k("w_eyebrow"));
+    $("w-title").textContent = t(k("w_title"));
+    $("w-text").textContent = t(k("w_text"));
+    $("w-after").textContent = t(k("w_after"));
+    $("w-facts").hidden = who === "teacher";
+    $("consent-row").hidden = who !== "child";
+    $("consent-error").hidden = true;
+    $("start").textContent = t(who === "teacher" ? "start_teacher" : "start");
+  }
+  welcomeFor("child");
+  $("who").addEventListener("change", () => welcomeFor(picked("who") || "child"));
 
   $("start").addEventListener("click", async () => {
-    if (!$("consent").checked) { $("consent-error").textContent = t("consent_err"); $("consent-error").hidden = false; return; }
-    $("consent-error").hidden = true;
     const who = picked("who") || "child";
+    if (who === "child" && !$("consent").checked) { $("consent-error").textContent = t("consent_err"); $("consent-error").hidden = false; return; }
+    $("consent-error").hidden = true;
     if (who === "teacher") { show("teacher-soon"); window.scrollTo({ top: 0 }); return; }
     $("start").disabled = true;
     try {
@@ -58,7 +73,8 @@
 
   // ---------- about the child ----------
   function buildAbout() {
-    chips("age", "age", O.AGE_BANDS.map((a) => ({ value: a, label: `${a} ${t("age_unit")}` })));
+    // Age ranges are isolated left-to-right (U+2066…U+2069), or "4–5" shows as "5–4" inside Arabic text.
+    chips("age", "age", O.AGE_BANDS.map((a) => ({ value: a, label: `⁦${a}⁩ ${t("age_unit")}` })));
     fillCountries("country");
     chips("lang", "lang", O.HOME_LANGUAGES.map((x) => ({ value: x.id, label: I.label(x) })));
     chips("goal", "goal", O.GOALS.map((x) => ({ value: x.id, label: I.label(x) })), "checkbox");
@@ -128,19 +144,19 @@
 
   // ---------- the adult track ----------
   function buildAdult() {
-    chips("ad-age", "ad_age", O.ADULT_AGE_BANDS.map((a) => ({ value: a, label: a })));
+    chips("ad-age", "ad_age", O.ADULT_AGE_BANDS.map((a) => ({ value: a, label: `⁦${a}⁩` })));
     fillCountries("ad-country");
-    chips("ad-explain", "ad_explain", O.EXPLAIN_LANGS.map((x) => ({ value: x.id, label: I.label(x) })));
+    chips("ad-juz", "ad_juz", O.ADULT_JUZ.map((x) => ({ value: x.id, label: I.label(x) })));
     chips("ad-goal", "ad_goal", O.ADULT_GOALS.map((x) => ({ value: x.id, label: I.label(x) })), "checkbox");
     chips("ad-teacher", "ad_teacher", O.TEACHER.map((x) => ({ value: x.id, label: I.label(x) })));
     chips("ad-self", "ad_self", O.ADULT_SELF.map((x) => ({ value: x.id, label: I.label(x) })));
     chips("ad-ayah-self", "ad_ayah", O.AYAH_SELF.map((x) => ({ value: x.id, label: I.label(x) })));
     chips("ad-per-week", "ad_per_week", O.LESSONS_PER_WEEK.map((x) => ({ value: x.id, label: I.label(x) })));
     document.querySelector(`input[name="ad_per_week"][value="${O.DEFAULT_LESSONS_PER_WEEK}"]`).checked = true;
-    $("ad-ayah").textContent = content.ayah.items[0].text;
+    // An ayah from the verified files only (a sample Sara has checked, or Al-Fatiha 1:7 until then).
+    $("ad-ayah").textContent = content.adult_ayah.text;
+    $("ad-ayah-ref").textContent = t("ad_ayah_ref", { surah: content.adult_ayah.surah_name, ref: content.adult_ayah.ref });
     $("ad-tajweed").innerHTML = tajweedHtml("atj", (q) => I.label(O.TAJWEED_QS_ADULT[q.id]));
-    // The Tajweed questions only for someone who reads.
-    $("ad-self").addEventListener("change", () => ($("ad-tajweed-field").hidden = picked("ad_self") === "none"));
   }
 
   $("adult-form").addEventListener("submit", (e) => {
@@ -149,19 +165,20 @@
       who: "adult",
       age_band: picked("ad_age"),
       country: $("ad-country").value,
-      explain_lang: picked("ad_explain"),
+      juz: picked("ad_juz"),
       goals: checked("ad_goal"),
       teacher: picked("ad_teacher"),
       self: picked("ad_self"),
       ayah: picked("ad_ayah"),
+      ayah_ref: content.adult_ayah.ref,
       lessons_per_week: Number(picked("ad_per_week")) || undefined,
       lang: I.lang,
+      tajweed: tajweedOf("atj"),
     };
-    if (p.self && p.self !== "none") p.tajweed = tajweedOf("atj");
     const missing = [];
     if (!p.age_band) missing.push(t("m_age"));
     if (!p.country) missing.push(t("m_country"));
-    if (!p.explain_lang) missing.push(t("m_explain"));
+    if (!p.juz) missing.push(t("m_juz"));
     if (!p.goals.length) missing.push(t("m_goal"));
     if (!p.self) missing.push(t("m_self"));
     if (!p.ayah) missing.push(t("m_ayah"));
@@ -295,6 +312,38 @@
     return { ...r, passed: r.score >= L.PASS[key] };
   }
 
+  // Find the word: the ayah's words as buttons, the word to find above them.
+  async function stageFind() {
+    const items = content.find.items;
+    let score = 0;
+    for (let i = 0; i < items.length; i++) {
+      frame(t("s7_label"), t("s7_title"), items.length, i);
+      const it = items[i];
+      const pick = await choiceRound("find",
+        `<p>${esc(t("s7_prompt"))}</p><div class="word quran" lang="ar" dir="rtl">${esc(it.answer)}</div><p class="small muted center">${esc(t("s7_in", { ref: it.ref }))}</p>`,
+        it.words,
+        false
+      );
+      rec.answered(pick === it.answer);
+      if (pick === it.answer) score++;
+    }
+    return { score, total: items.length, passed: score >= L.PASS.find };
+  }
+
+  // Which word has madd: three words from Al-Fatiha, one with a natural madd.
+  async function stageMadd() {
+    const items = content.madd.items;
+    let score = 0;
+    for (let i = 0; i < items.length; i++) {
+      frame(t("s8_label"), t("s8_title"), items.length, i);
+      const it = items[i];
+      const pick = await choiceRound("madd", `<p>${esc(t("s8_prompt"))}</p>`, shuffle(it.choices), false);
+      rec.answered(pick === it.answer);
+      if (pick === it.answer) score++;
+    }
+    return { score, total: items.length, passed: score >= L.PASS.madd };
+  }
+
   const PLAY = {
     sound: stageSound,
     shape: stageShape,
@@ -302,12 +351,18 @@
     harakat: () => stageWords("harakat", 4, "", (w) => w.word),
     fatiha: () => stageWords("fatiha", 5, "quran", (w) => w.text),
     ayah: () => stageWords("ayah", 6, "quran ayah", (w) => w.text),
+    find: stageFind,
+    madd: stageMadd,
   };
 
   async function play() {
     rec = S.recorder();
     const result = await L.runStages(L.startStage(profile.estimate), (key) => PLAY[key]());
     stages = result.stages;
+    // Every child plays at their own level: a child who reads words from Al-Fatiha also gets the harder games.
+    if (stages.fatiha && stages.fatiha.passed && !stages.fatiha.inferred) {
+      for (const key of L.READER_STAGES) stages[key] = await PLAY[key]();
+    }
     save();
   }
 

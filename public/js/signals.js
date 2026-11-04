@@ -4,7 +4,7 @@
 // Works in the browser (window.QuranaSignals) and in Node (server and tests).
 (function (root) {
   // The kind of each game: hearing a letter, seeing a letter's shape, or reading (confirmed by the grown-up).
-  const KIND = { sound: "sound", shape: "shape", fatha: "read", harakat: "read", fatiha: "read", ayah: "read" };
+  const KIND = { sound: "sound", shape: "shape", fatha: "read", harakat: "read", fatiha: "read", ayah: "read", find: "read", madd: "read" };
 
   // ---------- recording (browser) ----------
   function recorder() {

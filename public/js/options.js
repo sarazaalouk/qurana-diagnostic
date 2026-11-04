@@ -147,12 +147,24 @@
     { id: "teacher", label: "معلم أو معلمة", label_en: "A teacher" },
   ];
 
-  // The adult track: own reading, an ayah read aloud, goals and time.
+  // The English track (an English-speaking teacher) is kept for Kottab and switched off for Qurana, whose families
+  // read Arabic: everyone gets the Arabic track. One setting.
+  const ENGLISH_TRACK = false;
+
+  // The adult track (Arabic readers): fluency, an ayah they have probably not memorized, Tajweed, memorization by juz',
+  // goals and time. Spoken to in the singular.
   const ADULT_AGE_BANDS = ["18–25", "26–35", "36–50", "51+"];
   const ADULT_SELF = [
-    { id: "none", label: "لا أقرأ العربية بعد", label_en: "I don't read Arabic yet" },
-    { id: "slow", label: "أقرأ ببطء وأخطئ أحيانًا", label_en: "I read slowly and make some mistakes" },
-    { id: "fluent", label: "أقرأ من المصحف بطلاقة", label_en: "I read from the Mushaf fluently" },
+    { id: "fluent", label: "أقرأ بطلاقة", label_en: "I read fluently" },
+    { id: "slow", label: "أقرأ ببطء", label_en: "I read slowly" },
+    { id: "stumble", label: "أتعثّر في القراءة", label_en: "I stumble when I read" },
+  ];
+  // How much the adult has memorized, by juz'.
+  const ADULT_JUZ = [
+    { id: "none", label: "لا شيء", label_en: "Nothing yet" },
+    { id: "amma", label: "جزء عمّ", label_en: "Juz' Amma" },
+    { id: "upto5", label: "حتى 5 أجزاء", label_en: "Up to 5 juz'" },
+    { id: "more", label: "أكثر من ذلك", label_en: "More" },
   ];
   const AYAH_SELF = [
     { id: "easy", label: "قرأتها بسهولة", label_en: "I read it easily" },
@@ -166,18 +178,15 @@
     { id: "tajweed", label: "التجويد", label_en: "Tajweed", program: "tajweed", path: "tajweed" },
     { id: "ijaza", label: "الإجازة", label_en: "Ijazah (certified recitation)", program: "ijaza", path: null },
   ];
-  const EXPLAIN_LANGS = [
-    { id: "ar", label: "العربية", label_en: "Arabic" },
-    { id: "en", label: "الإنجليزية", label_en: "English" },
-  ];
-  // The adult's level from the self-assessment and the ayah: A1 → starts with the letters, A2 → reading from the Mushaf,
-  // A3 → recitation and memorization. Each maps to the child level whose start stage it shares.
+  // The adult's level from the self-assessment and the ayah: A1 → strengthening reading (vowels, madd, sukun, shaddah,
+  // then the Mushaf), A2 → reading from the Mushaf, A3 → recitation and memorization. Each maps to the child level whose
+  // start stage it shares.
   function adultLevel(self, ayah) {
-    if (self === "none" || ayah === "no") return "A1";
+    if (self === "stumble" || ayah === "no") return "A1";
     if (self === "fluent" && ayah === "easy") return "A3";
     return "A2";
   }
-  const ADULT_TO_LEVEL = { A1: "R1", A2: "R5", A3: "R6" };
+  const ADULT_TO_LEVEL = { A1: "R4", A2: "R5", A3: "R6" };
 
   PROGRAMS.tilawa = { name: "تصحيح التلاوة", name_en: "Correcting recitation" };
   PROGRAMS.ijaza = { name: "الإجازة", name_en: "Ijazah" };
@@ -202,8 +211,8 @@
   // what the family chose when they chose 2 a week explicitly ("chosen").
   function suggestion(profile, level) {
     const adult = profile.who === "adult";
-    const track = adult ? (profile.explain_lang === "en" ? "english" : "arabic")
-      : profile.home_language === "en" || profile.home_language === "other" ? "english" : "arabic";
+    const english = ENGLISH_TRACK && (adult ? profile.lang === "en" : profile.home_language === "en" || profile.home_language === "other");
+    const track = english ? "english" : "arabic";
     const ids = adult ? profile.goals : Array.isArray(profile.goals) && profile.goals.length ? profile.goals : [profile.goal];
     const chosen = (adult ? ADULT_GOALS : GOALS).filter((g) => ids.includes(g.id)).map((g) => g.program);
     const learningToRead = ["R1", "R2", "R3", "R4"].includes(level);
@@ -219,7 +228,7 @@
   const api = {
     AGE_BANDS, COUNTRIES, countryFromZone, HOME_LANGUAGES, PROGRAMS, GOALS, TEACHER, SURAHS, SURAH_NAMES, LESSONS_PER_WEEK, DEFAULT_LESSONS_PER_WEEK, MEM_SOURCES,
     TAJWEED_QS, TAJWEED_QS_ADULT, TAJWEED_ANSWERS, FOCUS, focusOrder, readsMushaf, LIKES_QS, LIKES_ANSWERS, MOTIVATION, WHO,
-    ADULT_AGE_BANDS, ADULT_SELF, AYAH_SELF, ADULT_GOALS, EXPLAIN_LANGS, adultLevel, ADULT_TO_LEVEL, PLANS, pathGoals, suggestion,
+    ENGLISH_TRACK, ADULT_AGE_BANDS, ADULT_SELF, ADULT_JUZ, AYAH_SELF, ADULT_GOALS, adultLevel, ADULT_TO_LEVEL, PLANS, pathGoals, suggestion,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.QuranaOptions = api;

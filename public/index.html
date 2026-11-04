@@ -21,16 +21,17 @@
 
 <main>
   <!-- 1. Welcome -->
+  <!-- The texts and the consent box follow who is taking it (child / adult / teacher); set in diagnosis.js. -->
   <section class="card" id="welcome" aria-labelledby="w-title">
-    <span class="eyebrow" data-i18n="w_eyebrow"></span>
-    <h1 id="w-title" data-i18n="w_title"></h1>
-    <p data-i18n="w_text"></p>
-    <div class="facts"><span data-i18n="fact1"></span><span data-i18n="fact2"></span><span data-i18n="fact3"></span><span data-i18n="fact4"></span></div>
-    <p class="small muted" data-i18n="w_after"></p>
     <fieldset class="field"><legend data-i18n="who_q"></legend><div class="chips" id="who"></div></fieldset>
-    <label class="check"><input type="checkbox" id="consent"><span data-i18n="consent"></span></label>
+    <span class="eyebrow" id="w-eyebrow"></span>
+    <h1 id="w-title"></h1>
+    <p id="w-text"></p>
+    <div class="facts" id="w-facts"><span data-i18n="fact1"></span><span data-i18n="fact2"></span><span data-i18n="fact3"></span><span data-i18n="fact4"></span></div>
+    <p class="small muted" id="w-after"></p>
+    <label class="check" id="consent-row"><input type="checkbox" id="consent"><span data-i18n="consent"></span></label>
     <p class="error" id="consent-error" hidden></p>
-    <button class="btn block" id="start" data-i18n="start"></button>
+    <button class="btn block" id="start"></button>
   </section>
 
   <!-- 2. About the child (parent) -->
@@ -81,12 +82,13 @@
       <fieldset class="field"><legend data-i18n="ad_self_q"></legend><div class="chips" id="ad-self"></div></fieldset>
       <fieldset class="field"><legend data-i18n="ad_ayah_q"></legend>
         <div class="word quran ayah" lang="ar" dir="rtl" id="ad-ayah"></div>
+        <p class="small muted center" id="ad-ayah-ref"></p>
         <div class="chips" id="ad-ayah-self"></div>
       </fieldset>
-      <fieldset class="field" id="ad-tajweed-field" hidden><legend data-i18n="tajweed_q"></legend><div class="form-stack" id="ad-tajweed"></div></fieldset>
+      <fieldset class="field"><legend data-i18n="tajweed_q"></legend><div class="form-stack" id="ad-tajweed"></div></fieldset>
+      <fieldset class="field"><legend data-i18n="ad_juz_q"></legend><div class="chips" id="ad-juz"></div></fieldset>
       <fieldset class="field"><legend data-i18n="ad_goal_q"></legend><div class="chips" id="ad-goal"></div></fieldset>
-      <fieldset class="field"><legend data-i18n="ad_explain_q"></legend><div class="chips" id="ad-explain"></div></fieldset>
-      <fieldset class="field"><legend data-i18n="per_week_q"></legend><div class="chips" id="ad-per-week"></div><p class="small muted" data-i18n="per_week_tip"></p></fieldset>
+      <fieldset class="field"><legend data-i18n="per_week_q_adult"></legend><div class="chips" id="ad-per-week"></div><p class="small muted" data-i18n="per_week_tip"></p></fieldset>
       <fieldset class="field"><legend data-i18n="ad_teacher_q"></legend><div class="chips" id="ad-teacher"></div></fieldset>
       <p class="error" id="adult-error" hidden></p>
       <button class="btn block" type="submit" data-i18n="ad_go"></button>

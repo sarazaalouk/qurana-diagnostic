@@ -149,15 +149,20 @@ const fakeClient = (...replies) => {
 
   // ---- the adult track ----
   const validate = require("../lib/validate").validateSubmission;
-  const ad = validate({ profile: { who: "adult", age_band: "26–35", country: "KW", explain_lang: "ar", goals: ["hifz"], teacher: "any", self: "fluent", ayah: "easy", lessons_per_week: 3, tajweed: { madd: "no" } } }).value;
+  const ad = validate({ profile: { who: "adult", age_band: "26–35", country: "KW", juz: "none", goals: ["hifz"], teacher: "any", self: "fluent", ayah: "easy", lessons_per_week: 3, tajweed: { madd: "no" } } }).value;
   path = plan.pathFor(ad, "ar", approved);
   check("P46. an adult who reads fluently gets the adult path: memorization from the start of the memorization stages, with Tajweed alongside",
     ad.profile.adult_level === "A3" && ad.level === "R6" && path.status === "ready" && path.stages[0].id === "L3-S1" && path.stages[0].focus === "المد", `${ad.profile.adult_level} ${path.status} ${path.stages && path.stages[0].id}`);
-  const beginner = validate({ profile: { who: "adult", age_band: "36–50", country: "GB", explain_lang: "en", goals: ["tilawa"], teacher: "female", self: "none", ayah: "no", lessons_per_week: 2 } }).value;
+  const beginner = validate({ profile: { who: "adult", age_band: "36–50", country: "GB", juz: "none", goals: ["tilawa"], teacher: "female", self: "stumble", ayah: "no", lessons_per_week: 2 } }).value;
   path = plan.pathFor(beginner, "en", approved);
-  check("P47. an adult who does not read yet starts with the letters, and correcting recitation leads on to Tajweed", beginner.profile.adult_level === "A1" && path.stages[0].id === "L1-S1" && path.stages[path.stages.length - 1].id === "L4-S3");
-  const ijaza = validate({ profile: { who: "adult", age_band: "51+", country: "SA", explain_lang: "ar", goals: ["ijaza"], teacher: "male", self: "fluent", ayah: "easy", lessons_per_week: 3 } }).value;
+  check("P47. an adult who stumbles strengthens reading from the vowels (not the letters), and correcting recitation leads on to Tajweed", beginner.profile.adult_level === "A1" && path.stages[0].id === "L1-S4" && path.stages[path.stages.length - 1].id === "L4-S3");
+  const ijaza = validate({ profile: { who: "adult", age_band: "51+", country: "SA", juz: "more", goals: ["ijaza"], teacher: "male", self: "fluent", ayah: "easy", lessons_per_week: 3 } }).value;
   check("P48. an adult who wants only the Ijazah: the teacher decides (no path)", plan.pathFor(ijaza, "ar", approved).status === "teacher");
+  const amma = (goals) => validate({ profile: { who: "adult", age_band: "26–35", country: "KW", juz: "amma", goals, teacher: "any", self: "fluent", ayah: "easy", lessons_per_week: 3, tajweed: { madd: "no" } } }).value;
+  check("P67. an adult who knows Juz' Amma by heart: the memorization stages count as done", plan.pathFor(amma(["hifz"]), "ar", approved).status === "reached");
+  path = plan.pathFor(amma(["hifz", "tajweed"]), "ar", approved);
+  check("P68. …and with Tajweed too, the Tajweed stages remain (there is no memorization stage to go alongside)", path.status === "ready" && path.stages.every((x) => x.program === "tajweed"), path.stages && path.stages.map((x) => x.id).join(","));
+  check("P69. the adult form has no language-of-explanation question any more", !("explain_lang" in ad.profile) && ad.profile.juz === "none");
 
   // ---- the words (model) ----
   let out = await plan.writeNotes(r6, "ar", { client: fakeClient(good), curriculumData: approved });

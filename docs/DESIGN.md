@@ -10,7 +10,7 @@ In 3–5 minutes the parent and child find the child's starting level, and get a
 - **Parent present.** The parent reads the instructions, says the letter sounds and confirms the readings.
 
 ## Flow
-1. **Welcome + consent**: who is taking it — a child / an adult / a teacher.
+1. **Welcome**: who is taking it — a child (default) / an adult / a teacher — first; the texts follow the choice: child «ألعاب قصيرة يلعبها طفلكم وأنتم بجانبه…» with the parent's box «أنا وليّ الأمر وسأجلس بجانبه»; adult «دقائق قليلة تعرف فيها مستواك في التلاوة والتجويد والحفظ، وتحصل على خطة مقترحة» without it; teacher the «قريبًا» text.
 2. **Child — about the child** (parent, 1 screen): nickname (optional), age band, country (detected), language at home, goals (one or more), surahs memorized (names) and how (listening / from the Mushaf / both — asked only when surahs are listed), lessons a week (3 chosen in advance with «ننصح بثلاث حصص أسبوعيًا لثبات التقدم»; 2 can be chosen), teacher preference, parent's estimate of the child's reading, Tajweed basics (madd, ghunnah, qalqalah — only when the parent says the child reads from the Mushaf), and «ما يستجيب له طفلكم» (optional): enjoys nasheeds and listening? writing and drawing? moving about? more excited by a challenge or by praise?
 3. **Child — games** (child with parent): adaptive, starting from the parent's estimate and going down only if needed. Each item records the time to answer, whether the hint was opened, skips and the answer after a mistake (`public/js/signals.js`); only a short summary is sent (per game kind: count, correct, median time; hints; skips; after-mistake; slower in the second half).
    1. Letter sounds — 6 letters of the Bismillah, pass 4.
@@ -19,7 +19,8 @@ In 3–5 minutes the parent and child find the child's starting level, and get a
    4. Reading with kasra and damma — 4 Noor Al-Bayan words, pass 3.
    5. Words from Al-Fatiha — 4 words from the verified file, pass 2.
    6. A whole ayah — 1:1 read in full, confirmed by the parent.
-2b. **Adult** (one screen): age band, country, own reading (don't read yet / slowly / fluently), ayah 1:1 read aloud (easily / with difficulty / couldn't), Tajweed basics (unless they don't read), goals (correct recitation / memorization / Tajweed / Ijazah), language of explanation, lessons a week, teacher. Level A1 (→ the R1 start), A2 (→ R5), A3 (→ R6); the same curriculum and rules build the path. Ijazah alone: "the teacher decides after a short test".
+   7–8. **For a child who reads words from Al-Fatiha**, two harder games after the level games: find a word inside its ayah (pass 3 of 4) and which word has madd (pass 3 of 4), all words by position in the verified Al-Fatiha file. They do not change the level. The result lists only the games actually played (no «لم يحتجها»).
+2b. **Adult** (Arabic readers; spoken to in the singular): age band, country, fluency (أقرأ بطلاقة / أقرأ ببطء / أتعثّر), an ayah read aloud (easily / with difficulty / couldn't) — from `data/quran_samples.json` (medium surahs most adults have not memorized) once Sara has checked it (`text_ar`, `verified_by`, `verified_on`), Al-Fatiha 1:7 until then — the three Tajweed questions, memorization by juz' (لا شيء / جزء عمّ / حتى 5 أجزاء / أكثر; Juz' Amma or more counts the curriculum's memorization stages as done), goals, lessons a week, teacher. Level A1 تقوية القراءة (→ the R4 start: vowels, madd, sukun, shaddah, then the Mushaf), A2 (→ R5), A3 (→ R6). Ijazah alone: "the teacher decides after a short test".
 2c. **Teacher**: «قريبًا» — an email (with consent) for when the teachers' diagnostic opens (`waitlist` table). The teachers' diagnostic is a separate project.
 4. **Result** at `/r/<id>`: level, the plan (time windows first), «ما لاحظناه» (children), what was done, the suggestion, and the three buttons.
 
@@ -43,6 +44,7 @@ In 3–5 minutes the parent and child find the child's starting level, and get a
 - Prices: `<SITE_URL>/#plans`. Booking: `<SITE_URL>/register?diagnosis=<id>&result=<full result link>` (the site reads them in step 3).
 
 ## Languages
+- Qurana has one track: Arabic. The English track (English-speaking teacher) stays in the code for Kottab behind one setting, `ENGLISH_TRACK` in `public/js/options.js` (false here); the result page shows no track row while it is off. The interface itself is still Arabic or English.
 - Arabic (RTL) and English (LTR): `?lang=ar|en`, then the last choice (`localStorage` `qurana.lang`), then Arabic. Text in `public/js/i18n.js`; `npm test` checks both languages have the same keys.
 - The Arabic letters and words the child reads stay Arabic in both languages.
 

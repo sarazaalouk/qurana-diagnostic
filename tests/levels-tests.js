@@ -29,9 +29,10 @@ const run = (estimate, results) => L.runStages(L.startStage(estimate), async (k)
   r = await run("mushaf", { fatiha: true, ayah: false });
   check("L6. reading words from Al-Fatiha but not the whole ayah stays at R5", L.levelFrom(r.stages), "R5");
 
-  check("L7. suggestion: English track for an English-speaking home, reading foundations while learning to read, Seed for 2 lessons a week",
+  check("L7. Qurana: the English track is off, so an English-speaking home still gets the Arabic track; reading foundations while learning to read",
     O.suggestion({ home_language: "en", goals: ["hifz"], age_band: "4–5", lessons_per_week: 2 }, "R3"),
-    { track: "english", program: "reading", plan: "growth", chosen: "seed", then: "hifz", with_tajweed: false });
+    { track: "arabic", program: "reading", plan: "growth", chosen: "seed", then: "hifz", with_tajweed: false });
+  check("L17. the English track is one setting, kept for Kottab and off for Qurana", O.ENGLISH_TRACK, false);
   check("L8. suggestion: a reader follows the goal, Arabic track, Growth plan for 3 lessons a week",
     O.suggestion({ home_language: "ar", goals: ["tajweed"], age_band: "8–9", lessons_per_week: 3 }, "R6"),
     { track: "arabic", program: "tajweed", plan: "growth", chosen: "growth", then: null, with_tajweed: false });
@@ -51,7 +52,8 @@ const run = (estimate, results) => L.runStages(L.startStage(estimate), async (k)
   check("L13. the focus order: no first, then sometimes, then not sure; yes needs none",
     O.focusOrder({ madd: "sometimes", ghunnah: "no", qalqalah: "yes" }), ["ghunnah", "madd"]);
   check("L14. adult level from the self-assessment and the ayah",
-    [O.adultLevel("none", "easy"), O.adultLevel("slow", "hard"), O.adultLevel("fluent", "easy"), O.adultLevel("fluent", "no")], ["A1", "A2", "A3", "A1"]);
+    [O.adultLevel("stumble", "easy"), O.adultLevel("slow", "hard"), O.adultLevel("fluent", "easy"), O.adultLevel("fluent", "no")], ["A1", "A2", "A3", "A1"]);
+  check("L18. the reader games do not change the level", L.levelFrom({ sound: { passed: true }, shape: { passed: true }, fatha: { passed: true }, harakat: { passed: true }, fatiha: { passed: true }, ayah: { passed: true }, find: { passed: false }, madd: { passed: false } }), "R6");
   check("L10. an older result with a single goal still works",
     O.suggestion({ home_language: "ar", goal: "tajweed", lessons_per_week: 3 }, "R6").program, "tajweed");
 

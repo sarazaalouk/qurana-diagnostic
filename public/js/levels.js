@@ -4,8 +4,13 @@
   // The games, easiest first. Each opens only if the one below it was passed (or counted as passed).
   const STAGES = ["sound", "shape", "fatha", "harakat", "fatiha", "ayah"];
 
+  // Harder games for a child who reads words from Al-Fatiha: find a word inside an ayah, and which word has madd.
+  // They do not change the level; they tell the teacher more, and their response signals are recorded like the others.
+  const READER_STAGES = ["find", "madd"];
+  const ALL_STAGES = [...STAGES, ...READER_STAGES];
+
   // Pass marks (out of the number of items in each stage).
-  const PASS = { sound: 4, shape: 3, fatha: 2, harakat: 3, fatiha: 2, ayah: 1 };
+  const PASS = { sound: 4, shape: 3, fatha: 2, harakat: 3, fatiha: 2, ayah: 1, find: 3, madd: 3 };
 
   // The parent's estimate of the child's reading, and the stage to start from.
   const ESTIMATES = [
@@ -71,12 +76,12 @@
 
   // Adult levels (from the self-assessment and the ayah read aloud; see adultLevel in options.js).
   const ADULT_LEVELS = {
-    A1: { name: "البداية بالحروف", focus: "قراءة الحروف وأصواتها ثم الكلمات.", name_en: "Starting with the letters", focus_en: "Reading the letters and their sounds, then words." },
+    A1: { name: "تقوية القراءة", focus: "إتقان الحركات والمد والسكون والشدة، ثم القراءة من المصحف بثقة.", name_en: "Strengthening reading", focus_en: "Mastering the vowels, madd, sukun and shaddah, then reading the Mushaf with confidence." },
     A2: { name: "القراءة من المصحف", focus: "قراءة المصحف قراءة صحيحة بثقة.", name_en: "Reading from the Mushaf", focus_en: "Reading the Mushaf correctly and with confidence." },
     A3: { name: "التلاوة والحفظ", focus: "تحسين التلاوة وتطبيق التجويد والحفظ.", name_en: "Recitation and memorization", focus_en: "Improving recitation, applying Tajweed, and memorizing." },
   };
 
-  const api = { STAGES, PASS, ESTIMATES, LEVELS, ADULT_LEVELS, startStage, runStages, levelFrom };
+  const api = { STAGES, READER_STAGES, ALL_STAGES, PASS, ESTIMATES, LEVELS, ADULT_LEVELS, startStage, runStages, levelFrom };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.QuranaLevels = api;
 })(typeof window !== "undefined" ? window : globalThis);
