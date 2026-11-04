@@ -62,7 +62,7 @@ const base = { ...content.gameContent(), bank };
   check("D19. two runs for the same child vary the surahs", JSON.stringify(A.pickContent(base, advanced, rng).fatiha.items) !== JSON.stringify(A.pickContent(base, advanced, rng).fatiha.items), true);
   const empty = A.pickContent({ ...base, bank: [] }, advanced, rng);
   check("D20. until ayat are verified, Al-Fatiha (the verified file) fills in", empty.fatiha.items.every((x) => x.ref.startsWith("1:")) && empty.ayah.items[0].ref === "1:1", true);
-  // Sara verified the 70 ayat on 2026-11-04: the real bank is used, and Al-Fatiha is never a test item or a fallback.
+  // Sara verified the 80 ayat on 2026-11-04 (70, then the 10 long ones): the real bank is used, and Al-Fatiha is never a test item or a fallback.
   const real = content.gameContent();
   const realReaders = [{ who: "child", estimate: "mushaf", memorized: ["الفاتحة"], memorized_more: true }, { who: "child", estimate: "words", memorized: [] }, { who: "adult", juz: "more" }];
   const fatihaSeen = realReaders.some((p) => {
@@ -89,7 +89,7 @@ const base = { ...content.gameContent(), bank };
     if (c.fatiha.items.length !== 4 || c.find.items.length !== 4 || c.madd.items.length !== 4 || c.ayah.items.length !== 1) fromFatiha++;
   }
   check("D21b. the foundational games with the real bank: full rounds, no word or ayah from Al-Fatiha, «find the word» in ayat of 4+ words", [gameItems, fromFatiha], [kids.length * 20 * 13, 0]);
-  check("D21. the real bank: 70 verified ayat; no Al-Fatiha in the reading check, recitation, rules or memorization", [real.bank.length, fatihaSeen], [70, false]);
+  check("D21. the real bank: 80 verified ayat; no Al-Fatiha in the reading check, recitation, rules or memorization", [real.bank.length, fatihaSeen], [80, false]);
 
   // ---- Tajweed rules on the Uthmani marks ----
   const ruleAt = (text) => { const w = tajweed.wordsOf(text); return tajweed.rulesOf(text).map((r) => `${r.words.map((i) => w[i - 1]).join(" ")}=${r.rule}`); };
