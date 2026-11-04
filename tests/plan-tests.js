@@ -164,14 +164,29 @@ const fakeClient = (...replies) => {
   check("P68. …and with Tajweed too, the Tajweed stages remain (there is no memorization stage to go alongside)", path.status === "ready" && path.stages.every((x) => x.program === "tajweed"), path.stages && path.stages.map((x) => x.id).join(","));
   check("P69. the adult form has no language-of-explanation question any more", !("explain_lang" in ad.profile) && ad.profile.juz === "none");
 
+  // ---- tied to the test: each window says which finding it answers ----
+  const tied = {
+    month1: "أظهر الاختبار أن قراءة الكلمات بالفتح تحتاج إلى عمل، فنبدأ بالمد في سورة الفاتحة.",
+    month3: "وبما أن الاختبار بيّن ما يحتاجه، نتوقع بعد ثلاثة أشهر تقريبًا أن يطبّق الغنة في قراءته.",
+    longer: "على المدى الأبعد يطبّق طفلكم ما تعلّمه عند الوقف، كما ظهر في الاختبار.",
+    tip: good.tip,
+  };
+  const ev = { evidence: { needs: ["قراءة كلمات بالفتح"] } };
+  check("P70. with findings on the page, a window that does not mention the test is refused; one tied to it passes",
+    problems({ ...good }).length === 0 && plan.validateReply(good, "ar", allowed, ev).some((x) => x.includes("الاختبار")) && plan.validateReply(tied, "ar", allowed, ev).length === 0,
+    plan.validateReply(tied, "ar", allowed, ev).join("; "));
+  check("P71. month1 must name something the test found needs work",
+    plan.validateReply({ ...tied, month1: "أظهر الاختبار تقدّمًا، فنبدأ بالمد في سورة الفاتحة." }, "ar", allowed, ev).some((x) => x.includes("needs work")));
+
   // ---- the words (model) ----
-  let out = await plan.writeNotes(r6, "ar", { client: fakeClient(good), curriculumData: approved });
-  check("P19. accepted words: three windows and a tip", out.status === "ready" && out.windows.month1 === good.month1 && out.tip === good.tip);
+  let out = await plan.writeNotes(r6, "ar", { client: fakeClient(tied), curriculumData: approved });
+  check("P19. accepted words: three windows and a tip", out.status === "ready" && out.windows.month1 === tied.month1 && out.tip === tied.tip, (out.problems || []).join("; "));
   const sent = JSON.stringify(requests[0]);
   check("P20. the request uses the documented model, sends the path, windows and totals and the voice guide, and no nickname",
     requests[0].model === plan.MODEL && !sent.includes("weeks_at") && sent.includes("windows") && sent.includes("lessons_per_week") && requests[0].system.includes("عبارات ممنوعة") && !sent.includes("Zaid"));
-  const bad = { ...good, month1: "خطة من 12 حصة." };
-  out = await plan.writeNotes(r6, "ar", { client: fakeClient(bad, good), curriculumData: approved });
+  check("P72. the model is given the level with its reason and what the test found", sent.includes("level_and_reason") && sent.includes("what_the_test_found") && sent.includes("الاختبار"));
+  const bad = { ...tied, month1: "خطة من 12 حصة." };
+  out = await plan.writeNotes(r6, "ar", { client: fakeClient(bad, tied), curriculumData: approved });
   check("P21. a rejected reply is written once more with the problems listed, and the second one is used",
     requests.length === 2 && requests[1].messages[0].content.includes("rejected") && out.status === "ready");
   out = await plan.writeNotes(r6, "ar", { client: fakeClient(bad, bad), curriculumData: approved });
@@ -179,7 +194,7 @@ const fakeClient = (...replies) => {
   out = await plan.writeNotes(r6, "ar", { client: fakeClient({ stop: "refusal", reply: {} }), curriculumData: approved });
   check("P23. a model refusal: the words fail, no second try", requests.length === 1 && out.status === "failed");
   let tries = 0;
-  const flaky = { beta: { messages: { create: async () => { tries++; if (tries === 1) throw new Error("offline"); return { stop_reason: "end_turn", content: [{ type: "text", text: JSON.stringify(good) }] }; } } } };
+  const flaky = { beta: { messages: { create: async () => { tries++; if (tries === 1) throw new Error("offline"); return { stop_reason: "end_turn", content: [{ type: "text", text: JSON.stringify(tied) }] }; } } } };
   out = await plan.writeNotes(r6, "ar", { client: flaky, curriculumData: approved });
   check("P29. an API error is tried once more", tries === 2 && out.status === "ready");
   const offline = { beta: { messages: { create: async () => { throw new Error("offline"); } } } };

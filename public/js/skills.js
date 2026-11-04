@@ -149,7 +149,93 @@
     return null; // meem: the reason is the next letter itself (meem / ba / another) — not a question
   }
 
-  const api = { reasonQuestion, noonCategory, lamCategory, SKILLS, CHOICES, APPLY, ITEM_RESULTS, skillOf, label, report, lines };
+  // ---------- the result in words: the level and its reason, and «ما رصده الاختبار» ----------
+  // Fixed rules on the saved result (no model), for the result page and for the model's facts.
+  const andList = (l, en) => (l.length <= 1 ? l.join("") : en ? `${l.slice(0, -1).join(", ")} and ${l[l.length - 1]}` : l.join(" و"));
+  const GAMES = {
+    sound: { ar: "أصوات الحروف", en: "letter sounds" }, shape: { ar: "أشكال الحروف داخل الكلمة", en: "letter shapes inside a word" },
+    fatha: { ar: "قراءة كلمات بالفتح", en: "reading words with fatha" }, harakat: { ar: "القراءة بالحركات الثلاث", en: "reading with all three vowels" },
+    fatiha: { ar: "قراءة كلمات من المصحف", en: "reading words from the Mushaf" }, ayah: { ar: "قراءة آية كاملة", en: "reading a whole ayah" },
+    find: { ar: "إيجاد الكلمة داخل الآية", en: "finding a word inside an ayah" }, madd: { ar: "تمييز الكلمة التي فيها مدّ", en: "spotting the word with madd" },
+  };
+  const LEVEL_GAMES = ["sound", "shape", "fatha", "harakat", "fatiha", "ayah", "find", "madd"];
+
+  // «مستوى طفلكم: القراءة من المصحف — لأن قراءة الآيات صحيحة، لكن أحكام التجويد ما زالت تحتاج إلى تثبيت.»
+  // (No pronoun for a child: the name the parent gives says nothing about whether it is a boy or a girl.)
+  function levelReason(record, levelName, lang = "ar") {
+    const en = lang === "en";
+    const p = record.profile || {}, st = record.stages || {};
+    const ok = (k) => Boolean(st[k] && st[k].passed);
+    let why;
+    if (p.who === "adult") {
+      const tj = ["rules", "reasons"].filter((k) => st[k]);
+      const tjPassed = tj.length && tj.reduce((n, k) => n + st[k].score, 0) >= Math.ceil(tj.reduce((n, k) => n + st[k].total, 0) * 0.6);
+      why = p.adult_level === "A1" ? (en ? "because you stumble when you read, so we first make the vowels and madd steady" : "لأنك تتعثّر في القراءة، فنبدأ بتثبيت الحركات والمدّ")
+        : p.adult_level === "A3" ? (tj.length ? (en ? "because you read fluently and answered most of the Tajweed questions and their reasons" : "لأنك تقرأ بطلاقة وأجبت عن أغلب أسئلة التجويد وأسبابها") : (en ? "because you read fluently" : "لأنك تقرأ بطلاقة"))
+        : p.self === "fluent" && tj.length && !tjPassed ? (en ? "because you read fluently, but the Tajweed rules still need to be made steady" : "لأنك تقرأ بطلاقة، لكن أحكام التجويد ما زالت تحتاج إلى تثبيت")
+        : (en ? "because you read slowly, so we build fluency in reading the Mushaf" : "لأنك تقرأ ببطء، فنبني الطلاقة في القراءة من المصحف");
+      return en ? `Your level: ${levelName} — ${why}.` : `مستواك: ${levelName} — ${why}.`;
+    }
+    // (The saved record has the level code; the result page gets it as { code, name, … }.)
+    const lvl = record.level && typeof record.level === "object" ? record.level.code : record.level;
+    if (st.recite) {
+      why = lvl === "R6" ? (en ? "because they read the ayat correctly and answered most of the Tajweed questions" : "لأن قراءة الآيات جاءت صحيحة، والإجابات صحيحة في أغلب أسئلة أحكام التجويد")
+        : lvl === "R5" ? (en ? "because they read the ayat correctly, but the Tajweed rules still need to be made steady" : "لأن قراءة الآيات صحيحة، لكن أحكام التجويد ما زالت تحتاج إلى تثبيت")
+        : (en ? "because the longer ayat still have mistakes, so we make the vowels and madd steady before the Tajweed rules" : "لأن الآيات الأطول ما زالت فيها أخطاء، فنثبّت الحركات والمدّ قبل أحكام التجويد");
+    } else if (st.check && !st.check.passed && lvl === "R5" && ok("ayah")) {
+      why = en ? "because the short ayah at the start had many mistakes, although the reading games went well" : "لأن الآية القصيرة في البداية قُرئت بأخطاء كثيرة، مع النجاح في ألعاب القراءة";
+    } else {
+      why = {
+        R1: en ? "because the letter sounds still need to be learned" : "لأن أصوات الحروف ما زالت تحتاج إلى تعلّم",
+        R2: en ? "because they know the letter sounds, but the shapes inside a word still need work" : "لأن أصوات الحروف معروفة، لكن أشكالها داخل الكلمة ما زالت تحتاج إلى عمل",
+        R3: en ? "because they know the letters, but reading words with fatha still needs work" : "لأن الحروف معروفة، لكن قراءة الكلمات بالفتح ما زالت تحتاج إلى عمل",
+        R4: en ? "because they read with fatha, but kasra and damma still need work" : "لأن القراءة بالفتح صحيحة، لكن الكسر والضم ما زالا يحتاجان إلى عمل",
+        R5: en ? "because they read words with vowels, but words and ayat from the Mushaf still need to be made steady" : "لأن قراءة الكلمات بالحركات صحيحة، لكن قراءة كلمات المصحف وآياته ما زالت تحتاج إلى تثبيت",
+        R6: en ? "because they read words and a whole ayah from the Mushaf correctly" : "لأن قراءة كلمات وآية كاملة من المصحف جاءت صحيحة",
+      }[lvl];
+    }
+    const who = p.nickname ? p.nickname : en ? "your child" : "طفلكم";
+    return en ? `${who === "your child" ? "Your child's" : `${who}'s`} level: ${levelName} — ${why}.` : `مستوى ${who}: ${levelName} — ${why}.`;
+  }
+
+  // Two sentences from the answers: what was right, and what was wrong (with the rule chosen instead, when known).
+  // From the Tajweed questions («ما الحكم؟», and «ولماذا؟» for an adult); from the games for a child who played them.
+  function findings(stages, lang = "ar", adult = false) {
+    const en = lang === "en";
+    const st = stages || {};
+    const lab = (id) => label(id, lang);
+    if (st.rules && (st.rules.items || []).length) {
+      const items = st.rules.items;
+      const right = [...new Set(items.filter((x) => x.result === "right").map((x) => x.skill))];
+      const wrong = items.filter((x) => x.result === "wrong" && !right.includes(x.skill));
+      const mixed = [...new Map(wrong.filter((x) => x.picked && x.picked !== x.skill && SKILLS[x.picked]).map((x) => [`${x.skill}|${x.picked}`, [x.skill, x.picked]])).values()];
+      const plain = [...new Set(wrong.filter((x) => !mixed.some(([s]) => s === x.skill)).map((x) => x.skill))];
+      const whyWrong = adult ? [...new Set(((st.reasons || {}).items || []).filter((x) => x.result === "wrong").map((x) => x.skill))] : [];
+      const s1 = right.length
+        ? (en ? `${adult ? "You got right" : "Got right"}: ${andList(right.slice(0, 4).map(lab), true)}.` : `${adult ? "أتقنتَ" : "أتقن"} ${andList(right.slice(0, 4).map(lab))}.`)
+        : (en ? `${adult ? "You did not" : "Did not"} get any of the rules asked right yet.` : adult ? "لم تُصب بعد في أيّ حكم سُئلت عنه." : "لم يُصب بعد في أيّ حكم سُئل عنه.");
+      const parts = [
+        ...mixed.slice(0, 2).map(([a, b]) => (en ? `${adult ? "you mixed up" : "mixed up"} ${lab(a)} and ${lab(b)}` : `${adult ? "خلطتَ" : "خلط"} بين ${lab(a)} و${lab(b)}`)),
+        ...(plain.length ? [en ? `${adult ? "you missed" : "missed"} ${andList(plain.slice(0, 3).map(lab), true)}` : `${adult ? "أخطأتَ" : "أخطأ"} في ${andList(plain.slice(0, 3).map(lab))}`] : []),
+        ...(whyWrong.length ? [en ? `you do not yet know the reason for ${andList(whyWrong.slice(0, 2).map(lab), true)}` : `لا تعرف بعد سبب ${andList(whyWrong.slice(0, 2).map(lab))}`] : []),
+      ];
+      const s2 = parts.length
+        ? (en ? `${right.length ? "But " : ""}${parts.join("; ")}.`.replace(/^But y/, "But y").replace(/^([a-z])/, (c) => c.toUpperCase())
+          : `${right.length ? (adult ? "لكنك " : "لكنه ") : ""}${parts.join("، و")}.`)
+        : (en ? `${adult ? "You made" : "Made"} no mistake in the rules asked.` : adult ? "ولم تخطئ في أيّ حكم سُئلت عنه." : "ولم يخطئ في أيّ حكم سُئل عنه.");
+      return [s1, s2];
+    }
+    const played = LEVEL_GAMES.filter((k) => st[k] && !st[k].inferred);
+    if (!played.length) return null;
+    const g = (k) => GAMES[k][en ? "en" : "ar"];
+    const passed = played.filter((k) => st[k].passed).map(g), failed = played.filter((k) => !st[k].passed).map(g);
+    return [
+      passed.length ? (en ? `Did well in: ${andList(passed, true)}.` : `نجح في: ${andList(passed)}.`) : (en ? "The first game still needs work." : "اللعبة الأولى ما زالت تحتاج إلى عمل."),
+      failed.length ? (en ? `Still needs work in: ${andList(failed, true)}.` : `ويحتاج إلى عمل في: ${andList(failed)}.`) : (en ? "And did well in every game played." : "ونجح في كل لعبة لعبها."),
+    ];
+  }
+
+  const api = { GAMES, levelReason, findings, reasonQuestion, noonCategory, lamCategory, SKILLS, CHOICES, APPLY, ITEM_RESULTS, skillOf, label, report, lines };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.QuranaSkills = api;
 })(typeof window !== "undefined" ? window : globalThis);

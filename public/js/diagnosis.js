@@ -459,7 +459,8 @@
       const right = isWordQ ? pick === q.answer : pick === SK.label(q.answer, I.lang);
       rec.answered(right);
       const res = right ? "right" : "wrong";
-      rules.push({ skill: q.skill, ref: q.ref, word: q.word, d: q.d, result: res });
+      const picked = isWordQ ? undefined : q.choices[labels.indexOf(pick)];
+      rules.push({ skill: q.skill, ref: q.ref, word: q.word, d: q.d, result: res, ...(!right && picked && { picked }) });
       // «ولماذا؟» (adults): the rule is named, and the reason is chosen.
       const why = adult && SK.reasonQuestion(q, I.lang);
       if (why) {

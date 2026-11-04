@@ -212,6 +212,13 @@ const base = { ...content.gameContent(), bank };
   check("D53. an adult needs no recitation they rate themselves: the Tajweed test (rules + reasons) decides; 14/14 → A3, 8/14 → A2",
     [strong.error || "", strong.value && strong.value.profile.adult_level, weak.value && weak.value.profile.adult_level, strong.value && "ayah" in strong.value.profile], ["", "A3", "A2", false]);
   check("D54. the adult's report: «تعرف سبب …»", SKL.lines(SKL.report(strong.value.stages, "ar"), "ar", true).mastered.some((l) => l.startsWith("تعرف سبب")), true);
+  const rec5 = { level: "R5", profile: { who: "child" }, stages: { recite: { passed: true }, rules: { passed: false } } };
+  check("D55. the level in one sentence with its reason, from the saved record or from the page's { code } form",
+    [SKL.levelReason(rec5, "القراءة من المصحف"), SKL.levelReason({ ...rec5, level: { code: "R5" } }, "القراءة من المصحف")],
+    Array(2).fill("مستوى طفلكم: القراءة من المصحف — لأن قراءة الآيات صحيحة، لكن أحكام التجويد ما زالت تحتاج إلى تثبيت."));
+  check("D56. «ما رصده الاختبار»: two sentences, with the rule chosen instead («خلط بين … و…»)",
+    SKL.findings({ rules: { items: [{ skill: "ikhfa", result: "right" }, { skill: "madd_muttasil", result: "right" }, { skill: "idgham_ghunnah", result: "wrong", picked: "idgham_no_ghunnah" }, { skill: "qalqalah", result: "wrong" }] } }, "ar"),
+    ["أتقن الإخفاء والمدّ المتصل.", "لكنه خلط بين الإدغام بغنة والإدغام بلا غنة، وأخطأ في القلقلة."]);
   fs.unlinkSync(tmp);
 
   console.log(failed ? `\n${failed} adaptive case(s) failed` : "\nall adaptive cases behaved as expected");

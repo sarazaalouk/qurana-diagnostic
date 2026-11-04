@@ -104,10 +104,16 @@ const setCurriculum = (c) => { fs.writeFileSync(curriculumFile, JSON.stringify(c
     app.locals.planClient = { beta: { messages: { create: async (req) => {
       calls++;
       if (modelFails) throw new Error("model down");
-      const reply = {
-        month1: "In the first month your child goes over the short vowels.",
-        month3: "After about three months we expect your child to be reading from the Mushaf.",
-        longer: "Further on, your child memorizes the short surahs.",
+      // Tied to the test (each window mentions it; month1 names what needs work), in the language asked for.
+      const reply = !req.system.includes("Write in plain English") ? {
+        month1: "أظهر الاختبار ما يحتاجه طفلكم، فنبدأ في الشهر الأول بقراءة الكلمات بالفتح.",
+        month3: "وبما أن الاختبار بيّن قدرته على الأصوات، نتوقع بعد ثلاثة أشهر تقريبًا أن يقرأ من المصحف.",
+        longer: "على المدى الأبعد يحفظ طفلكم السور القصيرة، كما ظهر في الاختبار.",
+        tip: "دقائق قليلة هادئة في أغلب الأيام.",
+      } : {
+        month1: "The test showed that reading words with fatha needs work, so the first month goes over the short vowels.",
+        month3: "As the test showed, after about three months we expect your child to be reading from the Mushaf.",
+        longer: "Further on, building on what the test found, your child memorizes the short surahs.",
         tip: "A few calm minutes most days.",
       };
       return { stop_reason: "end_turn", content: [{ type: "text", text: JSON.stringify(reply) }] };

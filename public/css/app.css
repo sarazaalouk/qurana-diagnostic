@@ -158,3 +158,8 @@ html[lang="en"] h1, html[lang="en"] h2 { font-family: "Inter", "Segoe UI", Arial
 .rep-list { margin: 0; padding-inline-start: 20px; display: grid; gap: 4px; }
 .choices.reasons { display: grid; gap: 8px; }
 .choices.reasons .choice { font-size: 1rem; line-height: 1.6; text-align: start; padding: 10px 14px; }
+/* The level's reason and «ما رصده الاختبار» (fixed rules on the result). */
+.level-why { font-weight: 600; }
+.findings { background: var(--soft, #f4efe3); border-radius: 12px; padding: 12px 14px; margin: 0 0 14px; }
+.findings h3 { font-size: 1rem; margin: 0 0 6px; }
+.findings p { margin: 0; }

@@ -30,12 +30,17 @@
       <span class="eyebrow" id="r-date"></span>
       <h1 id="r-title"></h1>
       <div><span class="level-badge" id="r-level"></span></div>
+      <p class="level-why" id="r-why"></p>
       <p id="r-focus"></p>
       <p class="note" id="r-note"></p>
     </section>
 
     <section class="card" aria-labelledby="p-title">
       <h2 id="p-title" data-i18n="p_title"></h2>
+      <div class="findings" id="findings" hidden>
+        <h3 data-i18n="f_title"></h3>
+        <p id="findings-text"></p>
+      </div>
       <div id="plan" aria-live="polite"></div>
     </section>
 
@@ -110,6 +115,10 @@
   $("r-title").textContent = nick ? I.t("r_title_named", { name: nick }) : t("r_title");
   $("r-level").textContent = levelName;
   $("r-focus").textContent = I.t("r_focus", { focus: I.label(lvl, "focus") });
+  // The level in one sentence with its reason, and «ما رصده الاختبار» above the plan (fixed rules on this result).
+  $("r-why").textContent = window.QuranaSkills.levelReason(r, levelName, I.lang);
+  const found = window.QuranaSkills.findings(r.stages, I.lang, adult);
+  if (found) { $("findings-text").textContent = found.join(" "); $("findings").hidden = false; }
   $("r-note").textContent = t("r_note");
   document.querySelector(".ai-note").textContent = t("r_ai_note");
   $("d-title").textContent = t("r_done");
