@@ -37,7 +37,9 @@ const adultAyah = (samples) => {
   return JSON.parse(out);
 };
 const real = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "data", "quran_samples.json"), "utf8"));
-check("C8. the samples file lists ayat waiting for review, none shown before it", real.samples.length >= 2 && real.samples.every((x) => !x.text_ar || (x.verified_by && x.verified_on)));
+const shown = new Set(c.bank.map((x) => x.id));
+check("C8. the samples file lists graded ayat from several surahs; only the checked ones are shown",
+  real.samples.length >= 10 && new Set(real.samples.map((x) => x.surah)).size >= 10 && real.samples.every((x) => shown.has(x.id) === !!(x.text_ar && x.verified_by && x.verified_on)));
 let r = adultAyah([{ surah: 67, surah_name: "الملك", ayah: 3, text_ar: "نص للتجربة فقط", verified_by: "", verified_on: "" }]);
 check("C9. an ayah with text but no reviewer and date is not shown: Al-Fatiha 1:7 instead", r.a.ref === "1:7" && r.a.fallback === true && r.unknown.length === 0, JSON.stringify(r.a).slice(0, 80));
 r = adultAyah([{ surah: 67, surah_name: "الملك", ayah: 3, text_ar: "نص للتجربة فقط", verified_by: "Sara", verified_on: "2026-11-04" }]);

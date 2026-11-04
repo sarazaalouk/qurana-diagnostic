@@ -7,6 +7,7 @@
   const O = window.QuranaOptions;
   const I = window.QuranaI18n;
   const S = window.QuranaSignals;
+  const A = window.QuranaAdaptive;
   const t = I.t;
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -229,7 +230,7 @@
   function choiceRound(stage, promptHtml, options, canSkip) {
     return new Promise((resolve) => {
       $("g-body").innerHTML = `${promptHtml}
-        <div class="choices" dir="rtl">${options.map((o, i) => `<button class="choice" data-i="${i}" lang="ar">${esc(o)}</button>`).join("")}</div>
+        <div class="choices${stage === "find" || stage === "madd" ? " quran" : ""}" dir="rtl">${options.map((o, i) => `<button class="choice" data-i="${i}" lang="ar">${esc(o)}</button>`).join("")}</div>
         ${canSkip ? `<button class="btn secondary" id="skip">${esc(t("skip"))}</button>` : ""}`;
       rec.shown(stage);
       const cue = $("g-body").querySelector("details");
@@ -252,9 +253,11 @@
       const next = () => {
         frame(label, title, words.length, i);
         if (i >= words.length) return resolve({ score, total: words.length });
+        const item = typeof words[i] === "string" ? { text: words[i] } : words[i];
         $("g-body").innerHTML = `
           <p>${esc(prompt)}</p>
-          <div class="word ${cls}" lang="ar" dir="rtl">${esc(words[i])}</div>
+          <div class="word ${cls}" lang="ar" dir="rtl">${esc(item.text)}</div>
+          ${item.caption ? `<p class="small muted center">${esc(item.caption)}</p>` : ""}
           <p class="cue">${esc(t("read_q"))}</p>
           <div class="row"><button class="btn" id="yes">${esc(t("read_yes"))}</button><button class="btn secondary" id="no">${esc(t("read_no"))}</button></div>`;
         rec.shown(stage);
@@ -320,7 +323,7 @@
       frame(t("s7_label"), t("s7_title"), items.length, i);
       const it = items[i];
       const pick = await choiceRound("find",
-        `<p>${esc(t("s7_prompt"))}</p><div class="word quran" lang="ar" dir="rtl">${esc(it.answer)}</div><p class="small muted center">${esc(t("s7_in", { ref: it.ref }))}</p>`,
+        `<p>${esc(t("s7_prompt"))}</p><div class="word quran" lang="ar" dir="rtl">${esc(it.answer)}</div><p class="small muted center">${esc(t("from_surah", { surah: it.surah_name, ref: it.ref }))}</p>`,
         it.words,
         false
       );
@@ -349,18 +352,21 @@
     shape: stageShape,
     fatha: () => stageWords("fatha", 3, "", (w) => w.word),
     harakat: () => stageWords("harakat", 4, "", (w) => w.word),
-    fatiha: () => stageWords("fatiha", 5, "quran", (w) => w.text),
-    ayah: () => stageWords("ayah", 6, "quran ayah", (w) => w.text),
+    fatiha: () => stageWords("fatiha", 5, "quran", (w) => ({ text: w.text, caption: t("from_surah", { surah: w.surah_name, ref: w.ref }) })),
+    ayah: () => stageWords("ayah", 6, "quran ayah", (w) => ({ text: w.text, caption: t("from_surah", { surah: w.surah_name, ref: w.ref }) })),
     find: stageFind,
     madd: stageMadd,
   };
 
   async function play() {
     rec = S.recorder();
-    const result = await L.runStages(L.startStage(profile.estimate), (key) => PLAY[key]());
+    // The test adapts to the parent's answers: where it starts and which ayat it uses (public/js/adaptive.js).
+    content = A.pickContent(content, profile);
+    profile.start_stage = A.startFor(profile);
+    const result = await L.runStages(profile.start_stage, (key) => PLAY[key]());
     stages = result.stages;
-    // Every child plays at their own level: a child who reads words from Al-Fatiha also gets the harder games.
-    if (stages.fatiha && stages.fatiha.passed && !stages.fatiha.inferred) {
+    // A child who reads (passed reading words from the Quran, or started above it) also gets the harder games.
+    if (stages.fatiha && stages.fatiha.passed) {
       for (const key of L.READER_STAGES) stages[key] = await PLAY[key]();
     }
     save();
