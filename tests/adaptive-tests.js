@@ -62,7 +62,21 @@ const base = { ...content.gameContent(), bank };
   check("D19. two runs for the same child vary the surahs", JSON.stringify(A.pickContent(base, advanced, rng).fatiha.items) !== JSON.stringify(A.pickContent(base, advanced, rng).fatiha.items), true);
   const empty = A.pickContent({ ...base, bank: [] }, advanced, rng);
   check("D20. until ayat are verified, Al-Fatiha (the verified file) fills in", empty.fatiha.items.every((x) => x.ref.startsWith("1:")) && empty.ayah.items[0].ref === "1:1", true);
-  check("D21. the real bank shows nothing before Sara's review", content.gameContent().bank.length, 0);
+  // Sara verified the 70 ayat on 2026-11-04: the real bank is used, and Al-Fatiha is never a test item or a fallback.
+  const real = content.gameContent();
+  const realReaders = [{ who: "child", estimate: "mushaf", memorized: ["الفاتحة"], memorized_more: true }, { who: "child", estimate: "words", memorized: [] }, { who: "adult", juz: "more" }];
+  const fatihaSeen = realReaders.some((p) => {
+    const pool = A.assessmentPool(real, p, rng);
+    for (const ans of ["right", "wrong", "partial"]) {
+      const run = A.simulate(pool, () => ans);
+      pool.shown = new Set();
+      const first = A.nextPassage(pool, 1, new Set());
+      if (pool.fallback || first.ref.startsWith("1:") || first.d !== 1 || run.recite.some((x) => x.ref.startsWith("1:")) || run.rules.some((x) => x.ref.startsWith("1:"))) return true;
+      if (A.pickHifz(pool, new Set()).some((x) => x.ref.startsWith("1:"))) return true;
+    }
+    return false;
+  });
+  check("D21. the real bank: 70 verified ayat; no Al-Fatiha in the reading check, recitation, rules or memorization", [real.bank.length, fatihaSeen], [70, false]);
 
   // ---- Tajweed rules on the Uthmani marks ----
   const ruleAt = (text) => { const w = tajweed.wordsOf(text); return tajweed.rulesOf(text).map((r) => `${r.words.map((i) => w[i - 1]).join(" ")}=${r.rule}`); };
