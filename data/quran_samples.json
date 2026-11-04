@@ -1,635 +1,108 @@
 {
-  "purpose": "Graded ayat for the diagnostic, from several surahs (not Al-Fatiha only). Tier 2: short ayat for a child who reads words with vowels. Tier 3: whole ayat from medium surahs, for a child who reads from the Mushaf and for adults. An ayah is used only when text_ar, verified_by and verified_on are all filled in (Sara checks it by hand against the Madinah Mushaf, as for data/quran_fatiha.json).",
-  "how_to_verify": "Compare text_ar with the Mushaf word by word; check tajweed_words (word positions counted from 1, among words): madd, ghunnah and qalqalah are candidates found by rule on the marks, plain = words without madd used as wrong answers in «أين المد؟». Correct any list, then fill verified_by and verified_on (YYYY-MM-DD).",
+  "purpose": "Graded ayat for the diagnostic. use=assess: test items — ayat most readers have not memorized (the longer surahs of Juz' Amma and medium surahs), with difficulty 1 (easy) to 3 (hard) from length and the number of Tajweed rules. use=warmup: famous short surahs, used only to check memorization, never as test items. An ayah is used only when text_ar, verified_by and verified_on are all filled in (Sara checks it by hand against the Madinah Mushaf, as for data/quran_fatiha.json).",
+  "how_to_verify": "Compare text_ar with the Mushaf word by word; check tajweed_words (word positions counted from 1, among words): madd, ghunnah and qalqalah are candidates found by rule on the marks, plain = words without madd used as wrong answers in «أين المد؟». Correct any list, then fill verified_by and verified_on (YYYY-MM-DD). rules: Tajweed rules on marked places (noon sakinah/tanween: izhar, idgham_ghunnah, idgham_no_ghunnah, iqlab, ikhfa; meem sakinah: izhar_shafawi, idgham_shafawi, ikhfa_shafawi; lam: shamsiyah, qamariyah), found by rule on the Uthmani marks — used in the rules questions once the ayah is verified.",
   "source": "مصحف المدينة النبوية — مجمع الملك فهد لطباعة المصحف الشريف (رواية حفص عن عاصم)",
   "samples": [
     {
-      "id": "t2-114-1",
+      "id": "t2-94-1",
       "tier": 2,
-      "surah": 114,
-      "surah_name": "الناس",
+      "surah": 94,
+      "surah_name": "الشرح",
       "ayah": 1,
-      "text_ar": "قُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          2,
-          4
-        ],
-        "ghunnah": [
-          4
-        ],
-        "qalqalah": [],
-        "plain": [
-          3
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-114-2",
-      "tier": 2,
-      "surah": 114,
-      "surah_name": "الناس",
-      "ayah": 2,
-      "text_ar": "مَلِكِ ٱلنَّاسِ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          2
-        ],
-        "ghunnah": [
-          2
-        ],
-        "qalqalah": [],
-        "plain": [
-          1
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-114-3",
-      "tier": 2,
-      "surah": 114,
-      "surah_name": "الناس",
-      "ayah": 3,
-      "text_ar": "إِلَـٰهِ ٱلنَّاسِ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          1,
-          2
-        ],
-        "ghunnah": [
-          2
-        ],
-        "qalqalah": [],
-        "plain": []
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-113-1",
-      "tier": 2,
-      "surah": 113,
-      "surah_name": "الفلق",
-      "ayah": 1,
-      "text_ar": "قُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          2
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
-          3,
-          4
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-113-2",
-      "tier": 2,
-      "surah": 113,
-      "surah_name": "الفلق",
-      "ayah": 2,
-      "text_ar": "مِن شَرِّ مَا خَلَقَ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          3
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
-          4
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-113-3",
-      "tier": 2,
-      "surah": 113,
-      "surah_name": "الفلق",
-      "ayah": 3,
-      "text_ar": "وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          3,
-          4
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
-          1,
-          5
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-113-4",
-      "tier": 2,
-      "surah": 113,
-      "surah_name": "الفلق",
-      "ayah": 4,
-      "text_ar": "وَمِن شَرِّ ٱلنَّفَّـٰثَـٰتِ فِى ٱلْعُقَدِ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          3,
-          4
-        ],
-        "ghunnah": [
-          3
-        ],
-        "qalqalah": [],
-        "plain": [
-          1,
-          5
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-113-5",
-      "tier": 2,
-      "surah": 113,
-      "surah_name": "الفلق",
-      "ayah": 5,
-      "text_ar": "وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          3,
-          4
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
-          1,
-          5
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-112-1",
-      "tier": 2,
-      "surah": 112,
-      "surah_name": "الإخلاص",
-      "ayah": 1,
-      "text_ar": "قُلْ هُوَ ٱللَّهُ أَحَدٌ",
+      "text_ar": "أَلَمْ نَشْرَحْ لَكَ صَدْرَكَ",
       "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
       "tajweed_words": {
         "madd": [],
         "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
-          4
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-112-2",
-      "tier": 2,
-      "surah": 112,
-      "surah_name": "الإخلاص",
-      "ayah": 2,
-      "text_ar": "ٱللَّهُ ٱلصَّمَدُ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
-          2
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-112-3",
-      "tier": 2,
-      "surah": 112,
-      "surah_name": "الإخلاص",
-      "ayah": 3,
-      "text_ar": "لَمْ يَلِدْ وَلَمْ يُولَدْ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          4
-        ],
-        "ghunnah": [],
         "qalqalah": [
-          2,
           4
         ],
         "plain": [
-          2,
-          3
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-112-4",
-      "tier": 2,
-      "surah": 112,
-      "surah_name": "الإخلاص",
-      "ayah": 4,
-      "text_ar": "وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          3
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
           1,
           2,
-          4,
-          5
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-111-1",
-      "tier": 2,
-      "surah": 111,
-      "surah_name": "المسد",
-      "ayah": 1,
-      "text_ar": "تَبَّتْ يَدَآ أَبِى لَهَبٍ وَتَبَّ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          2,
-          3
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
-          1,
-          4,
-          5
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-111-3",
-      "tier": 2,
-      "surah": 111,
-      "surah_name": "المسد",
-      "ayah": 3,
-      "text_ar": "سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          1,
-          2,
-          3
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
           4
         ]
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
     },
     {
-      "id": "t2-110-1",
+      "id": "t2-95-1",
       "tier": 2,
-      "surah": 110,
-      "surah_name": "النصر",
+      "surah": 95,
+      "surah_name": "التين",
       "ayah": 1,
-      "text_ar": "إِذَا جَآءَ نَصْرُ ٱللَّهِ وَٱلْفَتْحُ",
+      "text_ar": "وَٱلتِّينِ وَٱلزَّيْتُونِ",
       "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
       "tajweed_words": {
         "madd": [
           1,
           2
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
-          3,
-          5
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-109-1",
-      "tier": 2,
-      "surah": 109,
-      "surah_name": "الكافرون",
-      "ayah": 1,
-      "text_ar": "قُلْ يَـٰٓأَيُّهَا ٱلْكَـٰفِرُونَ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          2,
-          3
         ],
         "ghunnah": [],
         "qalqalah": [],
         "plain": []
       },
       "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-109-6",
-      "tier": 2,
-      "surah": 109,
-      "surah_name": "الكافرون",
-      "ayah": 6,
-      "text_ar": "لَكُمْ دِينُكُمْ وَلِىَ دِينِ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          2,
-          3,
-          4
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
-          1
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-108-1",
-      "tier": 2,
-      "surah": 108,
-      "surah_name": "الكوثر",
-      "ayah": 1,
-      "text_ar": "إِنَّآ أَعْطَيْنَـٰكَ ٱلْكَوْثَرَ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
-      "tajweed_words": {
-        "madd": [
-          1,
-          2
-        ],
-        "ghunnah": [
-          1
-        ],
-        "qalqalah": [],
-        "plain": []
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-108-2",
-      "tier": 2,
-      "surah": 108,
-      "surah_name": "الكوثر",
-      "ayah": 2,
-      "text_ar": "فَصَلِّ لِرَبِّكَ وَٱنْحَرْ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
-          1,
-          2,
-          3
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-108-3",
-      "tier": 2,
-      "surah": 108,
-      "surah_name": "الكوثر",
-      "ayah": 3,
-      "text_ar": "إِنَّ شَانِئَكَ هُوَ ٱلْأَبْتَرُ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          2
-        ],
-        "ghunnah": [
-          1
-        ],
-        "qalqalah": [
-          4
-        ],
-        "plain": [
-          4
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-106-1",
-      "tier": 2,
-      "surah": 106,
-      "surah_name": "قريش",
-      "ayah": 1,
-      "text_ar": "لِإِيلَـٰفِ قُرَيْشٍ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
-      "tajweed_words": {
-        "madd": [
-          1
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": []
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-106-3",
-      "tier": 2,
-      "surah": 106,
-      "surah_name": "قريش",
-      "ayah": 3,
-      "text_ar": "فَلْيَعْبُدُوا۟ رَبَّ هَـٰذَا ٱلْبَيْتِ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          1,
-          3
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": []
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-105-1",
-      "tier": 2,
-      "surah": 105,
-      "surah_name": "الفيل",
-      "ayah": 1,
-      "text_ar": "أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَـٰبِ ٱلْفِيلِ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
-      "tajweed_words": {
-        "madd": [
-          6,
-          7
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
-          1,
-          4,
-          5
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-105-2",
-      "tier": 2,
-      "surah": 105,
-      "surah_name": "الفيل",
-      "ayah": 2,
-      "text_ar": "أَلَمْ يَجْعَلْ كَيْدَهُمْ فِى تَضْلِيلٍ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          4,
-          5
-        ],
-        "ghunnah": [],
-        "qalqalah": [
-          2
-        ],
-        "plain": [
-          1,
-          2
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-103-1",
-      "tier": 2,
-      "surah": 103,
-      "surah_name": "العصر",
-      "ayah": 1,
-      "text_ar": "وَٱلْعَصْرِ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
-      "tajweed_words": {
-        "madd": [],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
-          1
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-103-2",
-      "tier": 2,
-      "surah": 103,
-      "surah_name": "العصر",
-      "ayah": 2,
-      "text_ar": "إِنَّ ٱلْإِنسَـٰنَ لَفِى خُسْرٍ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          2,
-          3
-        ],
-        "ghunnah": [
-          1
-        ],
-        "qalqalah": [],
-        "plain": [
-          4
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-100-1",
-      "tier": 2,
-      "surah": 100,
-      "surah_name": "العاديات",
-      "ayah": 1,
-      "text_ar": "وَٱلْعَـٰدِيَـٰتِ ضَبْحًا",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
-      "tajweed_words": {
-        "madd": [
-          1
-        ],
-        "ghunnah": [],
-        "qalqalah": [
-          2
-        ],
-        "plain": [
-          2
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-99-1",
-      "tier": 2,
-      "surah": 99,
-      "surah_name": "الزلزلة",
-      "ayah": 1,
-      "text_ar": "إِذَا زُلْزِلَتِ ٱلْأَرْضُ زِلْزَالَهَا",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
-      "tajweed_words": {
-        "madd": [
-          1,
-          4
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
-          2,
-          3
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
     },
     {
       "id": "t2-97-1",
@@ -656,62 +129,88 @@
         ]
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 2,
+      "use": "warmup"
     },
     {
-      "id": "t2-95-1",
+      "id": "t2-99-1",
       "tier": 2,
-      "surah": 95,
-      "surah_name": "التين",
+      "surah": 99,
+      "surah_name": "الزلزلة",
       "ayah": 1,
-      "text_ar": "وَٱلتِّينِ وَٱلزَّيْتُونِ",
+      "text_ar": "إِذَا زُلْزِلَتِ ٱلْأَرْضُ زِلْزَالَهَا",
       "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
       "tajweed_words": {
         "madd": [
           1,
-          2
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": []
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t2-94-1",
-      "tier": 2,
-      "surah": 94,
-      "surah_name": "الشرح",
-      "ayah": 1,
-      "text_ar": "أَلَمْ نَشْرَحْ لَكَ صَدْرَكَ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
-      "tajweed_words": {
-        "madd": [],
-        "ghunnah": [],
-        "qalqalah": [
           4
-        ],
-        "plain": [
-          1,
-          2,
-          4
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t3-94-2",
-      "tier": 3,
-      "surah": 94,
-      "surah_name": "الشرح",
-      "ayah": 2,
-      "text_ar": "وَوَضَعْنَا عَنكَ وِزْرَكَ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          1
         ],
         "ghunnah": [],
         "qalqalah": [],
@@ -721,151 +220,432 @@
         ]
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            3
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
     },
     {
-      "id": "t3-94-5",
-      "tier": 3,
-      "surah": 94,
-      "surah_name": "الشرح",
-      "ayah": 5,
-      "text_ar": "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "id": "t2-100-1",
+      "tier": 2,
+      "surah": 100,
+      "surah_name": "العاديات",
+      "ayah": 1,
+      "text_ar": "وَٱلْعَـٰدِيَـٰتِ ضَبْحًا",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
+      "tajweed_words": {
+        "madd": [
+          1
+        ],
+        "ghunnah": [],
+        "qalqalah": [
+          2
+        ],
+        "plain": [
+          2
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-103-1",
+      "tier": 2,
+      "surah": 103,
+      "surah_name": "العصر",
+      "ayah": 1,
+      "text_ar": "وَٱلْعَصْرِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
       "tajweed_words": {
         "madd": [],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          1
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-103-2",
+      "tier": 2,
+      "surah": 103,
+      "surah_name": "العصر",
+      "ayah": 2,
+      "text_ar": "إِنَّ ٱلْإِنسَـٰنَ لَفِى خُسْرٍ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          2,
+          3
+        ],
         "ghunnah": [
           1
         ],
         "qalqalah": [],
         "plain": [
-          1,
-          3,
           4
         ]
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
     },
     {
-      "id": "t3-93-1",
-      "tier": 3,
-      "surah": 93,
-      "surah_name": "الضحى",
+      "id": "t2-105-1",
+      "tier": 2,
+      "surah": 105,
+      "surah_name": "الفيل",
       "ayah": 1,
-      "text_ar": "وَٱلضُّحَىٰ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "text_ar": "أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَـٰبِ ٱلْفِيلِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
       "tajweed_words": {
         "madd": [
-          1
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": []
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t3-93-2",
-      "tier": 3,
-      "surah": 93,
-      "surah_name": "الضحى",
-      "ayah": 2,
-      "text_ar": "وَٱلَّيْلِ إِذَا سَجَىٰ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          2,
-          3
+          6,
+          7
         ],
         "ghunnah": [],
         "qalqalah": [],
         "plain": [
-          1
+          1,
+          4,
+          5
         ]
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
     },
     {
-      "id": "t3-93-3",
-      "tier": 3,
-      "surah": 93,
-      "surah_name": "الضحى",
-      "ayah": 3,
-      "text_ar": "مَا وَدَّعَكَ رَبُّكَ وَمَا قَلَىٰ",
+      "id": "t2-105-2",
+      "tier": 2,
+      "surah": 105,
+      "surah_name": "الفيل",
+      "ayah": 2,
+      "text_ar": "أَلَمْ يَجْعَلْ كَيْدَهُمْ فِى تَضْلِيلٍ",
       "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
       "tajweed_words": {
         "madd": [
-          1,
           4,
           5
         ],
         "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
-          2,
-          3
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t3-87-1",
-      "tier": 3,
-      "surah": 87,
-      "surah_name": "الأعلى",
-      "ayah": 1,
-      "text_ar": "سَبِّحِ ٱسْمَ رَبِّكَ ٱلْأَعْلَى",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          4
+        "qalqalah": [
+          2
         ],
-        "ghunnah": [],
-        "qalqalah": [],
         "plain": [
           1,
-          2,
-          3
-        ]
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t3-87-2",
-      "tier": 3,
-      "surah": 87,
-      "surah_name": "الأعلى",
-      "ayah": 2,
-      "text_ar": "ٱلَّذِى خَلَقَ فَسَوَّىٰ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
-      "tajweed_words": {
-        "madd": [
-          1,
-          3
-        ],
-        "ghunnah": [],
-        "qalqalah": [],
-        "plain": [
           2
         ]
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
     },
     {
-      "id": "t3-78-1",
-      "tier": 3,
-      "surah": 78,
-      "surah_name": "النبأ",
+      "id": "t2-106-1",
+      "tier": 2,
+      "surah": 106,
+      "surah_name": "قريش",
       "ayah": 1,
-      "text_ar": "عَمَّ يَتَسَآءَلُونَ",
+      "text_ar": "لِإِيلَـٰفِ قُرَيْشٍ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
+      "tajweed_words": {
+        "madd": [
+          1
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": []
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-106-3",
+      "tier": 2,
+      "surah": 106,
+      "surah_name": "قريش",
+      "ayah": 3,
+      "text_ar": "فَلْيَعْبُدُوا۟ رَبَّ هَـٰذَا ٱلْبَيْتِ",
       "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
       "tajweed_words": {
         "madd": [
+          1,
+          3
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": []
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            4
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-108-1",
+      "tier": 2,
+      "surah": 108,
+      "surah_name": "الكوثر",
+      "ayah": 1,
+      "text_ar": "إِنَّآ أَعْطَيْنَـٰكَ ٱلْكَوْثَرَ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
+      "tajweed_words": {
+        "madd": [
+          1,
           2
         ],
         "ghunnah": [
@@ -875,104 +655,1496 @@
         "plain": []
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            3
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
     },
     {
-      "id": "t3-78-2",
-      "tier": 3,
-      "surah": 78,
-      "surah_name": "النبأ",
+      "id": "t2-108-2",
+      "tier": 2,
+      "surah": 108,
+      "surah_name": "الكوثر",
       "ayah": 2,
-      "text_ar": "عَنِ ٱلنَّبَإِ ٱلْعَظِيمِ",
+      "text_ar": "فَصَلِّ لِرَبِّكَ وَٱنْحَرْ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          1,
+          2,
+          3
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            3
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-108-3",
+      "tier": 2,
+      "surah": 108,
+      "surah_name": "الكوثر",
+      "ayah": 3,
+      "text_ar": "إِنَّ شَانِئَكَ هُوَ ٱلْأَبْتَرُ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          2
+        ],
+        "ghunnah": [
+          1
+        ],
+        "qalqalah": [
+          4
+        ],
+        "plain": [
+          4
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            4
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-109-1",
+      "tier": 2,
+      "surah": 109,
+      "surah_name": "الكافرون",
+      "ayah": 1,
+      "text_ar": "قُلْ يَـٰٓأَيُّهَا ٱلْكَـٰفِرُونَ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          2,
+          3
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": []
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            3
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-109-6",
+      "tier": 2,
+      "surah": 109,
+      "surah_name": "الكافرون",
+      "ayah": 6,
+      "text_ar": "لَكُمْ دِينُكُمْ وَلِىَ دِينِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          2,
+          3,
+          4
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          1
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-110-1",
+      "tier": 2,
+      "surah": 110,
+      "surah_name": "النصر",
+      "ayah": 1,
+      "text_ar": "إِذَا جَآءَ نَصْرُ ٱللَّهِ وَٱلْفَتْحُ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
+      "tajweed_words": {
+        "madd": [
+          1,
+          2
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          3,
+          5
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            5
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "allah",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-111-1",
+      "tier": 2,
+      "surah": 111,
+      "surah_name": "المسد",
+      "ayah": 1,
+      "text_ar": "تَبَّتْ يَدَآ أَبِى لَهَبٍ وَتَبَّ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          2,
+          3
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          1,
+          4,
+          5
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-111-3",
+      "tier": 2,
+      "surah": 111,
+      "surah_name": "المسد",
+      "ayah": 3,
+      "text_ar": "سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          1,
+          2,
+          3
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          4
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-112-1",
+      "tier": 2,
+      "surah": 112,
+      "surah_name": "الإخلاص",
+      "ayah": 1,
+      "text_ar": "قُلْ هُوَ ٱللَّهُ أَحَدٌ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
+      "tajweed_words": {
+        "madd": [],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          4
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            3
+          ],
+          "kind": "allah",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-112-2",
+      "tier": 2,
+      "surah": 112,
+      "surah_name": "الإخلاص",
+      "ayah": 2,
+      "text_ar": "ٱللَّهُ ٱلصَّمَدُ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          2
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-112-3",
+      "tier": 2,
+      "surah": 112,
+      "surah_name": "الإخلاص",
+      "ayah": 3,
+      "text_ar": "لَمْ يَلِدْ وَلَمْ يُولَدْ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          4
+        ],
+        "ghunnah": [],
+        "qalqalah": [
+          2,
+          4
+        ],
+        "plain": [
+          2,
+          3
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-112-4",
+      "tier": 2,
+      "surah": 112,
+      "surah_name": "الإخلاص",
+      "ayah": 4,
+      "text_ar": "وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ",
       "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
       "tajweed_words": {
         "madd": [
           3
         ],
-        "ghunnah": [
-          2
-        ],
+        "ghunnah": [],
         "qalqalah": [],
         "plain": [
-          2
+          1,
+          2,
+          4,
+          5
         ]
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "noon",
+          "rule": "idgham_no_ghunnah"
+        },
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
     },
     {
-      "id": "t3-78-3",
-      "tier": 3,
-      "surah": 78,
-      "surah_name": "النبأ",
-      "ayah": 3,
-      "text_ar": "ٱلَّذِى هُمْ فِيهِ مُخْتَلِفُونَ",
+      "id": "t2-113-1",
+      "tier": 2,
+      "surah": 113,
+      "surah_name": "الفلق",
+      "ayah": 1,
+      "text_ar": "قُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ",
       "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
       "tajweed_words": {
         "madd": [
-          1,
+          2
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          3,
+          4
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            4
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-113-2",
+      "tier": 2,
+      "surah": 113,
+      "surah_name": "الفلق",
+      "ayah": 2,
+      "text_ar": "مِن شَرِّ مَا خَلَقَ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          3
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          4
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tarqiq"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-113-3",
+      "tier": 2,
+      "surah": 113,
+      "surah_name": "الفلق",
+      "ayah": 3,
+      "text_ar": "وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
           3,
           4
         ],
         "ghunnah": [],
         "qalqalah": [],
+        "plain": [
+          1,
+          5
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tarqiq"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-113-4",
+      "tier": 2,
+      "surah": 113,
+      "surah_name": "الفلق",
+      "ayah": 4,
+      "text_ar": "وَمِن شَرِّ ٱلنَّفَّـٰثَـٰتِ فِى ٱلْعُقَدِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          3,
+          4
+        ],
+        "ghunnah": [
+          3
+        ],
+        "qalqalah": [],
+        "plain": [
+          1,
+          5
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tarqiq"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 2,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-113-5",
+      "tier": 2,
+      "surah": 113,
+      "surah_name": "الفلق",
+      "ayah": 5,
+      "text_ar": "وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          3,
+          4
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          1,
+          5
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tarqiq"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-114-1",
+      "tier": 2,
+      "surah": 114,
+      "surah_name": "الناس",
+      "ayah": 1,
+      "text_ar": "قُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          2,
+          4
+        ],
+        "ghunnah": [
+          4
+        ],
+        "qalqalah": [],
+        "plain": [
+          3
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            4
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-114-2",
+      "tier": 2,
+      "surah": 114,
+      "surah_name": "الناس",
+      "ayah": 2,
+      "text_ar": "مَلِكِ ٱلنَّاسِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          2
+        ],
+        "ghunnah": [
+          2
+        ],
+        "qalqalah": [],
+        "plain": [
+          1
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t2-114-3",
+      "tier": 2,
+      "surah": 114,
+      "surah_name": "الناس",
+      "ayah": 3,
+      "text_ar": "إِلَـٰهِ ٱلنَّاسِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          1,
+          2
+        ],
+        "ghunnah": [
+          2
+        ],
+        "qalqalah": [],
         "plain": []
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
     },
     {
-      "id": "t3-76-3",
+      "id": "t3-19-4",
       "tier": 3,
-      "surah": 76,
-      "surah_name": "الإنسان",
-      "ayah": 3,
-      "text_ar": "إِنَّا هَدَيْنَـٰهُ ٱلسَّبِيلَ إِمَّا شَاكِرًا وَإِمَّا كَفُورًا",
+      "surah": 19,
+      "surah_name": "مريم",
+      "ayah": 4,
+      "text_ar": "قَالَ رَبِّ إِنِّى وَهَنَ ٱلْعَظْمُ مِنِّى وَٱشْتَعَلَ ٱلرَّأْسُ شَيْبًا وَلَمْ أَكُنۢ بِدُعَآئِكَ رَبِّ شَقِيًّا",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
+      "tajweed_words": {
+        "madd": [
+          1,
+          3,
+          6,
+          12
+        ],
+        "ghunnah": [
+          3,
+          6
+        ],
+        "qalqalah": [],
+        "plain": [
+          4,
+          5,
+          7,
+          8,
+          10,
+          11,
+          14
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            5
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            9,
+            10
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            10,
+            11
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            11,
+            12
+          ],
+          "kind": "noon",
+          "rule": "iqlab"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            11
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            12
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        },
+        {
+          "words": [
+            13
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        }
+      ],
+      "difficulty": 3,
+      "use": "assess"
+    },
+    {
+      "id": "t3-36-5",
+      "tier": 3,
+      "surah": 36,
+      "surah_name": "يس",
+      "ayah": 5,
+      "text_ar": "تَنزِيلَ ٱلْعَزِيزِ ٱلرَّحِيمِ",
       "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
       "tajweed_words": {
         "madd": [
           1,
           2,
-          3,
-          4,
-          5,
-          6,
-          7
+          3
         ],
-        "ghunnah": [
-          1,
-          4,
-          6
-        ],
+        "ghunnah": [],
         "qalqalah": [],
         "plain": []
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
     },
     {
-      "id": "t3-73-4",
+      "id": "t3-50-10",
       "tier": 3,
-      "surah": 73,
-      "surah_name": "المزمل",
-      "ayah": 4,
-      "text_ar": "أَوْ زِدْ عَلَيْهِ وَرَتِّلِ ٱلْقُرْءَانَ تَرْتِيلًا",
+      "surah": 50,
+      "surah_name": "ق",
+      "ayah": 10,
+      "text_ar": "وَٱلنَّخْلَ بَاسِقَـٰتٍ لَّهَا طَلْعٌ نَّضِيدٌ",
       "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
       "tajweed_words": {
         "madd": [
-          5,
-          6
+          2,
+          3,
+          5
         ],
-        "ghunnah": [],
-        "qalqalah": [
-          2
+        "ghunnah": [
+          1,
+          5
         ],
+        "qalqalah": [],
         "plain": [
+          1,
           4
         ]
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "noon",
+          "rule": "idgham_no_ghunnah"
+        },
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t3-55-19",
+      "tier": 3,
+      "surah": 55,
+      "surah_name": "الرحمن",
+      "ayah": 19,
+      "text_ar": "مَرَجَ ٱلْبَحْرَيْنِ يَلْتَقِيَانِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
+      "tajweed_words": {
+        "madd": [
+          3
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          1
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
     },
     {
       "id": "t3-67-3",
@@ -1010,7 +2182,168 @@
         ]
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            10
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            11,
+            12
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            14
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            17,
+            18
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            10
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            10
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            10
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            12
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            14
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            14
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            16
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            16
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        }
+      ],
+      "difficulty": 3,
+      "use": "assess"
     },
     {
       "id": "t3-67-15",
@@ -1042,18 +2375,577 @@
         ]
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            5
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            6,
+            7
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            11,
+            12
+          ],
+          "kind": "noon",
+          "rule": "idgham_no_ghunnah"
+        },
+        {
+          "words": [
+            14
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            10
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            12
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            12
+          ],
+          "kind": "ra",
+          "rule": "tarqiq"
+        },
+        {
+          "words": [
+            14
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 2,
+      "use": "assess"
     },
     {
-      "id": "t3-55-19",
+      "id": "t3-73-4",
       "tier": 3,
-      "surah": 55,
-      "surah_name": "الرحمن",
-      "ayah": 19,
-      "text_ar": "مَرَجَ ٱلْبَحْرَيْنِ يَلْتَقِيَانِ",
+      "surah": 73,
+      "surah_name": "المزمل",
+      "ayah": 4,
+      "text_ar": "أَوْ زِدْ عَلَيْهِ وَرَتِّلِ ٱلْقُرْءَانَ تَرْتِيلًا",
       "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
       "tajweed_words": {
         "madd": [
+          5,
+          6
+        ],
+        "ghunnah": [],
+        "qalqalah": [
+          2
+        ],
+        "plain": [
+          4
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            5
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t3-76-3",
+      "tier": 3,
+      "surah": 76,
+      "surah_name": "الإنسان",
+      "ayah": 3,
+      "text_ar": "إِنَّا هَدَيْنَـٰهُ ٱلسَّبِيلَ إِمَّا شَاكِرًا وَإِمَّا كَفُورًا",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
+      "tajweed_words": {
+        "madd": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "ghunnah": [
+          1,
+          4,
+          6
+        ],
+        "qalqalah": [],
+        "plain": []
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            3
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            5,
+            6
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t3-78-1",
+      "tier": 3,
+      "surah": 78,
+      "surah_name": "النبأ",
+      "ayah": 1,
+      "text_ar": "عَمَّ يَتَسَآءَلُونَ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          2
+        ],
+        "ghunnah": [
+          1
+        ],
+        "qalqalah": [],
+        "plain": []
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t3-78-2",
+      "tier": 3,
+      "surah": 78,
+      "surah_name": "النبأ",
+      "ayah": 2,
+      "text_ar": "عَنِ ٱلنَّبَإِ ٱلْعَظِيمِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          3
+        ],
+        "ghunnah": [
+          2
+        ],
+        "qalqalah": [],
+        "plain": [
+          2
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t3-78-3",
+      "tier": 3,
+      "surah": 78,
+      "surah_name": "النبأ",
+      "ayah": 3,
+      "text_ar": "ٱلَّذِى هُمْ فِيهِ مُخْتَلِفُونَ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          1,
+          3,
+          4
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": []
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t3-87-1",
+      "tier": 3,
+      "surah": 87,
+      "surah_name": "الأعلى",
+      "ayah": 1,
+      "text_ar": "سَبِّحِ ٱسْمَ رَبِّكَ ٱلْأَعْلَى",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          4
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          1,
+          2,
+          3
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            4
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t3-87-2",
+      "tier": 3,
+      "surah": 87,
+      "surah_name": "الأعلى",
+      "ayah": 2,
+      "text_ar": "ٱلَّذِى خَلَقَ فَسَوَّىٰ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          1,
+          3
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          2
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t3-93-1",
+      "tier": 3,
+      "surah": 93,
+      "surah_name": "الضحى",
+      "ayah": 1,
+      "text_ar": "وَٱلضُّحَىٰ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          1
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": []
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t3-93-2",
+      "tier": 3,
+      "surah": 93,
+      "surah_name": "الضحى",
+      "ayah": 2,
+      "text_ar": "وَٱلَّيْلِ إِذَا سَجَىٰ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          2,
           3
         ],
         "ghunnah": [],
@@ -1063,43 +2955,1912 @@
         ]
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
     },
     {
-      "id": "t3-50-10",
+      "id": "t3-93-3",
       "tier": 3,
-      "surah": 50,
-      "surah_name": "ق",
-      "ayah": 10,
-      "text_ar": "وَٱلنَّخْلَ بَاسِقَـٰتٍ لَّهَا طَلْعٌ نَّضِيدٌ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
+      "surah": 93,
+      "surah_name": "الضحى",
+      "ayah": 3,
+      "text_ar": "مَا وَدَّعَكَ رَبُّكَ وَمَا قَلَىٰ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
       "tajweed_words": {
         "madd": [
-          2,
-          3,
+          1,
+          4,
           5
         ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          2,
+          3
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t3-94-2",
+      "tier": 3,
+      "surah": 94,
+      "surah_name": "الشرح",
+      "ayah": 2,
+      "text_ar": "وَوَضَعْنَا عَنكَ وِزْرَكَ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [
+          1
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          2,
+          3
+        ]
+      },
+      "verified_by": "",
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
+    },
+    {
+      "id": "t3-94-5",
+      "tier": 3,
+      "surah": 94,
+      "surah_name": "الشرح",
+      "ayah": 5,
+      "text_ar": "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; reference from Sara's draft bank (its own text was not used)",
+      "tajweed_words": {
+        "madd": [],
         "ghunnah": [
-          1,
-          5
+          1
         ],
         "qalqalah": [],
         "plain": [
           1,
+          3,
           4
         ]
       },
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "rules": [
+        {
+          "words": [
+            3
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "ra",
+          "rule": "tarqiq"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "warmup"
     },
     {
-      "id": "t3-36-5",
-      "tier": 3,
-      "surah": 36,
-      "surah_name": "يس",
+      "id": "t4-79-12",
+      "tier": 4,
+      "surah": 79,
+      "surah_name": "النازعات",
+      "ayah": 12,
+      "text_ar": "قَالُوا۟ تِلْكَ إِذًا كَرَّةٌ خَاسِرَةٌ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          1,
+          5
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          2,
+          3,
+          4
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t4-79-34",
+      "tier": 4,
+      "surah": 79,
+      "surah_name": "النازعات",
+      "ayah": 34,
+      "text_ar": "فَإِذَا جَآءَتِ ٱلطَّآمَّةُ ٱلْكُبْرَىٰ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "ghunnah": [
+          3
+        ],
+        "qalqalah": [
+          4
+        ],
+        "plain": []
+      },
+      "rules": [
+        {
+          "words": [
+            3
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_lazim"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 2,
+      "use": "assess"
+    },
+    {
+      "id": "t4-79-40",
+      "tier": 4,
+      "surah": 79,
+      "surah_name": "النازعات",
+      "ayah": 40,
+      "text_ar": "وَأَمَّا مَنْ خَافَ مَقَامَ رَبِّهِۦ وَنَهَى ٱلنَّفْسَ عَنِ ٱلْهَوَىٰ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          1,
+          3,
+          4,
+          5,
+          6,
+          9
+        ],
+        "ghunnah": [
+          1,
+          7
+        ],
+        "qalqalah": [],
+        "plain": [
+          7
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 2,
+      "use": "assess"
+    },
+    {
+      "id": "t4-80-17",
+      "tier": 4,
+      "surah": 80,
+      "surah_name": "عبس",
+      "ayah": 17,
+      "text_ar": "قُتِلَ ٱلْإِنسَـٰنُ مَآ أَكْفَرَهُۥ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          2,
+          3,
+          4
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          1
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t4-80-37",
+      "tier": 4,
+      "surah": 80,
+      "surah_name": "عبس",
+      "ayah": 37,
+      "text_ar": "لِكُلِّ ٱمْرِئٍ مِّنْهُمْ يَوْمَئِذٍ شَأْنٌ يُغْنِيهِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          6
+        ],
+        "ghunnah": [
+          3
+        ],
+        "qalqalah": [],
+        "plain": [
+          1,
+          2,
+          3,
+          5
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            5,
+            6
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tarqiq"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 2,
+      "use": "assess"
+    },
+    {
+      "id": "t4-81-20",
+      "tier": 4,
+      "surah": 81,
+      "surah_name": "التكوير",
+      "ayah": 20,
+      "text_ar": "ذِى قُوَّةٍ عِندَ ذِى ٱلْعَرْشِ مَكِينٍ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          1,
+          4,
+          6
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          2,
+          3,
+          5
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t4-81-29",
+      "tier": 4,
+      "surah": 81,
+      "surah_name": "التكوير",
+      "ayah": 29,
+      "text_ar": "وَمَا تَشَآءُونَ إِلَّآ أَن يَشَآءَ ٱللَّهُ رَبُّ ٱلْعَـٰلَمِينَ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          1,
+          2,
+          3,
+          5,
+          8
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": []
+      },
+      "rules": [
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        },
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "allah",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 2,
+      "use": "assess"
+    },
+    {
+      "id": "t4-82-6",
+      "tier": 4,
+      "surah": 82,
+      "surah_name": "الانفطار",
+      "ayah": 6,
+      "text_ar": "يَـٰٓأَيُّهَا ٱلْإِنسَـٰنُ مَا غَرَّكَ بِرَبِّكَ ٱلْكَرِيمِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          1,
+          2,
+          3,
+          6
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          4,
+          5
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 2,
+      "use": "assess"
+    },
+    {
+      "id": "t4-82-13",
+      "tier": 4,
+      "surah": 82,
+      "surah_name": "الانفطار",
+      "ayah": 13,
+      "text_ar": "إِنَّ ٱلْأَبْرَارَ لَفِى نَعِيمٍ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          2,
+          3,
+          4
+        ],
+        "ghunnah": [
+          1
+        ],
+        "qalqalah": [
+          2
+        ],
+        "plain": []
+      },
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t4-82-19",
+      "tier": 4,
+      "surah": 82,
+      "surah_name": "الانفطار",
+      "ayah": 19,
+      "text_ar": "يَوْمَ لَا تَمْلِكُ نَفْسٌ لِّنَفْسٍ شَيْـًٔا ۖ وَٱلْأَمْرُ يَوْمَئِذٍ لِّلَّهِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          2
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          3,
+          4,
+          5,
+          7,
+          9
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "idgham_no_ghunnah"
+        },
+        {
+          "words": [
+            5,
+            6
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            8,
+            9
+          ],
+          "kind": "noon",
+          "rule": "idgham_no_ghunnah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "allah",
+          "rule": "tarqiq"
+        }
+      ],
+      "difficulty": 2,
+      "use": "assess"
+    },
+    {
+      "id": "t4-83-7",
+      "tier": 4,
+      "surah": 83,
+      "surah_name": "المطففين",
+      "ayah": 7,
+      "text_ar": "كَلَّآ إِنَّ كِتَـٰبَ ٱلْفُجَّارِ لَفِى سِجِّينٍ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          1,
+          3,
+          4,
+          5,
+          6
+        ],
+        "ghunnah": [
+          2
+        ],
+        "qalqalah": [],
+        "plain": []
+      },
+      "rules": [
+        {
+          "words": [
+            4
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "ra",
+          "rule": "tarqiq"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t4-83-18",
+      "tier": 4,
+      "surah": 83,
+      "surah_name": "المطففين",
+      "ayah": 18,
+      "text_ar": "كَلَّآ إِنَّ كِتَـٰبَ ٱلْأَبْرَارِ لَفِى عِلِّيِّينَ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          1,
+          3,
+          4,
+          5,
+          6
+        ],
+        "ghunnah": [
+          2
+        ],
+        "qalqalah": [
+          4
+        ],
+        "plain": []
+      },
+      "rules": [
+        {
+          "words": [
+            4
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        }
+      ],
+      "difficulty": 2,
+      "use": "assess"
+    },
+    {
+      "id": "t4-83-32",
+      "tier": 4,
+      "surah": 83,
+      "surah_name": "المطففين",
+      "ayah": 32,
+      "text_ar": "وَإِذَا رَأَوْهُمْ قَالُوٓا۟ إِنَّ هَـٰٓؤُلَآءِ لَضَآلُّونَ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          1,
+          3,
+          5,
+          6
+        ],
+        "ghunnah": [
+          4
+        ],
+        "qalqalah": [],
+        "plain": []
+      },
+      "rules": [
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "madd",
+          "rule": "madd_lazim"
+        }
+      ],
+      "difficulty": 2,
+      "use": "assess"
+    },
+    {
+      "id": "t4-88-6",
+      "tier": 4,
+      "surah": 88,
+      "surah_name": "الغاشية",
+      "ayah": 6,
+      "text_ar": "لَّيْسَ لَهُمْ طَعَامٌ إِلَّا مِن ضَرِيعٍ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          3,
+          4,
+          6
+        ],
+        "ghunnah": [],
+        "qalqalah": [],
+        "plain": [
+          1,
+          2
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "noon",
+          "rule": "izhar"
+        },
+        {
+          "words": [
+            5,
+            6
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t4-89-8",
+      "tier": 4,
+      "surah": 89,
+      "surah_name": "الفجر",
+      "ayah": 8,
+      "text_ar": "ٱلَّتِى لَمْ يُخْلَقْ مِثْلُهَا فِى ٱلْبِلَـٰدِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          1,
+          4,
+          5,
+          6
+        ],
+        "ghunnah": [],
+        "qalqalah": [
+          3
+        ],
+        "plain": [
+          3
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "meem",
+          "rule": "izhar_shafawi"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t4-89-15",
+      "tier": 4,
+      "surah": 89,
+      "surah_name": "الفجر",
+      "ayah": 15,
+      "text_ar": "فَأَمَّا ٱلْإِنسَـٰنُ إِذَا مَا ٱبْتَلَىٰهُ رَبُّهُۥ فَأَكْرَمَهُۥ وَنَعَّمَهُۥ فَيَقُولُ رَبِّىٓ أَكْرَمَنِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "ghunnah": [
+          1
+        ],
+        "qalqalah": [
+          5
+        ],
+        "plain": [
+          11
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            3
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            10,
+            11
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            10
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            11
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        }
+      ],
+      "difficulty": 2,
+      "use": "assess"
+    },
+    {
+      "id": "t4-89-16",
+      "tier": 4,
+      "surah": 89,
+      "surah_name": "الفجر",
+      "ayah": 16,
+      "text_ar": "وَأَمَّآ إِذَا مَا ٱبْتَلَىٰهُ فَقَدَرَ عَلَيْهِ رِزْقَهُۥ فَيَقُولُ رَبِّىٓ أَهَـٰنَنِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          1,
+          2,
+          3,
+          4,
+          7,
+          8,
+          9,
+          10
+        ],
+        "ghunnah": [
+          1
+        ],
+        "qalqalah": [
+          4
+        ],
+        "plain": [
+          5
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "ra",
+          "rule": "tarqiq"
+        },
+        {
+          "words": [
+            8
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            9,
+            10
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            10
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        }
+      ],
+      "difficulty": 2,
+      "use": "assess"
+    },
+    {
+      "id": "t4-89-23",
+      "tier": 4,
+      "surah": 89,
+      "surah_name": "الفجر",
+      "ayah": 23,
+      "text_ar": "وَجِا۟ىٓءَ يَوْمَئِذٍۭ بِجَهَنَّمَ ۚ يَوْمَئِذٍ يَتَذَكَّرُ ٱلْإِنسَـٰنُ وَأَنَّىٰ لَهُ ٱلذِّكْرَىٰ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          6,
+          7,
+          9
+        ],
+        "ghunnah": [
+          3,
+          7
+        ],
+        "qalqalah": [],
+        "plain": [
+          1,
+          3,
+          5
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "noon",
+          "rule": "iqlab"
+        },
+        {
+          "words": [
+            4,
+            5
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "noon",
+          "rule": "ikhfa"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "madd",
+          "rule": "madd_muttasil"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 3,
+      "use": "assess"
+    },
+    {
+      "id": "t4-90-5",
+      "tier": 4,
+      "surah": 90,
+      "surah_name": "البلد",
       "ayah": 5,
-      "text_ar": "تَنزِيلَ ٱلْعَزِيزِ ٱلرَّحِيمِ",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
+      "text_ar": "أَيَحْسَبُ أَن لَّن يَقْدِرَ عَلَيْهِ أَحَدٌ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [],
+        "ghunnah": [],
+        "qalqalah": [
+          4
+        ],
+        "plain": [
+          1,
+          4,
+          6
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            2,
+            3
+          ],
+          "kind": "noon",
+          "rule": "idgham_no_ghunnah"
+        },
+        {
+          "words": [
+            3,
+            4
+          ],
+          "kind": "noon",
+          "rule": "idgham_ghunnah"
+        },
+        {
+          "words": [
+            1
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            6
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        }
+      ],
+      "difficulty": 1,
+      "use": "assess"
+    },
+    {
+      "id": "t4-90-12",
+      "tier": 4,
+      "surah": 90,
+      "surah_name": "البلد",
+      "ayah": 12,
+      "text_ar": "وَمَآ أَدْرَىٰكَ مَا ٱلْعَقَبَةُ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
+      "verified_by": "",
+      "verified_on": "",
       "tajweed_words": {
         "madd": [
           1,
@@ -1107,44 +4868,157 @@
           3
         ],
         "ghunnah": [],
-        "qalqalah": [],
-        "plain": []
-      },
-      "verified_by": "",
-      "verified_on": ""
-    },
-    {
-      "id": "t3-19-4",
-      "tier": 3,
-      "surah": 19,
-      "surah_name": "مريم",
-      "ayah": 4,
-      "text_ar": "قَالَ رَبِّ إِنِّى وَهَنَ ٱلْعَظْمُ مِنِّى وَٱشْتَعَلَ ٱلرَّأْسُ شَيْبًا وَلَمْ أَكُنۢ بِدُعَآئِكَ رَبِّ شَقِيًّا",
-      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC; its Al-Fatiha matches data/quran_fatiha.json exactly",
-      "tajweed_words": {
-        "madd": [
-          1,
-          3,
-          6,
-          12
+        "qalqalah": [
+          2
         ],
-        "ghunnah": [
-          3,
-          6
-        ],
-        "qalqalah": [],
         "plain": [
-          4,
-          5,
-          7,
-          8,
-          10,
-          11,
-          14
+          4
         ]
       },
+      "rules": [
+        {
+          "words": [
+            4
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            1,
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_munfasil"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "ra",
+          "rule": "tafkhim"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_qat"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        }
+      ],
+      "difficulty": 2,
+      "use": "assess"
+    },
+    {
+      "id": "t4-90-17",
+      "tier": 4,
+      "surah": 90,
+      "surah_name": "البلد",
+      "ayah": 17,
+      "text_ar": "ثُمَّ كَانَ مِنَ ٱلَّذِينَ ءَامَنُوا۟ وَتَوَاصَوْا۟ بِٱلصَّبْرِ وَتَوَاصَوْا۟ بِٱلْمَرْحَمَةِ",
+      "source": "quran.com API v4, text_uthmani (Hafs), fetched 2026-11-04 and normalized to NFC (chosen by rule density from the longer surahs of Juz' Amma)",
       "verified_by": "",
-      "verified_on": ""
+      "verified_on": "",
+      "tajweed_words": {
+        "madd": [
+          2,
+          4,
+          5,
+          6,
+          8
+        ],
+        "ghunnah": [
+          1
+        ],
+        "qalqalah": [
+          7
+        ],
+        "plain": [
+          7,
+          9
+        ]
+      },
+      "rules": [
+        {
+          "words": [
+            7
+          ],
+          "kind": "lam",
+          "rule": "shamsiyah"
+        },
+        {
+          "words": [
+            9
+          ],
+          "kind": "lam",
+          "rule": "qamariyah"
+        },
+        {
+          "words": [
+            2
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            4
+          ],
+          "kind": "wasl",
+          "rule": "hamzat_wasl"
+        },
+        {
+          "words": [
+            5
+          ],
+          "kind": "madd",
+          "rule": "madd_tabii"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "qalqalah",
+          "rule": "qalqalah"
+        },
+        {
+          "words": [
+            7
+          ],
+          "kind": "ra",
+          "rule": "tarqiq"
+        }
+      ],
+      "difficulty": 2,
+      "use": "assess"
     }
   ]
 }

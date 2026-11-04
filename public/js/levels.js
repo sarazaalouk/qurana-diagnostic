@@ -7,10 +7,18 @@
   // Harder games for a child who reads words from Al-Fatiha: find a word inside an ayah, and which word has madd.
   // They do not change the level; they tell the teacher more, and their response signals are recorded like the others.
   const READER_STAGES = ["find", "madd"];
-  const ALL_STAGES = [...STAGES, ...READER_STAGES];
+  // The assessment of someone who already reads (a child who reads words or the Mushaf, or an adult): no letter games
+  // and no single words. A short reading check, then reciting passages that grow harder or easier with each answer,
+  // whether rules were applied while reciting (apply), naming the rule at a marked place (rules), and memorization.
+  const ASSESS_STAGES = ["check", "recite", "apply", "rules", "hifz"];
+  const ALL_STAGES = [...STAGES, ...READER_STAGES, ...ASSESS_STAGES];
 
-  // Pass marks (out of the number of items in each stage).
+  // Pass marks (out of the number of items in each stage). recite: 2 points per passage (no mistakes 2, a few 1).
   const PASS = { sound: 4, shape: 3, fatha: 2, harakat: 3, fatiha: 2, ayah: 1, find: 3, madd: 3 };
+  // The assessment's stages have as many items as the bank allows: their pass mark is a share of the items.
+  // recite / check: 2 points per passage (no mistakes 2, a few 1).
+  const PASS_RATIO = { check: 0.5, recite: 0.5, apply: 0.6, rules: 0.6, hifz: 0.5 };
+  const passed = (key, score, total) => (PASS_RATIO[key] ? total > 0 && score >= Math.ceil(total * PASS_RATIO[key]) : score >= PASS[key]);
 
   // The parent's estimate of the child's reading, and the stage to start from.
   const ESTIMATES = [
@@ -65,7 +73,14 @@
   };
 
   function levelFrom(stages) {
+    const lvl = levelOfStages(stages);
+    // Many mistakes on the short ayah at the start: at most «reading from the Mushaf», whatever the games after it.
+    return stages.check && !stages.check.passed && lvl === "R6" ? "R5" : lvl;
+  }
+  function levelOfStages(stages) {
     const ok = (k) => Boolean(stages[k] && stages[k].passed);
+    // A reader's assessment: recites well and knows the rules → R6; recites well → R5; otherwise → R4 (vowels and madd).
+    if (stages.recite) return ok("recite") ? (ok("rules") ? "R6" : "R5") : "R4";
     if (!ok("sound")) return "R1";
     if (!ok("shape")) return "R2";
     if (!ok("fatha")) return "R3";
@@ -81,7 +96,7 @@
     A3: { name: "التلاوة والحفظ", focus: "تحسين التلاوة وتطبيق التجويد والحفظ.", name_en: "Recitation and memorization", focus_en: "Improving recitation, applying Tajweed, and memorizing." },
   };
 
-  const api = { STAGES, READER_STAGES, ALL_STAGES, PASS, ESTIMATES, LEVELS, ADULT_LEVELS, startStage, runStages, levelFrom };
+  const api = { STAGES, READER_STAGES, ASSESS_STAGES, ALL_STAGES, PASS, PASS_RATIO, passed, ESTIMATES, LEVELS, ADULT_LEVELS, startStage, runStages, levelFrom };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.QuranaLevels = api;
 })(typeof window !== "undefined" ? window : globalThis);

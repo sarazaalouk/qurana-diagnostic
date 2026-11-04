@@ -145,3 +145,14 @@ html[lang="en"] h1, html[lang="en"] h2 { font-family: "Inter", "Segoe UI", Arial
 .stage-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; }
 .stage-chip { font-size: 13px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; color: var(--olive); }
 .stage-chips .dot { color: var(--muted); }
+.rule-ayah mark { background: #F6E3B4; color: inherit; border-radius: 6px; padding: 0 4px; }
+
+/* The reader's assessment: rules applied while reciting, and the skills report. */
+.rule-ayah mark sup { font-size: 0.55em; margin-inline-start: 2px; color: var(--muted, #6b6b6b); }
+.apply-list { display: grid; gap: 10px; margin: 12px 0; }
+.apply-row p { margin: 0 0 4px; }
+.apply-row .quran { font-size: 1.3em; }
+.rep-h { font-size: 1rem; margin: 14px 0 6px; }
+.rep-h.ok { color: var(--olive, #4f6b2f); }
+.rep-h.no { color: #9b3b1f; }
+.rep-list { margin: 0; padding-inline-start: 20px; display: grid; gap: 4px; }

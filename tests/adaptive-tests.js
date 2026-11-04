@@ -21,7 +21,7 @@ const advanced = { estimate: "mushaf", age_band: "10–12", goals: ["hifz", "taj
 
 // A stand-in for the verified bank (the real one waits for Sara's review): ayat from the samples file, as if verified.
 const samples = require("../data/quran_samples.json").samples;
-const bank = samples.map((x) => ({ id: x.id, tier: x.tier, surah: x.surah, surah_name: x.surah_name, ref: `${x.surah}:${x.ayah}`, text: x.text_ar, words: tajweed.wordsOf(x.text_ar), tajweed: x.tajweed_words }));
+const bank = samples.map((x) => ({ id: x.id, tier: x.tier, surah: x.surah, surah_name: x.surah_name, ref: `${x.surah}:${x.ayah}`, text: x.text_ar, tokens: x.text_ar.split(" "), words: tajweed.wordsOf(x.text_ar), tajweed: x.tajweed_words, rules: x.rules, difficulty: x.difficulty, use: x.use }));
 const base = { ...content.gameContent(), bank };
 
 (async () => {
@@ -63,6 +63,108 @@ const base = { ...content.gameContent(), bank };
   const empty = A.pickContent({ ...base, bank: [] }, advanced, rng);
   check("D20. until ayat are verified, Al-Fatiha (the verified file) fills in", empty.fatiha.items.every((x) => x.ref.startsWith("1:")) && empty.ayah.items[0].ref === "1:1", true);
   check("D21. the real bank shows nothing before Sara's review", content.gameContent().bank.length, 0);
+
+  // ---- Tajweed rules on the Uthmani marks ----
+  const ruleAt = (text) => { const w = tajweed.wordsOf(text); return tajweed.rulesOf(text).map((r) => `${r.words.map((i) => w[i - 1]).join(" ")}=${r.rule}`); };
+  const text = (id) => samples.find((x) => x.id === id).text_ar;
+  const r194 = ruleAt(text("t3-19-4"));
+  check("D22. rules from the marks: idgham with ghunnah, izhar shafawi, iqlab (Maryam 19:4)",
+    ["شَيْبًا وَلَمْ=idgham_ghunnah", "وَلَمْ أَكُنۢ=izhar_shafawi", "أَكُنۢ بِدُعَآئِكَ=iqlab"].every((x) => r194.includes(x)), true);
+  check("D23. idgham without ghunnah and ikhfa (Al-Ikhlas 112:4, Ash-Sharh 94:2)",
+    [ruleAt(text("t2-112-4")).includes("يَكُن لَّهُۥ=idgham_no_ghunnah"), ruleAt(text("t3-94-2")).includes("عَنكَ=ikhfa")], [true, true]);
+  const fatiha = require("../data/quran_fatiha.json").ayahs;
+  check("D24. lam shamsiyah / qamariyah, and the name of Allah is left out", [ruleAt(fatiha[0].text_ar), ruleAt(fatiha[1].text_ar)],
+    [["ٱلرَّحْمَـٰنِ=shamsiyah", "ٱلرَّحِيمِ=shamsiyah"], ["ٱلْحَمْدُ=qamariyah", "ٱلْعَـٰلَمِينَ=qamariyah"]]);
+  check("D25. no rule across a pause mark or before hamzat al-wasl («نَصْرُ ٱللَّهِ»)", ruleAt(text("t2-110-1")).some((x) => x.startsWith("نَصْرُ")), false);
+
+  // ---- who takes the reader's assessment ----
+  const arabChild = { who: "child", home_language: "ar", estimate: "mushaf", age_band: "8–9", goals: ["tajweed"], memorized: ["الفاتحة", "الإخلاص", "الفلق", "الناس"], memorized_more: true };
+  const foreignBeginner = { who: "child", home_language: "en", estimate: "none", age_band: "6–7", goals: ["read"], memorized: [] };
+  check("D26. a child who reads words or the Mushaf takes the assessment (any home language); an adult too",
+    [A.isReader(arabChild), A.isReader({ who: "child", home_language: "en", estimate: "words" }), A.isReader({ who: "adult" })], [true, true, true]);
+  check("D27. a child who does not read yet takes the foundational games", [A.isReader(foreignBeginner), A.isReader({ who: "child", home_language: "ar", estimate: "letters" })], [false, false]);
+
+  const pool = A.assessmentPool(base, arabChild, rng);
+  const famous = new Set(samples.filter((x) => x.use === "warmup").map((x) => `${x.surah}:${x.ayah}`));
+  check("D28. test items never come from Al-Fatiha or the famous short surahs (warm-up only)",
+    [pool.passages.some((x) => famous.has(x.ref) || x.ref.startsWith("1:")), pool.questions.some((q) => famous.has(q.ref) || q.ref.startsWith("1:"))], [false, false]);
+  const first = A.nextPassage(pool, 1, new Set());
+  check("D29. the reading check is a short ayah (difficulty 1)", first.d, 1);
+  const up = A.simulate(pool, () => "right"), down = A.simulate(pool, () => "wrong");
+  check("D30. recitation starts at medium, goes up after clean readings and down after many mistakes",
+    [up.recite.map((x) => x.d), down.recite.map((x) => x.d)], [[2, 3, 3], [2, 1, 1]]);
+  check("D31. recitation: three passages from three different surahs", new Set(up.recite.map((x) => x.ref.split(":")[0])).size, 3);
+  const hard = up.rules.slice(1).map((x) => x.d), easy = down.rules.slice(1).map((x) => x.d);
+  check("D32. rules adapt too: after right answers the questions are harder than after wrong ones",
+    hard.reduce((a, b) => a + b, 0) > easy.reduce((a, b) => a + b, 0), true);
+  const kinds = new Set(up.rules.map((x) => x.kind));
+  check("D33. eight rule questions across noon, madd, qalqalah and meem (and ra / Allah, lam / wasl); the answer is among the choices",
+    [up.rules.length, ["noon", "madd", "qalqalah", "meem"].every((k) => kinds.has(k)), up.rules.every((x) => x.choices.includes(x.answer))], [8, true, true]);
+  check("D34. each rule question from a different ayah, and no rule asked twice", [new Set(up.rules.map((x) => x.ref)).size, new Set(up.rules.map((x) => x.skill)).size], [8, 8]);
+  const madds = pool.questions.filter((q) => q.kind === "madd").map((q) => q.answer);
+  check("D35. the madd types are asked (natural, connected, separated, necessary)", ["madd_tabii", "madd_muttasil", "madd_munfasil", "madd_lazim"].every((m) => madds.includes(m)), true);
+  const x40 = A.nextPassage({ ...pool, passages: pool.passages.filter((x) => x.ref === "89:23") }, 3, new Set());
+  check("D36. rules a listener can hear in a passage, of different kinds (Al-Fajr 89:23)", x40.apply.map((s) => `${s.word}=${s.skill}`),
+    ["يَوْمَئِذٍۭ بِجَهَنَّمَ=iqlab", "يَوْمَئِذٍ يَتَذَكَّرُ=idgham_ghunnah", "ٱلْإِنسَـٰنُ=ikhfa"]);
+  const memo = A.pickHifz(pool, new Set());
+  check("D37. memorization: one place beyond the short surahs (the parent says the child knows more) and one short surah, never Al-Fatiha",
+    [memo.length, memo[0].beyond, memo[0].surah >= 78 && !famous.has(memo[0].ref), memo[1].beyond, arabChild.memorized.includes(memo[1].surah_name) && memo[1].surah !== 1], [2, true, true, false, true]);
+  const adultPool = A.assessmentPool(base, { who: "adult", juz: "none" }, rng);
+  check("D38. an adult who has not memorized Juz' Amma: no memorization question beyond it", A.pickHifz(adultPool, new Set()).filter((x) => x.beyond).length, 0);
+  const emptyPool = A.assessmentPool({ ...base, bank: [] }, arabChild, rng);
+  const fb = A.simulate(A.assessmentPool({ ...base, bank: [] }, arabChild, rng), () => "right");
+  check("D39b. with only Al-Fatiha to fall back on, no ayah is shown twice", new Set(fb.recite.map((x) => x.ref)).size, fb.recite.length);
+  check("D39. until ayat are verified: Al-Fatiha fills in (marked fallback), not 1:1", [emptyPool.fallback, emptyPool.passages.every((x) => x.ref.startsWith("1:") && x.ref !== "1:1"), emptyPool.questions.length > 0], [true, true, true]);
+
+  // ---- Tajweed rules on the marks (madd, qalqalah, ra, hamza) ----
+  const all = (tx) => { const w = tajweed.wordsOf(tx); return tajweed.allRulesOf(tx).map((r) => `${r.words.map((i) => w[i - 1]).join(" ")}=${r.rule}`); };
+  const a90 = all(text("t4-90-12"));
+  check("D40. madd munfasil, qalqalah, heavy ra and hamzat al-qat' (Al-Balad 90:12)",
+    ["وَمَآ أَدْرَىٰكَ=madd_munfasil", "أَدْرَىٰكَ=qalqalah", "أَدْرَىٰكَ=tafkhim", "أَدْرَىٰكَ=hamzat_qat"].every((x) => a90.includes(x)), true);
+  check("D41. a madd letter before hamzat al-wasl is not a madd («مَا ٱلْعَقَبَةُ», «وَنَهَى ٱلنَّفْسَ»)",
+    [a90.includes("مَا=madd_tabii"), all(text("t4-79-40")).includes("وَنَهَى=madd_tabii")], [false, false]);
+  check("D42. madd muttasil (Al-Fajr 89:23); the last word of an ayah is left out for natural madd and ra (stopping changes them)",
+    [all(text("t4-89-23")).includes("وَجِا۟ىٓءَ=madd_muttasil"), all(text("t4-89-23")).some((x) => x.startsWith("ٱلذِّكْرَىٰ=madd") || x.startsWith("ٱلذِّكْرَىٰ=taf"))], [true, false]);
+
+  // ---- levels, saving and the report ----
+  check("D43. the reader's level: recites well and knows the rules → R6; recites well → R5; otherwise → R4",
+    [L.levelFrom({ recite: { passed: true }, rules: { passed: true } }), L.levelFrom({ recite: { passed: true }, rules: { passed: false } }), L.levelFrom({ recite: { passed: false } })], ["R6", "R5", "R4"]);
+  const allGames = Object.fromEntries(L.STAGES.map((k) => [k, { passed: true }]));
+  check("D49. many mistakes on the first short ayah, then every game passed: at most R5, not R6",
+    [L.levelFrom({ check: { passed: false }, ...allGames }), L.levelFrom(allGames)], ["R5", "R6"]);
+  // The saved items must use words of the verified text: the test points the server at the samples file as if verified.
+  const fs = require("fs"), os = require("os"), path = require("path");
+  const tmp = path.join(os.tmpdir(), `qurana-samples-${process.pid}.json`);
+  const d = require("../data/quran_samples.json");
+  fs.writeFileSync(tmp, JSON.stringify({ ...d, samples: d.samples.map((x) => ({ ...x, verified_by: "test", verified_on: "2026-11-04" })) }));
+  process.env.QURAN_SAMPLES_PATH = tmp;
+  const validate = require("../lib/validate").validateSubmission;
+  const sim = A.simulate(pool, (part, it) => (part === "rules" && it.kind === "noon" ? "wrong" : "right"));
+  const wordOf = (x) => pool.questions.find((q) => q.ref === x.ref && q.skill === x.skill).word;
+  const spot = (s, result) => ({ skill: s.skill, ref: "89:23", word: s.word, d: 3, result });
+  const st = {
+    check: { score: 2, total: 2, passed: true, items: [{ skill: "recite_1", ref: first.ref, d: 1, result: "right" }] },
+    recite: { score: 6, total: 6, passed: true, items: sim.recite.map((x) => ({ skill: `recite_${x.d}`, ref: x.ref, d: x.d, result: "right" })) },
+    apply: { score: 1, total: 2, passed: false, items: [spot(x40.apply[0], "right"), spot(x40.apply[1], "wrong"), spot(x40.apply[2], "unsure")] },
+    rules: { score: sim.rules.filter((x) => x.result === "right").length, total: sim.rules.length, passed: true, items: sim.rules.map((x) => ({ skill: x.skill, ref: x.ref, word: wordOf(x), d: x.d, result: x.result })) },
+    hifz: { score: 0, total: 0, passed: false, items: [{ skill: "hifz", ref: memo[0].ref, result: "not_memorized" }] },
+  };
+  const body = (stg) => ({ profile: { ...arabChild, country: "KW", teacher: "any", lessons_per_week: 3, memorized_from: "mushaf", tajweed: { madd: "yes" } }, stages: stg });
+  const v = validate(body(st));
+  check("D44. a reader's result with its items is accepted without any letter game; the level comes from the assessment",
+    [v.error || "", v.value && v.value.level, v.value && !("sound" in v.value.stages), v.value && v.value.stages.rules.items.length], ["", "R6", true, 8]);
+  const forged = JSON.parse(JSON.stringify(st));
+  forged.rules.items[0].word = "كَلِمَةٌمُخْتَرَعَة";
+  check("D45. a word that is not in the verified text is refused", /verified text/.test(validate(body(forged)).error || ""), true);
+  check("D46. a recitation without the reading check is refused", /reading check/.test(validate(body({ recite: st.recite })).error || ""), true);
+  const SKL = require("../public/js/skills");
+  const rep = SKL.report(v.value.stages, "ar");
+  const lines = SKL.lines(rep, "ar");
+  check("D47. the report: noon rules answered wrong are «needs work»; iqlab applied is mastered, with its words; one place not sure",
+    [rep.needs.some((b) => b.part === "rules") && rep.needs.filter((b) => b.part === "rules").every((b) => ["izhar", "idgham_ghunnah", "idgham_no_ghunnah", "iqlab", "ikhfa"].includes(b.skill)),
+      lines.mastered.some((l) => l.startsWith("يطبّق الإقلاب (يَوْمَئِذٍۭ بِجَهَنَّمَ)")), lines.needs.some((l) => l.startsWith("لا يطبّق بعد الإدغام بغنة")), rep.unsure.length, rep.recite.top], [true, true, true, 1, 3]);
+  check("D48. an adult's report speaks to them", SKL.lines(rep, "ar", true).mastered.some((l) => l.startsWith("تطبّق")), true);
+  fs.unlinkSync(tmp);
 
   console.log(failed ? `\n${failed} adaptive case(s) failed` : "\nall adaptive cases behaved as expected");
   process.exit(failed ? 1 : 0);
