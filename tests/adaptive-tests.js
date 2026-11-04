@@ -76,6 +76,19 @@ const base = { ...content.gameContent(), bank };
     }
     return false;
   });
+  // The foundational games too: with the real bank, no item comes from Al-Fatiha, for any child, in many runs.
+  const kids = [beginner, middle, advanced, { estimate: "letters", goals: ["read"], memorized: [] }, { estimate: "words", goals: ["tajweed"], age_band: "4–5", memorized: ["الفاتحة"] }];
+  let gameItems = 0, fromFatiha = 0;
+  for (const kid of kids) for (let i = 0; i < 20; i++) {
+    const c = A.pickContent(real, kid, rng);
+    for (const key of ["fatiha", "ayah", "find", "madd"]) for (const it of c[key].items) {
+      gameItems++;
+      if (it.ref.startsWith("1:") || it.surah_name === "الفاتحة") fromFatiha++;
+      if (key === "find" && it.words.length < 4) fromFatiha++; // and «find the word» needs a real choice
+    }
+    if (c.fatiha.items.length !== 4 || c.find.items.length !== 4 || c.madd.items.length !== 4 || c.ayah.items.length !== 1) fromFatiha++;
+  }
+  check("D21b. the foundational games with the real bank: full rounds, no word or ayah from Al-Fatiha, «find the word» in ayat of 4+ words", [gameItems, fromFatiha], [kids.length * 20 * 13, 0]);
   check("D21. the real bank: 70 verified ayat; no Al-Fatiha in the reading check, recitation, rules or memorization", [real.bank.length, fatihaSeen], [70, false]);
 
   // ---- Tajweed rules on the Uthmani marks ----

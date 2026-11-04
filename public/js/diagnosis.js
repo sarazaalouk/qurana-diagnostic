@@ -338,7 +338,7 @@
     return { score, total: items.length, passed: score >= L.PASS.find };
   }
 
-  // Which word has madd: three words from Al-Fatiha, one with a natural madd.
+  // Which word has madd: three words from one ayah of the bank, one with a natural madd.
   async function stageMadd() {
     const items = content.madd.items;
     let score = 0;

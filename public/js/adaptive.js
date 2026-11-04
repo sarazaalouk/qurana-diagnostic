@@ -65,11 +65,13 @@
     const advanced = isAdvanced(p);
     const tier = (t) => bank.filter((x) => x.tier === t);
     const main = advanced ? tier(3) : tier(2);
-    const topUp = (items, defaults, n) => [...items, ...defaults].slice(0, n);
+    // Once the bank has verified ayat, the games never fall back on Al-Fatiha: a game short of items repeats the
+    // bank's own instead. Al-Fatiha (the verified file) is used only while the bank is empty.
+    const topUp = (items, defaults, n) => (bank.length ? Array.from({ length: Math.min(n, items.length ? n : 0) }, (_, i) => items[i % items.length]) : [...items, ...defaults].slice(0, n));
     const c = JSON.parse(JSON.stringify(content));
 
     // Reading words from the Quran: one word from each of four short ayat (other surahs than Al-Fatiha).
-    const wordItems = choose(tier(2).length ? tier(2) : main, 4, known, rng).map((x) => {
+    const wordItems = choose(tier(2).length ? tier(2) : main.length ? main : bank, 4, known, rng).map((x) => {
       const ok = x.words.filter((w) => letters(w) >= 3 && !/ٱللَّه|لِلَّه/.test(w));
       const w = ok.length ? ok[Math.floor(rng() * ok.length)] : x.words[0];
       return { ref: x.ref, surah_name: x.surah_name, text: w };
@@ -77,11 +79,13 @@
     c.fatiha.items = topUp(wordItems, content.fatiha.items, 4);
 
     // A whole ayah: from a medium surah for an advanced reader, a short ayah otherwise.
-    const ayahPick = choose(main, 1, known, rng)[0];
+    const ayahPick = choose(main.length ? main : bank, 1, known, rng)[0];
     if (ayahPick) c.ayah.items = [{ ref: ayahPick.ref, surah_name: ayahPick.surah_name, text: ayahPick.text }];
 
     // Find the word inside the ayah.
-    const findItems = choose(main.length ? main : bank, 4, known, rng).map((x) => {
+    // (Ayat of four words or more: finding the only word of an ayah is not a question.)
+    const longEnough = (l) => l.filter((x) => x.words.length >= 4);
+    const findItems = choose(longEnough(main).length >= 4 ? longEnough(main) : longEnough(bank), 4, known, rng).map((x) => {
       const targets = x.words.filter((w) => letters(w) >= 2 && once(x.words, w));
       return targets.length ? { ref: x.ref, surah_name: x.surah_name, words: x.words, answer: targets[Math.floor(rng() * targets.length)] } : null;
     }).filter(Boolean);
