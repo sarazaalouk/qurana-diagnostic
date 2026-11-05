@@ -93,6 +93,27 @@ const setCurriculum = (c) => { fs.writeFileSync(curriculumFile, JSON.stringify(c
     await new Promise((ok) => setTimeout(ok, 50));
     console.error = origErr;
     check("N2. a failed email does not fail the parent's result", res4.status === 201 && (await get(`/api/results/${res4.body.id}`)).status === 200);
+    // /admin: the connection check (no email) and the test email (fixed message, at most 3 an hour).
+    const adminCall = (url, method = "GET", withCookie = true) => fetch(base + url, { method, headers: withCookie && cookie ? { cookie } : {} }).then(async (x) => ({ status: x.status, body: await x.json() }));
+    let verified = 0;
+    notify.useTransport({ verify: async () => { verified++; }, sendMail: async (m) => { mails.push(m); } });
+    let ec = await adminCall("/api/admin/email-check", "GET", false);
+    check("N4. the email check and the test email need the PIN", ec.status === 401 && (await adminCall("/api/admin/test-email", "POST", false)).status === 401);
+    ec = await adminCall("/api/admin/email-check");
+    await adminCall("/api/admin/email-check");
+    check("N5. the email check logs in to the mail server once (kept for 5 minutes) and says it works", ec.status === 200 && ec.body.ok === true && ec.body.to === "info@example.test" && verified === 1, JSON.stringify(ec.body));
+    notify.useTransport({ verify: async () => { throw new Error("Invalid login"); }, sendMail: async () => {} });
+    console.error = () => {};
+    ec = await adminCall("/api/admin/email-check");
+    console.error = origErr;
+    check("N6. a wrong password shows as a failed connection with the reason", ec.body.ok === false && /Invalid login/.test(ec.body.reason));
+    notify.useTransport({ verify: async () => {}, sendMail: async (m) => { mails.push(m); } });
+    const mailsBefore = mails.length;
+    const t1 = await adminCall("/api/admin/test-email", "POST");
+    check("N7. the test email is one fixed message to NOTIFY_TO, with no result saved",
+      t1.status === 200 && t1.body.sent === true && mails.length === mailsBefore + 1 && /تجريبي/.test(mails[mails.length - 1].subject) && !/\/r\//.test(mails[mails.length - 1].text));
+    await adminCall("/api/admin/test-email", "POST"); await adminCall("/api/admin/test-email", "POST");
+    check("N8. at most 3 test emails an hour", (await adminCall("/api/admin/test-email", "POST")).status === 429);
     for (const k of ["SMTP_HOST", "SMTP_USER", "SMTP_PASS"]) delete process.env[k];
     notify.useTransport(null);
     check("N3. without SMTP settings nothing is sent", (await notify.newResult({ id: "x", profile }, "https://x")).sent === false);

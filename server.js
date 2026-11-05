@@ -172,6 +172,22 @@ app.get("/api/admin/results/:id", wrap(async (req, res) => {
   });
 }));
 
+// The email alert, for /admin: is the mail server reachable with these settings (no email sent),
+// and a test email to NOTIFY_TO (a fixed message, nothing saved; at most 3 an hour).
+app.get("/api/admin/email-check", wrap(async (req, res) => {
+  if (!access.isAdmin(req)) return res.status(401).json({ error: "enter the PIN first" });
+  res.set("Cache-Control", "no-store");
+  res.json(await notify.check());
+}));
+const testEmailAllowed = limit(3);
+app.post("/api/admin/test-email", wrap(async (req, res) => {
+  if (!access.isAdmin(req)) return res.status(401).json({ error: "enter the PIN first" });
+  if (!notify.enabled()) return res.status(400).json({ sent: false, reason: "not configured" });
+  if (!testEmailAllowed(req)) return res.status(429).json({ sent: false, reason: "at most 3 test emails an hour" });
+  const out = await notify.sendTest();
+  res.status(out.sent ? 200 : 502).json(out);
+}));
+
 // Result page at /r/<id>
 app.get("/r/:id", (req, res) => res.sendFile(path.join(__dirname, "public", "result.html")));
 

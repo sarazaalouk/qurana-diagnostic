@@ -38,6 +38,11 @@
     <p class="small muted" id="status-file"></p>
     <p class="small" id="status-storage"></p>
     <p class="small" id="status-email"></p>
+    <p class="small" id="status-email-check" hidden></p>
+    <p class="small" id="test-email-row" hidden>
+      <button class="btn secondary" id="test-email" type="button">ابعت إيميل تجريبي</button>
+      <span id="test-email-out"></span>
+    </p>
     <p class="small" id="status-links"></p>
     <div class="ctas">
       <a class="btn block" href="/">افتح التشخيص</a>
@@ -139,6 +144,8 @@
     $("status-email").textContent = s.email_alerts
       ? `تنبيه كل نتيجة جديدة بالبريد: مفعّل، إلى ${s.email_alerts}.`
       : "تنبيه كل نتيجة جديدة بالبريد: غير مفعّل. اضبطي SMTP_HOST وSMTP_USER وSMTP_PASS في Render.";
+    $("test-email-row").hidden = !s.email_alerts;
+    if (s.email_alerts) checkEmail();
     // Where result links point (PUBLIC_BASE_URL), and whether they work outside this computer.
     try {
       const cfg = await fetch("/api/config").then((x) => x.json());
@@ -156,6 +163,29 @@
     if (res.ok) return load();
     $("login-error").textContent = res.status === 429 ? "محاولات خاطئة كثيرة. حاولي بعد ربع ساعة." : res.status === 503 ? "رقم الإدارة غير مضبوط على السيرفر." : "الرقم غير صحيح.";
     $("login-error").hidden = false;
+  });
+  // The email alert: is the mail server reachable (a login, no email), and a test email on request.
+  async function checkEmail() {
+    const line = $("status-email-check");
+    line.hidden = false;
+    line.style.color = "";
+    line.textContent = "جاري التأكد من الاتصال بسيرفر البريد…";
+    try {
+      const c = await fetch("/api/admin/email-check").then((x) => x.json());
+      line.textContent = c.ok ? "الاتصال بسيرفر البريد: سليم." : `الاتصال بسيرفر البريد: فشل — ${c.reason || "سبب غير معروف"}.`;
+      line.style.color = c.ok ? "var(--olive, #4A520A)" : "#8A3A1E";
+    } catch { line.textContent = "الاتصال بسيرفر البريد: لم نتمكن من التأكد."; }
+  }
+  $("test-email").addEventListener("click", async () => {
+    if (!confirm("هيتبعت إيميل تجريبي حقيقي لصندوق التنبيه. أكمل؟")) return;
+    const btn = $("test-email"), out = $("test-email-out");
+    btn.disabled = true;
+    out.textContent = " جاري الإرسال…";
+    try {
+      const r = await fetch("/api/admin/test-email", { method: "POST" }).then((x) => x.json());
+      out.textContent = r.sent ? ` اتبعت إلى ${r.to}. شيّكي على البريد.` : ` ما اتبعتش — ${r.reason || "سبب غير معروف"}.`;
+    } catch { out.textContent = " ما اتبعتش — مشكلة في الاتصال بالموقع."; }
+    btn.disabled = false;
   });
   $("logout").addEventListener("click", async () => { await fetch("/api/admin/logout", { method: "POST" }); show("login"); });
   load();
