@@ -12,7 +12,11 @@
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((x) => x[1]);
-  const show = (id) => ["welcome", "about", "adult", "teacher-soon", "game", "saving"].forEach((s) => ($(s).hidden = s !== id));
+  // A new screen is also a PageView for the Meta Pixel (js/pixel.js; nothing happens where it is not allowed).
+  const show = (id) => {
+    ["welcome", "about", "adult", "teacher-soon", "game", "saving"].forEach((s) => ($(s).hidden = s !== id));
+    try { window.QuranaPixel && window.QuranaPixel.pageView(id); } catch { /* never in the way */ }
+  };
 
   I.apply();
   // The step counter (public/js/track.js): no personal data, only where visitors stop and where they came from.

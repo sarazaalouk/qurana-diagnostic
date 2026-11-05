@@ -171,3 +171,10 @@ html[lang="en"] h1, html[lang="en"] h2 { font-family: "Inter", "Segoe UI", Arial
 .funnel-table { width: 100%; border-collapse: collapse; margin: 8px 0; }
 .funnel-table th, .funnel-table td { text-align: start; padding: 6px 4px; border-bottom: 1px solid #eee; }
 .funnel-table td:nth-child(n+2), .funnel-table th:nth-child(n+2) { text-align: center; white-space: nowrap; }
+
+/* Meta Pixel consent notice (js/pixel.js): only for visitors where consent is needed */
+.ad-consent { position: fixed; inset-inline: 12px; bottom: 12px; z-index: 50; max-width: 460px; margin-inline: auto; background: #fff; border: 1px solid #e5d9d3; border-radius: 12px; padding: 14px 16px; box-shadow: 0 6px 24px rgba(0,0,0,.12); }
+.ad-consent-title { font-weight: 700; margin: 0 0 4px; }
+.ad-consent-body { margin: 0 0 10px; font-size: .92rem; }
+.ad-consent-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.linklike { background: none; border: 0; padding: 0; color: inherit; text-decoration: underline; cursor: pointer; font: inherit; }

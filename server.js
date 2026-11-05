@@ -63,7 +63,9 @@ app.get("/api/content", (req, res) => {
 
 app.get("/api/config", (req, res) => {
   const base = baseUrl(req);
-  res.json({ site_url: SITE_URL, public_base_url: base, base_from_env: !!process.env.PUBLIC_BASE_URL, local: isLocal(base), whatsapp: WHATSAPP });
+  // The visitor's country when the host sends one (two letters only, for the Meta Pixel's consent notice); else "".
+  const geo = String(req.get("cf-ipcountry") || req.get("x-vercel-ip-country") || req.get("x-country-code") || "").toUpperCase();
+  res.json({ site_url: SITE_URL, public_base_url: base, base_from_env: !!process.env.PUBLIC_BASE_URL, local: isLocal(base), whatsapp: WHATSAPP, geo_country: /^[A-Z]{2}$/.test(geo) && geo !== "XX" ? geo : "" });
 });
 
 // Express 5 passes a rejected promise to the error handler; this keeps the routes short.

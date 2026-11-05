@@ -6,7 +6,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node tests/levels-tests.js && node tests/content-tests.js && node tests/adaptive-tests.js && node tests/plan-tests.js && node tests/import-tests.js && node tests/i18n-tests.js && node tests/store-tests.js && node tests/leads-tests.js && node tests/api-tests.js",
+    "test": "node tests/levels-tests.js && node tests/content-tests.js && node tests/adaptive-tests.js && node tests/plan-tests.js && node tests/import-tests.js && node tests/i18n-tests.js && node tests/store-tests.js && node tests/leads-tests.js && node tests/pixel-tests.js && node tests/api-tests.js",
     "import-curriculum": "node tools/import-curriculum.js",
     "curriculum-template": "node tools/curriculum-template.js"
   },
