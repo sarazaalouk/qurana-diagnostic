@@ -118,6 +118,33 @@ const setCurriculum = (c) => { fs.writeFileSync(curriculumFile, JSON.stringify(c
     notify.useTransport(null);
     check("N3. without SMTP settings nothing is sent", (await notify.newResult({ id: "x", profile }, "https://x")).sent === false);
 
+    // The step counter (lib/funnel.js): anonymous events from the page, "saved" from the server, counts in /admin.
+    const ev = (body) => fetch(base + "/api/event", { method: "POST", headers: { "Content-Type": "application/json", ...(cookie && { cookie }) }, body: JSON.stringify(body) }).then((x) => x.status);
+    const sid = "funneltest0001", sid2 = "funneltest0002";
+    const codes = [
+      await ev({ event: "visit", session: sid, source: "Meta", campaign: "Launch Nov", lang: "ar", name: "ليلى" }),
+      await ev({ event: "visit", session: sid, source: "meta" }),
+      await ev({ event: "start", session: sid, who: "child", source: "meta" }),
+      await ev({ event: "test", session: sid, who: "child", source: "meta" }),
+      await ev({ event: "visit", session: sid2 }),
+      await ev({ event: "saved", session: sid2 }),
+      await ev({ event: "hack", session: sid2 }),
+      await ev({ event: "visit", session: "BAD id!" }),
+    ];
+    await new Promise((ok) => setTimeout(ok, 50));
+    const saved = await post({ profile, stages: { sound: { score: 5, total: 6, passed: true } }, track: { session: sid, source: "meta", campaign: "launch" } });
+    await new Promise((ok) => setTimeout(ok, 50));
+    const stored = fs.readFileSync(path.join(tmp, "events.jsonl"), "utf8").trim().split("\n").map((l) => JSON.parse(l));
+    check("F1. the page's events always get 204, and only known steps with a valid tab id are kept (no «saved» from the page)",
+      codes.every((c) => c === 204) && stored.filter((e) => e.event !== "saved").length === 5 && !stored.some((e) => e.event === "hack" || e.session === "BAD id!"), JSON.stringify(codes));
+    check("F2. an event holds only the step, the tab id, who, source, campaign, language and time (no name, no IP)",
+      stored.every((e) => Object.keys(e).sort().join() === "campaign,created_at,event,lang,session,source,who") && stored[0].source === "meta" && stored[0].campaign === "launchnov" && !JSON.stringify(stored).includes("ليلى"));
+    check("F3. a saved result adds «saved» with the same tab id and source", saved.status === 201 && stored.some((e) => e.event === "saved" && e.session === sid && e.source === "meta" && e.who === "child"));
+    let fu = await fetch(base + "/api/admin/funnel").then((x) => x.status);
+    check("F4. the counts need the PIN", fu === 401);
+    fu = await get("/api/admin/funnel?days=7").then((x) => x.json());
+    check("F5. one visitor counts once per step, per source too", fu.period.visit === 2 && fu.period.start === 1 && fu.period.saved === 1 && fu.today.visit === 2 && fu.by_source.find((x) => x.source === "meta").visit === 1 && fu.by_source.find((x) => x.source === "direct").visit === 1, JSON.stringify(fu.period));
+
     let bad = await post({ profile: { ...profile, goals: ["something-else"] }, stages: { sound: { score: 5, total: 6, passed: true } } });
     check("A6. an answer outside the options is refused", bad.status === 400);
     bad = await post({ profile: { ...profile, memorized: ["سورة غير موجودة"] }, stages: { sound: { score: 5, total: 6, passed: true } } });

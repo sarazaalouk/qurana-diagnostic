@@ -85,6 +85,7 @@
 
 <footer class="site"><p class="ai-note" data-i18n="r_ai_note"></p><p data-i18n="footer"></p></footer>
 
+<script src="/js/track.js"></script>
 <script src="/js/i18n.js"></script>
 <script src="/js/levels.js"></script>
 <script src="/js/options.js"></script>
@@ -212,6 +213,12 @@
   $("cta-book").href = r.links.booking + (r.links.booking.includes("?") ? "&" : "?") + `lang=${I.lang}`;
   $("cta-wa").href = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(waText)}`;
   $("cta-prices").href = r.links.prices;
+  // The step counter (js/track.js): the result seen by the person who took the diagnostic on this device,
+  // and the WhatsApp and booking buttons pressed. No personal data.
+  const track = (ev) => { try { window.QuranaTrack && window.QuranaTrack.track(ev, adult ? "adult" : "child"); } catch { /* never in the way */ } };
+  try { if (localStorage.getItem("qurana.lastResult") === r.id) track("result_view"); } catch { /* storage blocked */ }
+  $("cta-wa").addEventListener("click", () => track("wa_click"));
+  $("cta-book").addEventListener("click", () => track("book_click"));
   $("r-link").textContent = link;
   // A localhost link only works on this computer (PUBLIC_BASE_URL not set while developing).
   if (cfg.local) $("r-link").insertAdjacentHTML("afterend", `<br><span class="draft-note">${esc(I.t("local_link"))}</span>`);

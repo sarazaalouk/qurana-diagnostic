@@ -50,6 +50,13 @@
     </div>
   </section>
 
+  <section class="card" id="funnel" hidden>
+    <h2>رحلة الزوار</h2>
+    <p class="small muted">كام زائر وصل لكل خطوة (الزائر يتعدّ مرة واحدة في كل خطوة). من غير أي بيانات شخصية.</p>
+    <p class="small"><label>الفترة: <select id="funnel-days"><option value="1">النهاردة بس</option><option value="7" selected>آخر 7 أيام</option><option value="30">آخر 30 يوم</option></select></label></p>
+    <div id="funnel-box" class="small"></div>
+  </section>
+
   <section class="card" id="results" hidden>
     <h2>آخر النتائج</h2>
     <div class="steps-done" id="results-list"></div>
@@ -74,11 +81,67 @@
   const show = (id) => {
     ["login", "status", "no-pin"].forEach((s) => ($(s).hidden = s !== id));
     $("results").hidden = id !== "status";
-    if (id === "status") loadResults();
+    $("funnel").hidden = id !== "status";
+    if (id === "status") { loadResults(); loadFunnel(); }
   };
   const li = (text) => { const el = document.createElement("li"); el.textContent = text; return el; };
 
   // Recent results, and for one of them the practical points for the teacher (fixed rules, no model).
+  // The step counter (lib/funnel.js): visitors at each step, today and over the chosen days, and per source.
+  const STEP_NAMES = {
+    visit: "فتح صفحة التشخيص", start: "داس «ابدأ»", test: "خلّص أسئلة البداية وبدأ الاختبار", finish: "خلّص الاختبار",
+    saved: "النتيجة اتحفظت", result_view: "شاف صفحة النتيجة", wa_click: "داس زرار الواتساب", book_click: "داس زرار الحجز",
+    form_missing: "ظهرله «ناقص بيانات» في أسئلة البداية", save_failed: "فشل حفظ النتيجة",
+  };
+  async function loadFunnel() {
+    const box = $("funnel-box");
+    const days = Number($("funnel-days").value);
+    box.textContent = "جاري التحميل…";
+    let f;
+    try {
+      const res = await fetch(`/api/admin/funnel?days=${days === 1 ? 1 : days}`);
+      f = await res.json();
+      if (!res.ok) throw new Error(f.error || res.status);
+    } catch (err) {
+      box.textContent = `مش قادرين نجيب الأرقام: ${err.message}. لو الجدول funnel_events لسه ما اتعملش في Supabase، شغّلي آخر جزء في docs/supabase.sql.`;
+      return;
+    }
+    const data = days === 1 ? f.today : f.period;
+    const table = document.createElement("table");
+    table.className = "funnel-table";
+    const head = table.insertRow();
+    ["الخطوة", "عدد الزوار", "من الخطوة اللي قبلها"].forEach((h) => { const th = document.createElement("th"); th.textContent = h; head.appendChild(th); });
+    let prev = null;
+    for (const s of f.steps) {
+      const row = table.insertRow();
+      row.insertCell().textContent = STEP_NAMES[s] || s;
+      row.insertCell().textContent = data[s];
+      row.insertCell().textContent = prev && data[prev] ? `${Math.round((data[s] / data[prev]) * 100)}%` : "—";
+      // After "saved", the buttons are counted against the saved results, not against each other.
+      prev = ["wa_click", "book_click"].includes(s) ? prev : s;
+      if (s === "result_view") prev = "saved";
+    }
+    for (const s of f.extra) {
+      const row = table.insertRow();
+      row.className = "muted";
+      row.insertCell().textContent = STEP_NAMES[s] || s;
+      row.insertCell().textContent = data[s];
+      row.insertCell().textContent = "";
+    }
+    box.innerHTML = "";
+    box.appendChild(table);
+    if (f.by_source.length) {
+      const h = document.createElement("p");
+      h.textContent = days === 1 ? "حسب المصدر (آخر يوم):" : `حسب المصدر (آخر ${f.days} أيام):`;
+      h.style.fontWeight = "700";
+      box.appendChild(h);
+      const ul = document.createElement("ul");
+      f.by_source.forEach((x) => ul.appendChild(li(`${x.source}: فتح ${x.visit} · بدأ ${x.start} · اتحفظت ${x.saved} · واتساب ${x.wa_click}`)));
+      box.appendChild(ul);
+    }
+  }
+  $("funnel-days").addEventListener("change", loadFunnel);
+
   async function loadResults() {
     const res = await fetch("/api/admin/results");
     if (!res.ok) return;

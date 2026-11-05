@@ -167,3 +167,7 @@ html[lang="en"] h1, html[lang="en"] h2 { font-family: "Inter", "Segoe UI", Arial
 /* Rule names as choices: plain text, not the Mushaf font. */
 .choices.rules { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
 .choices.rules .choice { font-family: "Cairo", var(--body); font-size: 1.15rem; font-weight: 600; line-height: 1.5; min-height: 64px; padding: 10px 12px; }
+
+.funnel-table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+.funnel-table th, .funnel-table td { text-align: start; padding: 6px 4px; border-bottom: 1px solid #eee; }
+.funnel-table td:nth-child(n+2), .funnel-table th:nth-child(n+2) { text-align: center; white-space: nowrap; }

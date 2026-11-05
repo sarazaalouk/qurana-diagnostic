@@ -37,3 +37,21 @@ grant usage on schema public to service_role;
 grant select, insert, update on public.diagnoses to service_role;
 grant select, insert on public.waitlist to service_role;
 grant usage, select on all sequences in schema public to service_role;
+
+-- The step counter (lib/funnel.js): one row per step a visitor reaches. Anonymous: a random id for the browser tab,
+-- the step, child / adult, the page language, and where they came from (utm_source / utm_campaign or the linking site).
+-- No name, no answers, no IP. Run this block once (it is safe to run again).
+create table if not exists public.funnel_events (
+  id          bigint generated always as identity primary key,
+  created_at  timestamptz not null default now(),
+  event       text not null check (event in ('visit', 'start', 'test', 'finish', 'saved', 'result_view', 'wa_click', 'book_click', 'form_missing', 'save_failed')),
+  session     text not null check (session ~ '^[a-z0-9]{8,32}$'),
+  who         text not null default '' check (who in ('', 'child', 'adult', 'teacher')),
+  source      text not null default 'direct' check (char_length(source) <= 40),
+  campaign    text not null default '' check (char_length(campaign) <= 40),
+  lang        text not null default 'ar' check (lang in ('ar', 'en'))
+);
+create index if not exists funnel_events_created_at_idx on public.funnel_events (created_at desc);
+alter table public.funnel_events enable row level security;
+grant select, insert on public.funnel_events to service_role;
+grant usage, select on all sequences in schema public to service_role;

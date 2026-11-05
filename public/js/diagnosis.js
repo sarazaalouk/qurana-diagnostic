@@ -15,6 +15,9 @@
   const show = (id) => ["welcome", "about", "adult", "teacher-soon", "game", "saving"].forEach((s) => ($(s).hidden = s !== id));
 
   I.apply();
+  // The step counter (public/js/track.js): no personal data, only where visitors stop and where they came from.
+  const track = (event, who) => { try { window.QuranaTrack && window.QuranaTrack.track(event, who); } catch { /* never in the way */ } };
+  track("visit");
   let content = null;
   let profile = null;
   let stages = null;
@@ -56,6 +59,7 @@
     const who = picked("who") || "child";
     if (who === "child" && !$("consent").checked) { $("consent-error").textContent = t("consent_err"); $("consent-error").hidden = false; return; }
     $("consent-error").hidden = true;
+    track("start", who);
     if (who === "teacher") { show("teacher-soon"); window.scrollTo({ top: 0 }); return; }
     $("start").disabled = true;
     try {
@@ -134,12 +138,14 @@
     if (!p.lessons_per_week) missing.push(t("m_per_week"));
     if (!$("mem-from-field").hidden && !p.memorized_from) missing.push(t("m_mem_from"));
     if (missing.length) {
+      track("form_missing", "child");
       $("about-error").textContent = missingText(missing);
       $("about-error").hidden = false;
       return;
     }
     $("about-error").hidden = true;
     profile = p;
+    track("test", "child");
     // A reader takes the assessment; a child who stumbles badly on its first short ayah, or who does not read yet,
     // takes the foundational games.
     if (!A.isReader(profile)) return play();
@@ -186,12 +192,14 @@
     if (!p.teacher) missing.push(t("m_teacher"));
     if (!p.lessons_per_week) missing.push(t("m_per_week"));
     if (missing.length) {
+      track("form_missing", "adult");
       $("adult-error").textContent = missingText(missing);
       $("adult-error").hidden = false;
       return;
     }
     $("adult-error").hidden = true;
     profile = p;
+    track("test", "adult");
     assess().then((st) => {
       // The adult's level comes from their own reading answer and the Tajweed test (marked by the page, not by them).
       stages = st;
@@ -545,19 +553,21 @@
   // ---------- save → result page ----------
   async function save() {
     show("saving");
+    track("finish", profile && profile.who);
     $("retry").hidden = true;
     $("saving-text").textContent = t("saving_wait");
     try {
       const res = await fetch("/api/results", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profile, stages, ...(rec && { signals: rec.summary() }) }),
+        body: JSON.stringify({ profile, stages, ...(rec && { signals: rec.summary() }), ...(window.QuranaTrack && { track: { session: window.QuranaTrack.session, source: window.QuranaTrack.source(), campaign: window.QuranaTrack.campaign() } }) }),
       });
       if (!res.ok) throw new Error(String(res.status));
       const { id } = await res.json();
       try { localStorage.setItem("qurana.lastResult", id); } catch { /* storage blocked */ }
       location.href = `/r/${id}?lang=${I.lang}`;
     } catch {
+      track("save_failed", profile && profile.who);
       $("saving-text").textContent = t(profile && profile.who === "adult" ? "save_err_adult" : "save_err");
       $("retry").hidden = false;
     }

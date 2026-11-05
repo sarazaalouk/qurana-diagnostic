@@ -12,6 +12,7 @@ const signals = require("./public/js/signals");
 const voiceVersion = () => require("crypto").createHash("sha256").update(voice().text).digest("hex").slice(0, 12);
 const access = require("./lib/access");
 const notify = require("./lib/notify");
+const funnel = require("./lib/funnel");
 
 const PORT = process.env.PORT || 3100;
 // Where the result links point, and the main site for booking and prices.
@@ -76,6 +77,9 @@ app.post("/api/results", saveLimit, wrap(async (req, res) => {
   res.status(201).json({ id: record.id, url });
   // An email to info@ for every new result (lib/notify.js); after the reply, and a failure only goes to the log.
   notify.newResult(record, url);
+  // The step counter: "saved", with the same random tab id and source the page sent (lib/funnel.js).
+  const tr = req.body && req.body.track;
+  if (tr) funnel.record(funnel.fromBody({ ...tr, event: "saved", who: record.profile.who === "adult" ? "adult" : "child", lang: record.profile.lang }, true));
 }));
 
 // A saved result, for the result page and (later) for the site's booking form.
@@ -170,6 +174,21 @@ app.get("/api/admin/results/:id", wrap(async (req, res) => {
     id: r.id, who: r.profile.who || "child", level: r.profile.who === "adult" ? r.profile.adult_level : r.level,
     link: resultLink(req, r.id), local: isLocal(baseUrl(req)), profile: r.profile, signals: r.signals || null, start_with: o.teacher, observed: o.parent,
   });
+}));
+
+// The step counter: an anonymous event from the page (public/js/track.js). Always 204, so the page never waits
+// or shows an error; a refused or failed event is simply not counted.
+const eventAllowed = limit(300);
+app.post("/api/event", (req, res) => {
+  res.status(204).end();
+  if (eventAllowed(req)) funnel.record(funnel.fromBody(req.body));
+});
+// For /admin: visitors at each step, today and over the last days, and per source.
+app.get("/api/admin/funnel", wrap(async (req, res) => {
+  if (!access.isAdmin(req)) return res.status(401).json({ error: "enter the PIN first" });
+  const days = Math.min(Math.max(Number(req.query.days) || 7, 1), 60);
+  res.set("Cache-Control", "no-store");
+  try { res.json(await funnel.counts(days)); } catch (err) { res.status(503).json({ error: err.message }); }
 }));
 
 // The email alert, for /admin: is the mail server reachable with these settings (no email sent),
