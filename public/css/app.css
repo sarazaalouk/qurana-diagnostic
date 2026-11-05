@@ -100,6 +100,7 @@ input[type="text"], input[type="password"], input[type="email"], select {
 .steps-done div:last-child { border-bottom: 0; }
 .tick { color: var(--ok); font-weight: 700; }
 .ctas { display: grid; gap: 10px; }
+.ctas .wa-hint { margin: -4px 0 4px; text-align: center; }
 .note { font-size: 14px; color: var(--muted); }
 footer.site { max-width: 640px; margin: 0 auto; padding-block: 8px 32px; font-size: 13px; color: var(--muted); text-align: center; }
 @media (max-width: 420px) { .choice { font-size: 44px; min-height: 84px; } .big-letter { font-size: 72px; } }

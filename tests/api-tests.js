@@ -78,6 +78,25 @@ const setCurriculum = (c) => { fs.writeFileSync(curriculumFile, JSON.stringify(c
     process.env.PUBLIC_BASE_URL = savedBase;
     check("A5. nothing beyond the answers is stored (no phone or email fields)", !JSON.stringify(got).match(/phone|email|whatsapp_number/i));
 
+    // An email to info@ for every new result (lib/notify.js), with a stand-in mail transport.
+    const notify = require("../lib/notify");
+    const mails = [];
+    notify.useTransport({ sendMail: async (m) => { mails.push(m); } });
+    Object.assign(process.env, { SMTP_HOST: "mail.example.test", SMTP_USER: "info@example.test", SMTP_PASS: "test-only" });
+    const res3 = await post({ profile, stages: { sound: { score: 5, total: 6, passed: true } } });
+    await new Promise((ok) => setTimeout(ok, 50));
+    check("N1. a saved result sends one email to info@ with the level and the result link",
+      res3.status === 201 && mails.length === 1 && mails[0].to === "info@example.test" && mails[0].text.includes(res3.body.url) && /المستوى: .+\(R\d\)/.test(mails[0].text), JSON.stringify(mails[0] || {}).slice(0, 200));
+    notify.useTransport({ sendMail: async () => { throw new Error("smtp down"); } });
+    const origErr = console.error; console.error = () => {};
+    const res4 = await post({ profile, stages: { sound: { score: 5, total: 6, passed: true } } });
+    await new Promise((ok) => setTimeout(ok, 50));
+    console.error = origErr;
+    check("N2. a failed email does not fail the parent's result", res4.status === 201 && (await get(`/api/results/${res4.body.id}`)).status === 200);
+    for (const k of ["SMTP_HOST", "SMTP_USER", "SMTP_PASS"]) delete process.env[k];
+    notify.useTransport(null);
+    check("N3. without SMTP settings nothing is sent", (await notify.newResult({ id: "x", profile }, "https://x")).sent === false);
+
     let bad = await post({ profile: { ...profile, goals: ["something-else"] }, stages: { sound: { score: 5, total: 6, passed: true } } });
     check("A6. an answer outside the options is refused", bad.status === 400);
     bad = await post({ profile: { ...profile, memorized: ["سورة غير موجودة"] }, stages: { sound: { score: 5, total: 6, passed: true } } });

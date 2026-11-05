@@ -37,6 +37,7 @@
     <ul id="status-problems" class="small"></ul>
     <p class="small muted" id="status-file"></p>
     <p class="small" id="status-storage"></p>
+    <p class="small" id="status-email"></p>
     <p class="small" id="status-links"></p>
     <div class="ctas">
       <a class="btn block" href="/">افتح التشخيص</a>
@@ -135,6 +136,9 @@
     $("status-storage").textContent = s.storage === "supabase"
       ? "حفظ النتائج: قاعدة بيانات Supabase."
       : "حفظ النتائج: ملفات على السيرفر نفسه — تضيع مع كل نشر. اضبطي SUPABASE_URL وSUPABASE_SERVICE_KEY في Render.";
+    $("status-email").textContent = s.email_alerts
+      ? `تنبيه كل نتيجة جديدة بالبريد: مفعّل، إلى ${s.email_alerts}.`
+      : "تنبيه كل نتيجة جديدة بالبريد: غير مفعّل. اضبطي SMTP_HOST وSMTP_USER وSMTP_PASS في Render.";
     // Where result links point (PUBLIC_BASE_URL), and whether they work outside this computer.
     try {
       const cfg = await fetch("/api/config").then((x) => x.json());

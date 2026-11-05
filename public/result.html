@@ -69,8 +69,10 @@
     <section class="card" aria-labelledby="n-title">
       <h2 id="n-title" data-i18n="r_next"></h2>
       <div class="ctas">
-        <a class="btn block" id="cta-book" target="_blank" rel="noopener" data-i18n="cta_book"></a>
-        <a class="btn block secondary" id="cta-wa" target="_blank" rel="noopener" data-i18n="cta_wa"></a>
+        <!-- WhatsApp first: the result reaches the institute only when the parent presses «Send» in WhatsApp. -->
+        <a class="btn block" id="cta-wa" target="_blank" rel="noopener" data-i18n="cta_wa"></a>
+        <p class="small muted wa-hint" data-i18n="cta_wa_hint"></p>
+        <a class="btn block secondary" id="cta-book" target="_blank" rel="noopener" data-i18n="cta_book"></a>
         <a class="btn block secondary" id="cta-prices" target="_blank" rel="noopener" data-i18n="cta_prices"></a>
       </div>
       <div class="row" style="align-items:center">

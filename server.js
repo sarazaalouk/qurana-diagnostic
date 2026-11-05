@@ -11,6 +11,7 @@ const { pathFor, writeNotes, voice } = require("./lib/plan");
 const signals = require("./public/js/signals");
 const voiceVersion = () => require("crypto").createHash("sha256").update(voice().text).digest("hex").slice(0, 12);
 const access = require("./lib/access");
+const notify = require("./lib/notify");
 
 const PORT = process.env.PORT || 3100;
 // Where the result links point, and the main site for booking and prices.
@@ -71,7 +72,10 @@ app.post("/api/results", saveLimit, wrap(async (req, res) => {
   const { error, value } = validateSubmission(req.body);
   if (error) return res.status(400).json({ error });
   const record = await store.save(value);
-  res.status(201).json({ id: record.id, url: resultLink(req, record.id) });
+  const url = resultLink(req, record.id);
+  res.status(201).json({ id: record.id, url });
+  // An email to info@ for every new result (lib/notify.js); after the reply, and a failure only goes to the log.
+  notify.newResult(record, url);
 }));
 
 // A saved result, for the result page and (later) for the site's booking form.

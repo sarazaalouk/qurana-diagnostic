@@ -69,3 +69,17 @@
 - Render ← الخدمة ← **Settings** ← **Custom Domains** ← **Add**: `test.quraana-institute.com`.
 - في Namecheap ← cPanel ← Zone Editor: سجل **CNAME**؛ الاسم `test`، والقيمة اللي Render بيديها (`<الخدمة>.onrender.com`).
 - ما تغيّروش الـ Nameservers، وما تلمسوش أي سجل تاني (عشان بريد info@ وموقع Lovable يفضلوا شغالين).
+
+## 6) تنبيه بالبريد لكل نتيجة جديدة (info@)
+
+زرار الواتساب في صفحة النتيجة بيفتح واتساب برسالة جاهزة بس، وما بتوصلش إلا لو ولي الأمر داس «إرسال». عشان كده السيرفر بيبعت إيميل لـ info@ مع كل نتيجة بتتحفظ، من صندوق info@ نفسه، من غير أي تغيير في الـ DNS.
+
+- Render ← الخدمة ← **Environment** ← ضيفي:
+  - `SMTP_HOST`: سيرفر البريد الصادر من cPanel ← **Email Accounts** ← info@ ← **Connect Devices** (غالبًا `mail.quraana-institute.com` أو اسم السيرفر المكتوب هناك).
+  - `SMTP_PORT`: `465`
+  - `SMTP_USER`: `info@quraana-institute.com`
+  - `SMTP_PASS`: باسورد صندوق info@ (في Render بس، أبدًا في الكود).
+  - `NOTIFY_TO` (اختياري): الإيميل اللي يستلم التنبيه، والافتراضي `SMTP_USER`.
+- بعد الحفظ والنشر، صفحة `/admin` لازم تقول «تنبيه كل نتيجة جديدة بالبريد: مفعّل».
+- الإيميل فيه نفس اللي في `/admin` وبس: بالغ أو طفل (والاسم المستعار)، المستوى، العمر، الدولة، ورابط النتيجة.
+- لو البريد وقع، نتيجة ولي الأمر بتتحفظ عادي، والخطأ بيتكتب في الـ Logs على Render (`notify: email for result … failed`).
