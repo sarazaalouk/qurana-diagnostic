@@ -232,8 +232,8 @@
   function choiceRound(stage, promptHtml, options, canSkip) {
     return new Promise((resolve) => {
       $("g-body").innerHTML = `${promptHtml}
-        <div class="choices${["find", "madd", "qalqalah"].includes(stage) ? " quran" : stage === "reasons" ? " reasons" : ""}" dir="rtl">${options.map((o, i) => `<button class="choice" data-i="${i}" lang="ar">${esc(o)}</button>`).join("")}</div>
-        ${canSkip ? `<button class="btn secondary" id="skip">${esc(t("skip"))}</button>` : ""}`;
+        <div class="choices${["find", "madd", "qalqalah"].includes(stage) ? " quran" : stage === "reasons" ? " reasons" : stage === "rules" ? " rules" : ""}" dir="rtl">${options.map((o, i) => `<button class="choice" data-i="${i}" lang="ar">${esc(o)}</button>`).join("")}</div>
+        ${canSkip ? `<button class="btn secondary" id="skip">${esc(typeof canSkip === "string" ? canSkip : t("skip"))}</button>` : ""}`;
       rec.shown(stage);
       const cue = $("g-body").querySelector("details");
       if (cue) cue.addEventListener("toggle", () => { if (cue.open) rec.hint(); });
@@ -443,35 +443,45 @@
     if (apply.length) st.apply = { score: heard.filter((x) => x.result === "right").length, total: heard.length, passed: false, items: apply };
     }
 
-    // 3. Tajweed rules: name the rule at a marked place (or pick the word with qalqalah).
-    level = pool.start;
+    // 3. Tajweed rules: name the rule at a marked place (or pick the word with qalqalah). The questions are built from the
+    // first page (A.testPlan): where each kind starts, how many questions, how many choices. «لا أعرف» on every one.
+    const plan = A.testPlan(profile);
+    let delta = 0;
     const used = { items: new Set(), refs: new Set(), skills: new Set() };
     const rules = [], reasons = [];
-    const nRules = A.SLOTS.length;
+    const nRules = plan.slots.length;
+    const dontKnow = tw("dont_know");
     for (let i = 0; i < nRules; i++) {
-      const q = A.nextRule(pool, i, level, used);
+      const q = A.nextRule(pool, i, (k) => A.levelFor(plan, k, delta), used, plan.slots);
       if (!q) break;
       used.items.add(q); used.refs.add(q.ref); used.skills.add(q.skill);
-      frame(tw("a2_label"), tw("a2_title"), A.SLOTS.length, i);
+      frame(tw("a2_label"), tw("a2_title"), nRules, i);
       const isWordQ = q.kind === "qalqalah";
-      const labels = isWordQ ? q.choices : q.choices.map((c) => SK.label(c, I.lang));
-      const pick = await choiceRound(isWordQ ? "qalqalah" : "rules", `<p>${esc(t(`a2_q_${q.kind}`))}</p><div class="word quran ayah rule-ayah" lang="ar" dir="rtl">${marked(q.tokens, q.words)}</div>${caption(q)}`, labels, false);
-      const right = isWordQ ? pick === q.answer : pick === SK.label(q.answer, I.lang);
+      // The basic test: the right rule and two others (not five).
+      let ids = q.choices;
+      if (!isWordQ && plan.narrow && ids.length > 3) {
+        const others = shuffle(ids.filter((c) => c !== q.answer)).slice(0, 2);
+        ids = ids.filter((c) => c === q.answer || others.includes(c));
+      }
+      const labels = isWordQ ? ids : ids.map((c) => SK.label(c, I.lang));
+      const intro = i === 0 ? `<p class="small muted">${esc(tw(`a2_plan_${plan.tier}`))}</p>` : "";
+      const pick = await choiceRound(isWordQ ? "qalqalah" : "rules", `${intro}<p>${esc(t(`a2_q_${q.kind}`))}</p><div class="word quran ayah rule-ayah" lang="ar" dir="rtl">${marked(q.tokens, q.words)}</div>${caption(q)}`, labels, dontKnow);
+      const right = pick !== null && (isWordQ ? pick === q.answer : pick === SK.label(q.answer, I.lang));
       rec.answered(right);
-      const res = right ? "right" : "wrong";
-      const picked = isWordQ ? undefined : q.choices[labels.indexOf(pick)];
-      rules.push({ skill: q.skill, ref: q.ref, word: q.word, d: q.d, result: res, ...(!right && picked && { picked }) });
+      const res = pick === null ? "dont_know" : right ? "right" : "wrong";
+      const picked = isWordQ || pick === null ? undefined : ids[labels.indexOf(pick)];
+      rules.push({ skill: q.skill, ref: q.ref, word: q.word, d: q.d, result: res, ...(res === "wrong" && picked && { picked }) });
       // «ولماذا؟» (adults): the rule is named, and the reason is chosen.
       const why = adult && SK.reasonQuestion(q, I.lang);
       if (why) {
         frame(tw("a4_label"), tw("a4_title"), nRules, i);
         const at = q.words.length ? q.words : [positionOf(q.tokens, q.word)];
-        const wpick = await choiceRound("reasons", `<p>${esc(t("a4_q", { rule: SK.label(q.skill, I.lang) }))}</p><div class="word quran ayah rule-ayah" lang="ar" dir="rtl">${marked(q.tokens, at)}</div>${caption(q)}`, shuffle(why.choices), false);
+        const wpick = await choiceRound("reasons", `<p>${esc(t("a4_q", { rule: SK.label(q.skill, I.lang) }))}</p><div class="word quran ayah rule-ayah" lang="ar" dir="rtl">${marked(q.tokens, at)}</div>${caption(q)}`, shuffle(why.choices), dontKnow);
         const ok = wpick === why.answer;
         rec.answered(ok);
-        reasons.push({ skill: q.skill, ref: q.ref, word: q.word, d: q.d, result: ok ? "right" : "wrong" });
+        reasons.push({ skill: q.skill, ref: q.ref, word: q.word, d: q.d, result: wpick === null ? "dont_know" : ok ? "right" : "wrong" });
       }
-      level = A.step(level, res);
+      delta = A.nextDelta(delta, res);
     }
     if (reasons.length) {
       const score = reasons.filter((x) => x.result === "right").length;

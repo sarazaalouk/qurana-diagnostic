@@ -205,8 +205,10 @@
   }
   // The next Tajweed question for slot i: the kind of the slot, the difficulty nearest to the level, a new ayah and a
   // new rule when possible.
-  function nextRule(pool, i, level, used) {
-    const kinds = SLOTS[i % SLOTS.length];
+  // `level` is a number, or a function of the kind (testPlan / levelFor); `slots` the order of kinds (SLOTS by default).
+  function nextRule(pool, i, level, used, slots = SLOTS) {
+    const kinds = slots[i % slots.length];
+    const want = (q) => (typeof level === "function" ? level(q.kind) : level);
     let list = pool.questions.filter((q) => kinds.includes(q.kind) && !used.items.has(q));
     if (!list.length) list = pool.questions.filter((q) => !used.items.has(q));
     if (!list.length) return null;
@@ -214,9 +216,34 @@
     if (fresh.length) list = fresh;
     const newRule = list.filter((q) => !used.skills.has(q.skill));
     if (newRule.length) list = newRule;
-    const best = Math.min(...list.map((q) => Math.abs(q.d - level)));
-    return list.find((q) => Math.abs(q.d - level) === best);
+    const best = Math.min(...list.map((q) => Math.abs(q.d - want(q))));
+    return list.find((q) => Math.abs(q.d - want(q)) === best);
   }
+  // ---------- the Tajweed questions built from the first page ----------
+  // The three Tajweed answers (madd, ghunnah, qalqalah: yes / sometimes / no / not sure) set where each kind of rule
+  // starts: «no» or «not sure» → the easiest questions of that kind, «yes» → the hardest. Someone who says they apply
+  // almost none of them (or who stumbles when reading) gets a shorter basic test — six questions from the basic rules,
+  // three choices instead of five; someone who applies all three a full test that starts high. Every question has
+  // «لا أعرف». As answers come in, every kind goes up or down together (one step per answer, two at most).
+  const TJ_KINDS = { madd: ["madd"], ghunnah: ["noon", "meem"], qalqalah: ["qalqalah"] };
+  const ANSWER_LEVEL = { yes: 3, sometimes: 2, no: 1, unsure: 1 };
+  const BASIC_SLOTS = [["lam", "wasl"], ["madd"], ["qalqalah"], ["ra", "allah"], ["noon"], ["madd"]];
+  function testPlan(p) {
+    const tj = p.tajweed || {};
+    const answered = Object.keys(TJ_KINDS).filter((k) => ANSWER_LEVEL[tj[k]]);
+    const score = answered.reduce((n, k) => n + { yes: 2, sometimes: 1, no: 0, unsure: 0 }[tj[k]], 0);
+    const basic = p.self === "stumble" || (answered.length > 0 && score <= 1);
+    const advanced = !basic && answered.length === 3 && score >= 5 && p.self !== "slow";
+    const tier = basic ? "basic" : advanced ? "advanced" : "medium";
+    const start = basic ? 1 : advanced ? 3 : START_LEVEL;
+    const base = {};
+    for (const [q, kinds] of Object.entries(TJ_KINDS)) for (const k of kinds) base[k] = ANSWER_LEVEL[tj[q]] ? Math.min(ANSWER_LEVEL[tj[q]], basic ? 2 : 3) : start;
+    return { tier, start, base, slots: basic ? BASIC_SLOTS : SLOTS, narrow: basic };
+  }
+  // The level asked for a kind: where the plan starts it, moved by the answers so far.
+  const levelFor = (plan, kind, delta) => Math.max(1, Math.min(3, (plan.base[kind] || plan.start) + delta));
+  const nextDelta = (delta, result) => Math.max(-2, Math.min(2, delta + (result === "right" ? 1 : result === "partial" || result === "unsure" ? 0 : -1)));
+
   // Memorization: one place beyond the short surahs when the reader says they memorize more, and one short surah.
   function pickHifz(pool, usedSurahs) {
     const one = (l) => l.find((x) => !usedSurahs.has(x.surah));
@@ -226,7 +253,7 @@
 
   // The whole run with fixed answers (for the tests): answer(part, item) returns "right" / "wrong" / "partial" / "unsure".
   // The page runs the same steps one screen at a time.
-  function simulate(pool, answer) {
+  function simulate(pool, answer, plan) {
     pool.shown = new Set(); // a fresh run
     const usedSurahs = new Set(), out = { recite: [], rules: [] };
     let level = pool.start;
@@ -239,19 +266,22 @@
       level = step(level, res);
     }
     level = pool.start;
+    let delta = 0;
     const used = { items: new Set(), refs: new Set(), skills: new Set() };
-    for (let i = 0; i < SLOTS.length; i++) {
-      const q = nextRule(pool, i, level, used);
+    const slots = plan ? plan.slots : SLOTS;
+    for (let i = 0; i < slots.length; i++) {
+      const q = plan ? nextRule(pool, i, (k) => levelFor(plan, k, delta), used, slots) : nextRule(pool, i, level, used);
       if (!q) break;
       used.items.add(q); used.refs.add(q.ref); used.skills.add(q.skill);
       const res = answer("rules", q);
-      out.rules.push({ ref: q.ref, kind: q.kind, skill: q.skill, d: q.d, level, result: res, choices: q.choices, answer: q.answer });
+      out.rules.push({ ref: q.ref, kind: q.kind, skill: q.skill, d: q.d, level: plan ? levelFor(plan, q.kind, delta) : level, result: res, choices: q.choices, answer: q.answer });
       level = step(level, res);
+      delta = nextDelta(delta, res);
     }
     return out;
   }
 
-  const api = { startFor, isAdvanced, pickContent, memorizedCount, isReader, isArabicReader, assessmentPool, nextPassage, nextRule, pickHifz, simulate, step, SLOTS, RECITE_COUNT, START_LEVEL };
+  const api = { testPlan, levelFor, nextDelta, BASIC_SLOTS, startFor, isAdvanced, pickContent, memorizedCount, isReader, isArabicReader, assessmentPool, nextPassage, nextRule, pickHifz, simulate, step, SLOTS, RECITE_COUNT, START_LEVEL };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.QuranaAdaptive = api;
 })(typeof window !== "undefined" ? window : globalThis);

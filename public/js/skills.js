@@ -49,7 +49,8 @@
   };
   // The rules a listener can hear while the reader recites (application): ghunnah and hiding, madd lengths, qalqalah.
   const APPLY = new Set(["idgham_ghunnah", "iqlab", "ikhfa", "ikhfa_shafawi", "idgham_shafawi", "madd_muttasil", "madd_munfasil", "madd_lazim", "qalqalah", "ra_tarqiq"]);
-  const ITEM_RESULTS = ["right", "wrong", "unsure", "partial", "not_memorized"];
+  // dont_know: «لا أعرف» on a Tajweed question (counted as not right, said as «لم تعرف بعد» rather than «أخطأت»).
+  const ITEM_RESULTS = ["right", "wrong", "unsure", "partial", "not_memorized", "dont_know"];
 
   // The report: for each skill, how many places were right, and the words. Mastered: every answered place right;
   // needs work: at least one wrong. Recognition (rules) and application (apply) are kept apart, as are recitation and
@@ -61,10 +62,10 @@
       for (const it of ((stages || {})[part] || {}).items || []) {
         if (!SKILLS[it.skill] || it.result === "unsure") continue;
         const k = `${part}:${it.skill}`;
-        const b = (by[k] = by[k] || { part, skill: it.skill, label: label(it.skill, lang), right: 0, total: 0, right_words: [], wrong_words: [] });
+        const b = (by[k] = by[k] || { part, skill: it.skill, label: label(it.skill, lang), right: 0, total: 0, wrong: 0, right_words: [], wrong_words: [] });
         b.total++;
         if (it.result === "right") { b.right++; if (it.word) b.right_words.push(it.word); }
-        else if (it.word) b.wrong_words.push(it.word);
+        else { if (it.result !== "dont_know") b.wrong++; if (it.word) b.wrong_words.push(it.word); }
       }
     }
     const all = Object.values(by);
@@ -91,10 +92,12 @@
       apply_no: en ? (adult ? "You do not yet apply" : "Does not yet apply") : adult ? "لا تطبّق بعد" : "لا يطبّق بعد",
       reasons_ok: en ? (adult ? "You know the reason for" : "Knows the reason for") : adult ? "تعرف سبب" : "يعرف سبب",
       reasons_no: en ? (adult ? "You do not yet know the reason for" : "Does not yet know the reason for") : adult ? "لا تعرف بعد سبب" : "لا يعرف بعد سبب",
+      rules_dk: en ? (adult ? "You do not know yet" : "Does not know yet") : adult ? "لم تعرف بعد" : "لم يعرف بعد",
     };
     const out = { mastered: [], needs: [] };
     for (const b of rep.mastered) out.mastered.push(`${say[`${b.part}_ok`]} ${b.label}${words(b.right_words)}`);
-    for (const b of rep.needs) out.needs.push(`${say[`${b.part}_no`]} ${b.label}${words(b.wrong_words)}`);
+    // Only «لا أعرف» for a rule: «لم تعرف بعد …», not «تخلط في …».
+    for (const b of rep.needs) out.needs.push(`${say[b.part === "rules" && !b.wrong ? "rules_dk" : `${b.part}_no`]} ${b.label}${words(b.wrong_words)}`);
     return out;
   }
 
@@ -210,6 +213,7 @@
       const wrong = items.filter((x) => x.result === "wrong" && !right.includes(x.skill));
       const mixed = [...new Map(wrong.filter((x) => x.picked && x.picked !== x.skill && SKILLS[x.picked]).map((x) => [`${x.skill}|${x.picked}`, [x.skill, x.picked]])).values()];
       const plain = [...new Set(wrong.filter((x) => !mixed.some(([s]) => s === x.skill)).map((x) => x.skill))];
+      const unknown = [...new Set(items.filter((x) => x.result === "dont_know" && !right.includes(x.skill) && !wrong.some((w) => w.skill === x.skill)).map((x) => x.skill))];
       const whyWrong = adult ? [...new Set(((st.reasons || {}).items || []).filter((x) => x.result === "wrong").map((x) => x.skill))] : [];
       const s1 = right.length
         ? (en ? `${adult ? "You got right" : "Got right"}: ${andList(right.slice(0, 4).map(lab), true)}.` : `${adult ? "أتقنتَ" : "أتقن"} ${andList(right.slice(0, 4).map(lab))}.`)
@@ -217,6 +221,7 @@
       const parts = [
         ...mixed.slice(0, 2).map(([a, b]) => (en ? `${adult ? "you mixed up" : "mixed up"} ${lab(a)} and ${lab(b)}` : `${adult ? "خلطتَ" : "خلط"} بين ${lab(a)} و${lab(b)}`)),
         ...(plain.length ? [en ? `${adult ? "you missed" : "missed"} ${andList(plain.slice(0, 3).map(lab), true)}` : `${adult ? "أخطأتَ" : "أخطأ"} في ${andList(plain.slice(0, 3).map(lab))}`] : []),
+        ...(unknown.length ? [en ? `${adult ? "you did not know" : "did not know"} ${andList(unknown.slice(0, 3).map(lab), true)} yet` : `${adult ? "لم تعرف" : "لم يعرف"} بعد ${andList(unknown.slice(0, 3).map(lab))}`] : []),
         ...(whyWrong.length ? [en ? `you do not yet know the reason for ${andList(whyWrong.slice(0, 2).map(lab), true)}` : `لا تعرف بعد سبب ${andList(whyWrong.slice(0, 2).map(lab))}`] : []),
       ];
       const s2 = parts.length

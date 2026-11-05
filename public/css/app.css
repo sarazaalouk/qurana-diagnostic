@@ -163,3 +163,6 @@ html[lang="en"] h1, html[lang="en"] h2 { font-family: "Inter", "Segoe UI", Arial
 .findings { background: var(--soft, #f4efe3); border-radius: 12px; padding: 12px 14px; margin: 0 0 14px; }
 .findings h3 { font-size: 1rem; margin: 0 0 6px; }
 .findings p { margin: 0; }
+/* Rule names as choices: plain text, not the Mushaf font. */
+.choices.rules { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.choices.rules .choice { font-family: "Cairo", var(--body); font-size: 1.15rem; font-weight: 600; line-height: 1.5; min-height: 64px; padding: 10px 12px; }

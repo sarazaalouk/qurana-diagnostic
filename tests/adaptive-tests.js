@@ -219,6 +219,19 @@ const base = { ...content.gameContent(), bank };
   check("D56. «ما رصده الاختبار»: two sentences, with the rule chosen instead («خلط بين … و…»)",
     SKL.findings({ rules: { items: [{ skill: "ikhfa", result: "right" }, { skill: "madd_muttasil", result: "right" }, { skill: "idgham_ghunnah", result: "wrong", picked: "idgham_no_ghunnah" }, { skill: "qalqalah", result: "wrong" }] } }, "ar"),
     ["أتقن الإخفاء والمدّ المتصل.", "لكنه خلط بين الإدغام بغنة والإدغام بلا غنة، وأخطأ في القلقلة."]);
+  // ---- the Tajweed questions built from the first page ----
+  const tpLow = A.testPlan({ who: "adult", self: "fluent", tajweed: { madd: "no", ghunnah: "unsure", qalqalah: "no" } });
+  const tpMid = A.testPlan({ who: "adult", self: "fluent", tajweed: { madd: "sometimes", ghunnah: "yes", qalqalah: "no" } });
+  const tpHigh = A.testPlan({ who: "adult", self: "fluent", tajweed: { madd: "yes", ghunnah: "yes", qalqalah: "yes" } });
+  check("D57. «I don't apply most rules» → a basic test (6 questions, 3 choices); «yes» to all → starts high; a stumbling reader → basic",
+    [tpLow.tier, tpLow.slots.length, tpLow.narrow, tpMid.tier, tpHigh.tier, tpHigh.start, A.testPlan({ who: "adult", self: "stumble", tajweed: tpHigh.base }).tier], ["basic", 6, true, "medium", "advanced", 3, "basic"]);
+  const adultPool2 = A.assessmentPool(real, { who: "adult", juz: "none" }, rng);
+  const lowRun = A.simulate(adultPool2, () => "wrong", tpLow), highRun = A.simulate(adultPool2, () => "right", tpHigh);
+  check("D58. the basic test starts with basic rules (difficulty 1); each kind starts where its answer put it («yes» to ghunnah → the hardest noon rules)",
+    [lowRun.rules[0].d, lowRun.rules.every((x) => x.d <= 2), A.simulate(adultPool2, () => "right", tpMid).rules[0].d], [1, true, 3]);
+  const dk = SKL.findings({ rules: { items: [{ skill: "shamsiyah", result: "right" }, { skill: "ikhfa", result: "dont_know" }, { skill: "qalqalah", result: "wrong" }] } }, "ar", true);
+  const dkLines = SKL.lines(SKL.report({ rules: { items: [{ skill: "ikhfa", ref: "1:1", result: "dont_know" }] } }, "ar"), "ar", true);
+  check("D59. «لا أعرف» is said as «لم تعرف بعد», not as a mistake", [dk[1], dkLines.needs[0]], ["لكنك أخطأتَ في القلقلة، ولم تعرف بعد الإخفاء.", "لم تعرف بعد الإخفاء"]);
   fs.unlinkSync(tmp);
 
   console.log(failed ? `\n${failed} adaptive case(s) failed` : "\nall adaptive cases behaved as expected");
