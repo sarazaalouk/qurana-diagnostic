@@ -50,6 +50,18 @@
     </div>
   </section>
 
+  <section class="card" id="leads" hidden>
+    <h2>إرسال النتايج لموقع قرآنا</h2>
+    <p class="small muted">كل تشخيص بيخلص بيتبعت من السيرفر لموقع quraana-institute.com. اللي ما يوصلش بيتحفظ هنا لحد ما يتبعت تاني.</p>
+    <p class="small" id="leads-line"></p>
+    <ul class="small" id="leads-recent"></ul>
+    <p class="small">
+      <button class="btn secondary" id="leads-resend" type="button">ابعت اللي ما وصلش تاني</button>
+      <button class="btn secondary" id="leads-test" type="button">ابعت lead تجريبي (TEST)</button>
+    </p>
+    <p class="small" id="leads-out"></p>
+  </section>
+
   <section class="card" id="funnel" hidden>
     <h2>رحلة الزوار</h2>
     <p class="small muted">كام زائر وصل لكل خطوة (الزائر يتعدّ مرة واحدة في كل خطوة). من غير أي بيانات شخصية.</p>
@@ -82,7 +94,8 @@
     ["login", "status", "no-pin"].forEach((s) => ($(s).hidden = s !== id));
     $("results").hidden = id !== "status";
     $("funnel").hidden = id !== "status";
-    if (id === "status") { loadResults(); loadFunnel(); }
+    $("leads").hidden = id !== "status";
+    if (id === "status") { loadResults(); loadFunnel(); loadLeads(); }
   };
   const li = (text) => { const el = document.createElement("li"); el.textContent = text; return el; };
 
@@ -141,6 +154,34 @@
     }
   }
   $("funnel-days").addEventListener("change", loadFunnel);
+
+  // The leads on the Quraana website (lib/leads.js).
+  async function loadLeads() {
+    const line = $("leads-line"), ul = $("leads-recent");
+    ul.innerHTML = "";
+    try {
+      const l = await fetch("/api/admin/leads").then((x) => x.json());
+      if (l.error) { line.textContent = `مش قادرين نقرا الصندوق: ${l.error}. لو الجدول lead_outbox لسه ما اتعملش، شغّلي آخر جزء في docs/supabase.sql.`; return; }
+      line.textContent = (l.configured ? "الربط بالموقع: مفعّل." : "الربط بالموقع: غير مفعّل — ضيفي DIAGNOSTIC_WEBHOOK_SECRET في Render.")
+        + ` النتايج اللي مستنية إرسال: ${l.pending}.`;
+      line.style.color = l.configured && !l.pending ? "var(--olive, #4A520A)" : "#8A3A1E";
+      (l.recent || []).forEach((r) => ul.appendChild(li(`${r.id} · محاولات ${r.attempts} · ${r.last_error || ""}`)));
+    } catch { line.textContent = "مش قادرين نقرا حالة الربط."; }
+  }
+  async function leadsAction(url, confirmText) {
+    if (!confirm(confirmText)) return;
+    const out = $("leads-out");
+    out.textContent = "جاري الإرسال…";
+    try {
+      const r = await fetch(url, { method: "POST" }).then((x) => x.json());
+      out.textContent = "sent" in r && "pending" in r
+        ? `اتبعت ${r.sent} من ${r.pending}.` + (r.failed.length ? ` ما وصلش: ${r.failed.map((f) => `${f.id} (${f.error})`).join("، ")}` : "")
+        : r.ok ? "الموقع رد {\"ok\":true} — الـ lead التجريبي وصل." : `ما وصلش — ${r.status || ""} ${r.error || "سبب غير معروف"}`;
+    } catch { out.textContent = "مشكلة في الاتصال بالموقع."; }
+    loadLeads();
+  }
+  $("leads-resend").addEventListener("click", () => leadsAction("/api/admin/leads/resend", "هيتبعت كل اللي في الصندوق لموقع قرآنا. أكمل؟"));
+  $("leads-test").addEventListener("click", () => leadsAction("/api/admin/leads/test", "هيتبعت lead تجريبي (TEST، test: true) لموقع قرآنا. أكمل؟"));
 
   async function loadResults() {
     const res = await fetch("/api/admin/results");

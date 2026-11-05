@@ -55,3 +55,17 @@ create index if not exists funnel_events_created_at_idx on public.funnel_events 
 alter table public.funnel_events enable row level security;
 grant select, insert on public.funnel_events to service_role;
 grant usage, select on all sequences in schema public to service_role;
+
+-- Leads the Quraana website did not take yet (lib/leads.js): kept here so none is lost, and sent again from /admin.
+-- Run this block once (it is safe to run again).
+create table if not exists public.lead_outbox (
+  id          text primary key check (char_length(id) <= 64),
+  created_at  timestamptz not null default now(),
+  payload     jsonb not null,
+  attempts    integer not null default 1,
+  last_error  text,
+  sent_at     timestamptz
+);
+create index if not exists lead_outbox_pending_idx on public.lead_outbox (created_at) where sent_at is null;
+alter table public.lead_outbox enable row level security;
+grant select, insert, update on public.lead_outbox to service_role;

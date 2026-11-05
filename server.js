@@ -13,6 +13,7 @@ const voiceVersion = () => require("crypto").createHash("sha256").update(voice()
 const access = require("./lib/access");
 const notify = require("./lib/notify");
 const funnel = require("./lib/funnel");
+const leads = require("./lib/leads");
 
 const PORT = process.env.PORT || 3100;
 // Where the result links point, and the main site for booking and prices.
@@ -80,6 +81,9 @@ app.post("/api/results", saveLimit, wrap(async (req, res) => {
   // The step counter: "saved", with the same random tab id and source the page sent (lib/funnel.js).
   const tr = req.body && req.body.track;
   if (tr) funnel.record(funnel.fromBody({ ...tr, event: "saved", who: record.profile.who === "adult" ? "adult" : "child", lang: record.profile.lang }, true));
+  // The lead on the Quraana website (lib/leads.js): server to server, retried, kept in the outbox if it fails.
+  const from = funnel.fromBody({ ...(tr || {}), session: (tr && tr.session) || "nosession0", event: "saved" }, true);
+  leads.forResult(record, url, from ? { source: from.source, campaign: from.campaign } : {});
 }));
 
 // A saved result, for the result page and (later) for the site's booking form.
@@ -102,8 +106,9 @@ app.get("/api/results/:id", wrap(async (req, res) => {
     links: {
       result: resultLink(req, r.id),
       // The booking form gets the id and the full result link, so the site can open the result from any device.
-      booking: `${SITE_URL}/register?diagnosis=${r.id}&result=${encodeURIComponent(resultLink(req, r.id))}`,
-      prices: `${SITE_URL}/#plans`,
+      // The site has its English pages under /en (an English page is not sent to the Arabic one).
+      booking: `${SITE_URL}${lang === "en" ? "/en" : ""}/register?diagnosis=${r.id}&result=${encodeURIComponent(resultLink(req, r.id))}`,
+      prices: `${SITE_URL}${lang === "en" ? "/en" : ""}/#plans`,
     },
   });
 }));
@@ -189,6 +194,28 @@ app.get("/api/admin/funnel", wrap(async (req, res) => {
   const days = Math.min(Math.max(Number(req.query.days) || 7, 1), 60);
   res.set("Cache-Control", "no-store");
   try { res.json(await funnel.counts(days)); } catch (err) { res.status(503).json({ error: err.message }); }
+}));
+
+// The leads on the Quraana website, for /admin: is the secret set, how many are waiting in the outbox,
+// send them again, and one test lead ("test": true, childName "TEST").
+app.get("/api/admin/leads", wrap(async (req, res) => {
+  if (!access.isAdmin(req)) return res.status(401).json({ error: "enter the PIN first" });
+  res.set("Cache-Control", "no-store");
+  let pending = [];
+  try { pending = await store.leadOutbox(); } catch (err) { return res.json({ configured: leads.configured(), error: err.message }); }
+  res.json({ configured: leads.configured(), pending: pending.length, recent: pending.slice(-5).map((r) => ({ id: r.id, attempts: r.attempts, last_error: r.last_error })) });
+}));
+const leadAdminAllowed = limit(10);
+app.post("/api/admin/leads/resend", wrap(async (req, res) => {
+  if (!access.isAdmin(req)) return res.status(401).json({ error: "enter the PIN first" });
+  if (!leadAdminAllowed(req)) return res.status(429).json({ error: "too many tries, wait a little" });
+  res.json(await leads.resendOutbox());
+}));
+app.post("/api/admin/leads/test", wrap(async (req, res) => {
+  if (!access.isAdmin(req)) return res.status(401).json({ error: "enter the PIN first" });
+  if (!leadAdminAllowed(req)) return res.status(429).json({ error: "too many tries, wait a little" });
+  const out = await leads.sendTest();
+  res.status(out.ok ? 200 : 502).json(out);
 }));
 
 // The email alert, for /admin: is the mail server reachable with these settings (no email sent),

@@ -36,6 +36,10 @@ services:
         sync: false
       - key: NOTIFY_TO
         value: info@quraana-institute.com
+      # Every finished diagnostic is sent to the Quraana website as a lead (lib/leads.js). The shared secret:
+      # set it in the Render dashboard only, never in the code.
+      - key: DIAGNOSTIC_WEBHOOK_SECRET
+        sync: false
       - key: NODE_VERSION
         value: "22"
       # For step 2 (learning plan with Claude). Set in Render, never in the repository.

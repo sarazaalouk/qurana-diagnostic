@@ -63,6 +63,8 @@ const setCurriculum = (c) => { fs.writeFileSync(curriculumFile, JSON.stringify(c
     const got = await r.json();
     check("A3. the level is worked out on the server from the score (1 of 3 fatha → R3)", got.level.code === "R3" && got.stages.fatha.passed === false, got.level.code);
     check("A4. the result has the booking, prices and result links", got.links.booking.includes(`/register?diagnosis=${res.body.id}&`) && got.links.prices.endsWith("/#plans"));
+    const gotEn = await get(`/api/results/${res.body.id}?lang=en`).then((x) => x.json());
+    check("A4b. an English result page sends to the site's English pages (/en/register, /en/#plans)", gotEn.links.booking.includes("/en/register?diagnosis=") && gotEn.links.prices.endsWith("/en/#plans") && !got.links.booking.includes("/en/"));
     check("B1. result link, booking link and admin all use PUBLIC_BASE_URL",
       got.links.result === `https://test.quraana-institute.com/r/${res.body.id}` &&
       new URL(got.links.booking).searchParams.get("result") === got.links.result);
