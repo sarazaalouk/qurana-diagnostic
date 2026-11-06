@@ -74,11 +74,18 @@ function browser({ zone = "Asia/Kuwait", gpc = false, country = "", stored = {},
   again.window.QuranaPixel.lead("abcdefgh23");
   check("X4. opening the result again later does not fire it again", !again.fbqCalls().some((c) => c[1] === "Lead"));
 
+  // Contact: on each WhatsApp or booking press.
+  b.window.QuranaPixel.contact("whatsapp");
+  b.window.QuranaPixel.contact("booking");
+  const contacts = b.fbqCalls().filter((c) => c[1] === "Contact");
+  check("X14. the WhatsApp and booking buttons send Contact (whatsapp / booking)", contacts.length === 2 && contacts[0][2].content_name === "whatsapp" && contacts[1][2].content_name === "booking");
+
   // GPC: nothing at all.
   b = browser({ zone: "Asia/Kuwait", gpc: true });
   await b.settle();
   b.window.QuranaPixel.pageView("about");
   b.window.QuranaPixel.lead("gpcgpcgpc2");
+  b.window.QuranaPixel.contact("whatsapp");
   check("X5. with Global Privacy Control the pixel never loads and the Lead is skipped", !b.window.fbq && !b.scripts.length && !b.body.length);
 
   // Europe: the notice first, nothing loaded until «Accept».

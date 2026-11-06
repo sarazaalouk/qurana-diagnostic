@@ -130,5 +130,10 @@
     };
     if (allowed()) fire(); else waiting.push(fire);
   }
-  window.QuranaPixel = { pageView, lead, allowed: () => allowed(), _regionNeedsConsent: regionNeedsConsent };
+  // Contact: the WhatsApp or booking button pressed on the result page. Skipped where tracking is not allowed.
+  function contact(kind) {
+    if (!allowed()) return;
+    try { window.fbq("track", "Contact", { content_name: kind === "booking" ? "booking" : "whatsapp" }); } catch { /* never in the way */ }
+  }
+  window.QuranaPixel = { pageView, lead, contact, allowed: () => allowed(), _regionNeedsConsent: regionNeedsConsent };
 })();

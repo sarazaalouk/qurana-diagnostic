@@ -10,6 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Cairo:wght@400;600;700&family=Inter:wght@400;600;700&display=swap">
   <link rel="stylesheet" href="/css/app.css">
+<!-- Meta Pixel (privacy-gated: GPC, consent where required); it starts once the page is ready. -->
+<script src="/js/pixel.js"></script>
 </head>
 <body>
 <header class="top">
@@ -86,7 +88,6 @@
 <footer class="site"><p class="ai-note" data-i18n="r_ai_note"></p><p data-i18n="footer"></p></footer>
 
 <script src="/js/track.js"></script>
-<script src="/js/pixel.js"></script>
 <script src="/js/i18n.js"></script>
 <script src="/js/levels.js"></script>
 <script src="/js/options.js"></script>
@@ -224,8 +225,10 @@
       if (window.QuranaPixel) window.QuranaPixel.lead(r.id);
     }
   } catch { /* storage blocked */ }
-  $("cta-wa").addEventListener("click", () => track("wa_click"));
-  $("cta-book").addEventListener("click", () => track("book_click"));
+  // Meta Pixel: Contact for the WhatsApp and booking buttons (js/pixel.js; nothing where tracking is not allowed).
+  const contact = (kind) => { try { window.QuranaPixel && window.QuranaPixel.contact(kind); } catch { /* never in the way */ } };
+  $("cta-wa").addEventListener("click", () => { track("wa_click"); contact("whatsapp"); });
+  $("cta-book").addEventListener("click", () => { track("book_click"); contact("booking"); });
   $("r-link").textContent = link;
   // A localhost link only works on this computer (PUBLIC_BASE_URL not set while developing).
   if (cfg.local) $("r-link").insertAdjacentHTML("afterend", `<br><span class="draft-note">${esc(I.t("local_link"))}</span>`);
